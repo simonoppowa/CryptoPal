@@ -2,6 +2,7 @@ package de.othr.cryptopal.service;
 
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -12,7 +13,11 @@ public class InitService {
     @PersistenceContext
     private EntityManager em;
 
+    @Inject
+    private CurrencyInformationService currencyInformationService;
+
     public void init() {
-        System.out.println("Hello World");
+        System.out.println("InitService called");
+        currencyInformationService.getAllFiatCurrencies();
     }
 }
