@@ -16,8 +16,9 @@ public class InitService {
     @Inject
     private CurrencyInformationService currencyInformationService;
 
-    public void init() {
+    public void init() throws Exception {
         System.out.println("InitService called");
         currencyInformationService.getAllFiatCurrencies();
+        currencyInformationService.getAllCryptoCurrencies();
     }
 }

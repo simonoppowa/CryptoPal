@@ -18,7 +18,7 @@ public class SampleModel implements Serializable {
     @Inject
     private InitService initService;
 
-    public void init() {
+    public void init() throws Exception {
         initService.init();
     }
 

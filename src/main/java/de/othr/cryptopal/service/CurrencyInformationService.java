@@ -1,7 +1,8 @@
 package de.othr.cryptopal.service;
 
 import de.othr.cryptopal.entity.Currency;
-import de.othr.cryptopal.entity.util.CurrencyUtils;
+import de.othr.cryptopal.entity.util.JsonUtils;
+import de.othr.cryptopal.entity.util.UrlUtils;
 import org.codehaus.jettison.json.JSONObject;
 
 import javax.faces.bean.ApplicationScoped;
@@ -12,40 +13,44 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 @ApplicationScoped
 public class CurrencyInformationService implements Serializable {
 
-    // TODO Change base currency dynamically
-    private static final String EXCHANGE_RATE_BASE_URL = "https://api.exchangeratesapi.io/latest?base=USD";
-    private static final String EXCHANGE_RATE_SYMBOLS = "&symbols=";
+    // TODO Change currencies dynamically
+    private List<String> fiatCurrenciesToFetch = new ArrayList<>(Arrays.asList("EUR", "GBP", "JPY"));
+    private List<String> cryptoCurrenciesToFetch = new ArrayList<>(Arrays.asList("BTC", "ETH", "XRP"));
 
 
-    public List<Currency> getAllFiatCurrencies() {
+    public List<Currency> getAllFiatCurrencies() throws Exception {
+        URL url = UrlUtils.buildFiatCurrencyUrl(fiatCurrenciesToFetch);
+        JSONObject jsonObject = fetchFromURL(url);
+        List<Currency> currencies = JsonUtils.getFiatCurrenciesFromResponse(jsonObject, fiatCurrenciesToFetch);
 
-        // TODO Change currencies dynamically
-        List<String> currenciesToFetch = new ArrayList<>(Arrays.asList("EUR", "GBP", "JPY"));
+        for(Currency currency : currencies) {
+            System.out.println(currency.toString());
+        }
+
+        return null;
+
+    }
+
+    public List<Currency> getAllCryptoCurrencies() throws Exception {
+        URL url = UrlUtils.buildCryptoCurrencyUrl(cryptoCurrenciesToFetch);
+        JSONObject jsonObject = fetchFromURL(url);
+        List<Currency> currencies = JsonUtils.getCryptoCurrenciesFromResponse(jsonObject, cryptoCurrenciesToFetch);
+
+        for(Currency currency : currencies) {
+            System.out.println(currency.toString());
+        }
+
+        return null;
+    }
+
+    private JSONObject fetchFromURL(URL url) {
 
         try {
-            String urlString = EXCHANGE_RATE_BASE_URL.concat(EXCHANGE_RATE_SYMBOLS);
-
-            Iterator<String> iterator = currenciesToFetch.iterator();
-            while (iterator.hasNext()) {
-                String currencyString = iterator.next();
-
-                urlString += currencyString;
-
-                if (iterator.hasNext()) {
-                    urlString += ",";
-                }
-            }
-
-            System.out.println("Fetching from Url: " + urlString);
-
-
-            URL url = new URL(urlString);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Accept", "application/json");
@@ -62,18 +67,12 @@ public class CurrencyInformationService implements Serializable {
 
                 System.out.println("Fetched: " + jsonObject);
 
-                List<Currency> fetchesCurrencies = CurrencyUtils.getFiatCurrenciesFromResponse(jsonObject, currenciesToFetch);
-
-                for(Currency currency : fetchesCurrencies) {
-                    System.out.println("Fetches currency: " + currency.getCurrencyId() + " " + currency.getExchangeRate());
-                }
+                return jsonObject;
 
             }
 
-
-
         } catch (Exception ex) {
-
+            //TODO
         }
 
         return null;

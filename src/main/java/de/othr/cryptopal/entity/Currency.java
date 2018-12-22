@@ -1,7 +1,6 @@
 package de.othr.cryptopal.entity;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.codehaus.jackson.annotate.JsonProperty;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -14,7 +13,6 @@ public class Currency implements Serializable {
     @Id
     private String currencyId;
 
-    @JsonProperty("EUR")
     private double exchangeRate;
 
     public Currency() {
@@ -47,7 +45,7 @@ public class Currency implements Serializable {
 
     @Override
     public String toString() {
-        return currencyId + currencyId;
+        return currencyId + "\n   Exchange rate: " + exchangeRate;
     }
 
     @Override
