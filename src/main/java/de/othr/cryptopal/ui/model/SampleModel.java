@@ -13,20 +13,10 @@ import java.io.Serializable;
 @ManagedBean
 public class SampleModel implements Serializable {
 
-    private String helloWorld;
-
     @Inject
     private InitService initService;
 
-    public void init() throws Exception {
+    public void init() {
         initService.init();
-    }
-
-    public String getHelloWorld() {
-        return helloWorld;
-    }
-
-    public void setHelloWorld() {
-        this.helloWorld = "Hello World";
     }
 }

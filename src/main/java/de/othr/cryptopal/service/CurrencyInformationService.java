@@ -3,10 +3,12 @@ package de.othr.cryptopal.service;
 import de.othr.cryptopal.entity.Currency;
 import de.othr.cryptopal.entity.util.JsonUtils;
 import de.othr.cryptopal.entity.util.UrlUtils;
+import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
 import javax.faces.bean.ApplicationScoped;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.net.HttpURLConnection;
@@ -23,7 +25,7 @@ public class CurrencyInformationService implements Serializable {
     private List<String> cryptoCurrenciesToFetch = new ArrayList<>(Arrays.asList("BTC", "ETH", "XRP"));
 
 
-    public List<Currency> getAllFiatCurrencies() throws Exception {
+    public List<Currency> getAllFiatCurrencies() {
         URL url = UrlUtils.buildFiatCurrencyUrl(fiatCurrenciesToFetch);
         JSONObject jsonObject = fetchFromURL(url);
         List<Currency> currencies = JsonUtils.getFiatCurrenciesFromResponse(jsonObject, fiatCurrenciesToFetch);
@@ -36,7 +38,7 @@ public class CurrencyInformationService implements Serializable {
 
     }
 
-    public List<Currency> getAllCryptoCurrencies() throws Exception {
+    public List<Currency> getAllCryptoCurrencies() {
         URL url = UrlUtils.buildCryptoCurrencyUrl(cryptoCurrenciesToFetch);
         JSONObject jsonObject = fetchFromURL(url);
         List<Currency> currencies = JsonUtils.getCryptoCurrenciesFromResponse(jsonObject, cryptoCurrenciesToFetch);
@@ -68,11 +70,10 @@ public class CurrencyInformationService implements Serializable {
                 System.out.println("Fetched: " + jsonObject);
 
                 return jsonObject;
-
             }
 
-        } catch (Exception ex) {
-            //TODO
+        } catch (IOException | JSONException ex) {
+            ex.printStackTrace();
         }
 
         return null;
