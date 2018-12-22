@@ -1,5 +1,7 @@
 package de.othr.cryptopal.entity.util;
 
+import util.CurrencyPropertiesUtil;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Iterator;
@@ -7,17 +9,18 @@ import java.util.List;
 
 public class UrlUtils {
 
-    // TODO Change base currency dynamically
-    private static final String EXCHANGE_RATES_BASE_URL = "https://api.exchangeratesapi.io/latest?base=USD";
+    private static String BASE_CURRENCY_ID = CurrencyPropertiesUtil.getBaseCurrency();
+
+    private static final String EXCHANGE_RATES_BASE_URL = "https://api.exchangeratesapi.io/latest?base=";
     private static final String EXCHANGE_RATES_RATES_SYMBOLS = "&symbols=";
 
     private static final String CRYPTOCOMPARE_BASE_URL = "https://min-api.cryptocompare.com/data/pricemulti";
     private static final String CRYPTOCOMPARE_FSYM_SYMBOL = "?fsyms=";
-    private static final String CRYPTOCOMPARE_TSYM_SYMBOL = "&tsyms=USD";
+    private static final String CRYPTOCOMPARE_TSYM_SYMBOL = "&tsyms=";
 
     public static URL buildFiatCurrencyUrl(List<String> currenciesToFetch) {
 
-        String urlString = EXCHANGE_RATES_BASE_URL.concat(EXCHANGE_RATES_RATES_SYMBOLS);
+        String urlString = EXCHANGE_RATES_BASE_URL + BASE_CURRENCY_ID + EXCHANGE_RATES_RATES_SYMBOLS;
 
         Iterator<String> iterator = currenciesToFetch.iterator();
         while (iterator.hasNext()) {
@@ -45,6 +48,7 @@ public class UrlUtils {
 
         Iterator<String> iterator = currenciesToFetch.iterator();
 
+        //TODO use StringBuffer
         while(iterator.hasNext()) {
             String currencyString = iterator.next();
 
@@ -55,7 +59,7 @@ public class UrlUtils {
             }
 
         }
-        urlString += CRYPTOCOMPARE_TSYM_SYMBOL;
+        urlString += (CRYPTOCOMPARE_TSYM_SYMBOL + BASE_CURRENCY_ID);
 
         System.out.println("URL built: " + urlString);
 

@@ -5,6 +5,7 @@ import de.othr.cryptopal.entity.util.JsonUtils;
 import de.othr.cryptopal.entity.util.UrlUtils;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
+import util.CurrencyPropertiesUtil;
 
 import javax.faces.bean.ApplicationScoped;
 import java.io.BufferedReader;
@@ -20,9 +21,8 @@ import java.util.List;
 @ApplicationScoped
 public class CurrencyInformationService implements Serializable {
 
-    // TODO Change currencies dynamically
-    private List<String> fiatCurrenciesToFetch = new ArrayList<>(Arrays.asList("EUR", "GBP", "JPY"));
-    private List<String> cryptoCurrenciesToFetch = new ArrayList<>(Arrays.asList("BTC", "ETH", "XRP"));
+    private List<String> fiatCurrenciesToFetch = CurrencyPropertiesUtil.getSupportedFiatCurrencyStrings();
+    private List<String> cryptoCurrenciesToFetch = CurrencyPropertiesUtil.getSupportedCryptoCurrencyStrings();
 
 
     public List<Currency> getAllFiatCurrencies() {
@@ -35,7 +35,6 @@ public class CurrencyInformationService implements Serializable {
         }
 
         return null;
-
     }
 
     public List<Currency> getAllCryptoCurrencies() {
@@ -77,7 +76,6 @@ public class CurrencyInformationService implements Serializable {
         }
 
         return null;
-
     }
 
 

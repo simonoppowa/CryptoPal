@@ -3,6 +3,7 @@ package de.othr.cryptopal.entity.util;
 import de.othr.cryptopal.entity.Currency;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
+import util.CurrencyPropertiesUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,8 +16,7 @@ public class JsonUtils {
 
     private static String ECB_RATES_STRING = "rates";
 
-    // TODO change dynamically
-    private static String BASE_CURRENCY_STRING = "USD";
+    private static String BASE_CURRENCY_STRING = CurrencyPropertiesUtil.getBaseCurrency();
 
     public static List<Currency> getFiatCurrenciesFromResponse(JSONObject jsonObject, List<String> currencies) {
 
