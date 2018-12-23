@@ -1,14 +1,16 @@
 package de.othr.cryptopal.service;
 
-import javax.faces.bean.ApplicationScoped;
+
+import javax.enterprise.context.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.io.Serializable;
 
 @ApplicationScoped
 @ManagedBean
-public class InitService {
+public class InitService implements Serializable {
 
     @PersistenceContext
     private EntityManager em;

@@ -1,9 +1,9 @@
-package de.othr.cryptopal.ui.model;
+package de.othr.cryptopal.ui;
 
 import de.othr.cryptopal.service.InitService;
 
+import javax.enterprise.context.SessionScoped;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;

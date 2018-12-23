@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+<h:head>
+    <title>Register</title>
+</h:head>
+
+<body>
+        <h:form id="myform">
+            <h:panelGrid columns="2">
+                <h:outputLabel value="Login" for="email"/>
+                <h:inputText id="email" value="#{credentialsModel.email}" required="true" immediate="true"/>
+                <h:outputLabel value="Password" for="password"/>
+                <h:inputSecret id="password" value="#{credentialsModel.password}" maxlength="10" size="12"/>
+                <h:outputLabel value="Confirm Password" for="confirmPassword"/>
+                <h:inputSecret id="confirmPassword" value="#{credentialsModel.confirmPassword}" maxlength="10"
+                               size="12"/>
+                <!--ERROR MESSAGE-->
+                <h:message
+                        style="color: red;
+                                font-family: 'New Century Schoolbook', serif;
+                                font-style: oblique;" id="errors1" for="password"/>
+            </h:panelGrid>
+            <h:commandButton id="mybutton" value="Register" action="#{accountModel.doRegister}" class="btn btn-primary"
+                             type="submit"/>
+        </h:form>
+
+        <h:messages/>
+</body>
+</html>
