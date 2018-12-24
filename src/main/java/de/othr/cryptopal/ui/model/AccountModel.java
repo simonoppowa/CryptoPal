@@ -29,10 +29,12 @@ public class AccountModel implements Serializable {
         // Check if email field is filled out
         if(credentials.getEmail() == null || credentials.getEmail().equals("")) {
             addWarningMessage("fill_out_email_field");
+            return null;
         }
         // Check if password field is filled out
         if(credentials.getPassword() == null || credentials.getPassword().equals("")) {
             addWarningMessage("fill_out_password_field");
+            return null;
         }
 
         // Check if email is already used
