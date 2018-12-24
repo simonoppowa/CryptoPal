@@ -26,26 +26,38 @@ public class AccountModel implements Serializable {
         System.out.println("Register called with " + credentials.getEmail() + " " + credentials.getPassword() + " "
                 + credentials.getConfirmPassword());
 
+        boolean correctInput = true;
+
         // Check if email field is filled out
         if(credentials.getEmail() == null || credentials.getEmail().equals("")) {
-            addWarningMessage("fill_out_email_field");
-            return null;
+            addWarningMessage("fill_out_email_field", "inputform:email");
+            correctInput = false;
         }
         // Check if password field is filled out
         if(credentials.getPassword() == null || credentials.getPassword().equals("")) {
-            addWarningMessage("fill_out_password_field");
-            return null;
+            addWarningMessage("fill_out_password_field", "inputform:password");
+            correctInput = false;
+        }
+
+        // Check if confirmPassword field is filled out
+        if(credentials.getConfirmPassword() == null || credentials.getConfirmPassword().equals("")) {
+            addWarningMessage("fill_out_password_field", "inputform:confirmPassword");
+            correctInput = false;
         }
 
         // Check if email is already used
-        if(accountService.checkIfAccountAlreadyExists(credentials.getEmail())) {
-            addWarningMessage("login_already_exists");
-            return null;
+        if(correctInput && accountService.checkIfAccountAlreadyExists(credentials.getEmail())) {
+            addWarningMessage("login_already_exists", "inputform:email");
+            correctInput = false;
         }
 
         // Check if passwords match
-        if(!credentials.getPassword().equals(credentials.getConfirmPassword())) {
-            addWarningMessage("passwords_don't_match");
+        if(correctInput && !credentials.getPassword().equals(credentials.getConfirmPassword())) {
+            addWarningMessage("passwords_don't_match", "inputform:confirmPassword");
+            correctInput = false;
+        }
+
+        if(!correctInput) {
             return null;
         }
 
@@ -57,19 +69,19 @@ public class AccountModel implements Serializable {
             System.out.println("New account created: " + loggedInAccount.getEmail() + " " + loggedInAccount.getPassword());
         } else {
             System.out.println("Error while creating account");
-            addWarningMessage("critical_account_creation_error");
+            addWarningMessage("critical_account_creation_error", null);
         }
 
         return "createaccount.faces";
     }
 
-    private void addWarningMessage(String message, Object... args) {
+    private void addWarningMessage(String message, String component) {
         FacesContext context = FacesContext.getCurrentInstance();
-        context.addMessage("registerform", new FacesMessage(FacesMessage.SEVERITY_WARN,
-                getMessage(context, message, args), null));
+        context.addMessage(component, new FacesMessage(FacesMessage.SEVERITY_WARN,
+                "INFO", getMessage(context, message)));
     }
 
-    private String getMessage(FacesContext facesContext, String msgKey, Object... args) {
+    private String getMessage(FacesContext facesContext, String msgKey) {
         // TODO load message from properties
         return "Error 404: " + msgKey;
     }

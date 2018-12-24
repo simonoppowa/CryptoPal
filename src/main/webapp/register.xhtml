@@ -5,35 +5,31 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
 <h:head>
     <title>Register</title>
 </h:head>
 
-<body>
-        <h:form id="registerform">
-            <h:panelGrid columns="2">
-                <h:outputLabel value="Login" for="email"/>
-                <h:inputText id="email" value="#{credentialsModel.email}"/>
-                <h:outputLabel value="Password" for="password"/>
-                <h:inputSecret id="password" value="#{credentialsModel.password}" maxlength="10" size="12"/>
-                <h:outputLabel value="Confirm Password" for="confirmPassword"/>
-                <h:inputSecret id="confirmPassword" value="#{credentialsModel.confirmPassword}" maxlength="10"
-                               size="12"/>
+<h:body>
 
-            </h:panelGrid>
-            <h:commandButton id="mybutton" value="Register" action="#{accountModel.doRegister}" class="btn btn-primary"
-                             type="submit"/>
-        </h:form>
+    <h:form id="inputform">
+        <h:panelGrid id="grid" columns="3" cellpadding="5">
+            <p:outputLabel for="email" value="Email:"/>
+            <p:inputText id="email" value="#{credentialsModel.email}"/>
+            <p:message for="email"/>
 
-        <!--ERROR MESSAGE-->
-        <h:form>
-            <h:message
-                    style="color: red;
-                                font-family: 'New Century Schoolbook', serif;
-                                font-style: oblique;" id="errors1" for="registerform"/>
-            <h:messages/>
-        </h:form>
+            <p:outputLabel for="password" value="Password:"/>
+            <p:password id="password" value="#{credentialsModel.password}" feedback="true"/>
+            <p:message for="password"/>
 
-</body>
+            <p:outputLabel for="confirmPassword" value="Confirm Password:"/>
+            <p:password id="confirmPassword" value="#{credentialsModel.confirmPassword}"/>
+            <p:message for="confirmPassword"/>
+        </h:panelGrid>
+
+        <p:commandButton id="submitButton" value="Submit" update="grid" action="#{accountModel.doRegister}"/>
+    </h:form>
+
+</h:body>
 </html>
