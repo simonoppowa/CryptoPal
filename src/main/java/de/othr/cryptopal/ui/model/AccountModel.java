@@ -9,6 +9,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import java.io.Serializable;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 @SessionScoped
 @ManagedBean
@@ -41,7 +43,7 @@ public class AccountModel implements Serializable {
 
         // Check if confirmPassword field is filled out
         if(credentials.getConfirmPassword() == null || credentials.getConfirmPassword().equals("")) {
-            addWarningMessage("fill_out_password_field", "inputform:confirmPassword");
+            addWarningMessage("fill_out_confirm_password_field", "inputform:confirmPassword");
             correctInput = false;
         }
 
@@ -82,7 +84,10 @@ public class AccountModel implements Serializable {
     }
 
     private String getMessage(FacesContext facesContext, String msgKey) {
-        // TODO load message from properties
-        return "Error 404: " + msgKey;
+        Locale locale = facesContext.getViewRoot().getLocale();
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        ResourceBundle bundle = ResourceBundle.getBundle("messages", locale, classLoader);
+        String msg = bundle.getString(msgKey);
+        return msg;
     }
 }
