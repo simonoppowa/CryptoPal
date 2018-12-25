@@ -2,44 +2,43 @@ package de.othr.cryptopal.service;
 
 import de.othr.cryptopal.entity.Account;
 
-import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
-import javax.persistence.*;
+import javax.faces.bean.ManagedBean;
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @ApplicationScoped
+@ManagedBean
 public class AccountService implements Serializable {
 
     @PersistenceContext
     private EntityManager em;
 
     //TODO Remove
-    @PostConstruct
+//    @PostConstruct
+//    @Transactional
+//    public void createDummies() {
+//        Account account1 = new Account("max.mustermann@gmx.de", "123");
+//        Account account2 = new Account("manfred.mueller@gmail.com", "321");
+//        Account account3 = new Account("maria.meister@freenet.de", "test");
+//
+//        try {
+//            em.persist(account1);
+//            em.persist(account2);
+//            em.persist(account3);
+//        } catch(PersistenceException ex) {
+//            ex.printStackTrace();
+//        }
+//        System.out.println("Dummies created");
+//    }
+
     @Transactional
-    public void createDummies() {
-        Account account1 = new Account("max.mustermann@gmx.de", "123");
-        Account account2 = new Account("manfred.mueller@gmail.com", "321");
-        Account account3 = new Account("maria.meister@freenet.de", "test");
-
-        try {
-            em.persist(account1);
-            em.persist(account2);
-            em.persist(account3);
-        } catch(PersistenceException ex) {
-            ex.printStackTrace();
-        }
-        System.out.println("Dummies created");
-    }
-
-    @Transactional
-    public Account createNewAccount(@NotNull Account account, String confirmPassword) {
-
-        // Check if password matches confirmPassword
-        if(!account.getPassword().equals(confirmPassword)) {
-            return null;
-        }
+    public Account createNewAccount(@NotNull Account account) {
 
         try {
             em.persist(account);

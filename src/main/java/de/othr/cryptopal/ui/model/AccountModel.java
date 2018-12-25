@@ -3,7 +3,9 @@ package de.othr.cryptopal.ui.model;
 import de.othr.cryptopal.entity.Account;
 import de.othr.cryptopal.service.AccountService;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
+import javax.enterprise.inject.Produces;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
@@ -22,10 +24,16 @@ public class AccountModel implements Serializable {
     @Inject
     private CredentialsModel credentials;
 
+    @Produces
     private Account loggedInAccount;
 
+    @PostConstruct
+    private void postConstruct() {
+        loggedInAccount = new Account();
+    }
+
     public String doRegister() {
-        System.out.println("Register called with " + credentials.getEmail() + " " + credentials.getPassword() + " "
+        System.out.println("doRegister called with " + credentials.getEmail() + " " + credentials.getPassword() + " "
                 + credentials.getConfirmPassword());
 
         boolean correctInput = true;
@@ -59,22 +67,33 @@ public class AccountModel implements Serializable {
             correctInput = false;
         }
 
-        if(!correctInput) {
+        if(correctInput) {
+            loggedInAccount = new Account();
+            loggedInAccount.setEmail(credentials.getEmail());
+            loggedInAccount.setPassword(credentials.getPassword());
+            return "createaccount.faces";
+        } else {
             return null;
         }
+    }
 
-        Account newAccount = new Account(credentials.getEmail(), credentials.getPassword());
+    public String doCreateAccount() {
+        System.out.println("doCreateAccount called with " + loggedInAccount.toString());
 
-        loggedInAccount = accountService.createNewAccount(newAccount, credentials.getConfirmPassword());
+        //TODO check input
 
+       accountService.createNewAccount(loggedInAccount);
+
+       //TODO always true
         if(loggedInAccount != null) {
-            System.out.println("New account created: " + loggedInAccount.getEmail() + " " + loggedInAccount.getPassword());
+            System.out.println("New account created: " + loggedInAccount.toString());
         } else {
             System.out.println("Error while creating account");
             addWarningMessage("critical_account_creation_error", null);
+            return null;
         }
 
-        return "createaccount.faces";
+        return "index.faces";
     }
 
     private void addWarningMessage(String message, String component) {
@@ -87,7 +106,14 @@ public class AccountModel implements Serializable {
         Locale locale = facesContext.getViewRoot().getLocale();
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         ResourceBundle bundle = ResourceBundle.getBundle("messages", locale, classLoader);
-        String msg = bundle.getString(msgKey);
-        return msg;
+        return bundle.getString(msgKey);
+    }
+
+    public Account getLoggedInAccount() {
+        return loggedInAccount;
+    }
+
+    public void setLoggedInAccount(Account loggedInAccount) {
+        this.loggedInAccount = loggedInAccount;
     }
 }

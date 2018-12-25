@@ -31,10 +31,14 @@ public class Account implements Serializable {
     public Account() {
     }
 
-    // TODO remove
-    public Account(String email, String password) {
+    public Account(String firstname, String lastname, String email, String password, String defaultCurrencyId,
+                   boolean isBusinessAccount) {
+        this.firstname = firstname;
+        this.lastname = lastname;
         this.email = email;
         this.password = password;
+        this.defaultCurrencyId = defaultCurrencyId;
+        this.isBusinessAccount = isBusinessAccount;
     }
 
     public long getAccountId() {
@@ -91,6 +95,12 @@ public class Account implements Serializable {
 
     public void setBusinessAccount(boolean businessAccount) {
         isBusinessAccount = businessAccount;
+    }
+
+    @Override
+    public String toString() {
+        return accountId + " " + firstname + " " + firstname + " " + email + " " + password + " " + defaultCurrencyId +
+                " " + isBusinessAccount;
     }
 
     @Override
