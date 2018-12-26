@@ -3,7 +3,6 @@ package de.othr.cryptopal.ui.model;
 import de.othr.cryptopal.entity.Account;
 import de.othr.cryptopal.service.AccountService;
 
-import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.enterprise.inject.Produces;
 import javax.faces.application.FacesMessage;
@@ -15,6 +14,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 @SessionScoped
+@javax.faces.bean.SessionScoped // TODO needed because Target Unreachable exception
 @ManagedBean
 public class AccountModel implements Serializable {
 
@@ -26,11 +26,6 @@ public class AccountModel implements Serializable {
 
     @Produces
     private Account loggedInAccount;
-
-    @PostConstruct
-    private void postConstruct() {
-        loggedInAccount = new Account();
-    }
 
     public String doRegister() {
         System.out.println("doRegister called with " + credentials.getEmail() + " " + credentials.getPassword() + " "
@@ -80,20 +75,37 @@ public class AccountModel implements Serializable {
     public String doCreateAccount() {
         System.out.println("doCreateAccount called with " + loggedInAccount.toString());
 
-        //TODO check input
+        boolean correctInput = true;
 
-       accountService.createNewAccount(loggedInAccount);
-
-       //TODO always true
-        if(loggedInAccount != null) {
-            System.out.println("New account created: " + loggedInAccount.toString());
-        } else {
-            System.out.println("Error while creating account");
-            addWarningMessage("critical_account_creation_error", null);
-            return null;
+        // Check if firstname is filled out
+        if(loggedInAccount.getFirstname() == null || loggedInAccount.getFirstname().equals("")) {
+            addWarningMessage("fill_out_firstname_field", "registerdetailform:firstname");
+            correctInput = false;
+        }
+        // Check if lastname is filled out
+        if(loggedInAccount.getLastname() == null || loggedInAccount.getLastname().equals("")) {
+            addWarningMessage("fill_out_lastname_field", "registerdetailform:lastname");
+            correctInput = false;
+        }
+        // Check if defaultCurrency is filled out
+        if(loggedInAccount.getDefaultCurrencyId() == null || loggedInAccount.getDefaultCurrencyId().equals("")) {
+            addWarningMessage("fill_out_defaultcurrency_field", "registerdetailform:defaultCurrency");
+            correctInput = false;
         }
 
-        return "index.faces";
+        if(correctInput) {
+
+            boolean accountCreated = accountService.createNewAccount(loggedInAccount);
+
+            if(accountCreated) {
+                System.out.println("New account created: " + loggedInAccount.toString());
+                return "registersucess.faces";
+            } else {
+                System.out.println("Error while creating account");
+                addWarningMessage("critical_account_creation_error", null);
+            }
+        }
+        return null;
     }
 
     private void addWarningMessage(String message, String component) {

@@ -38,16 +38,16 @@ public class AccountService implements Serializable {
 //    }
 
     @Transactional
-    public Account createNewAccount(@NotNull Account account) {
+    public boolean createNewAccount(@NotNull Account account) {
 
         try {
             em.persist(account);
         } catch (Exception ex) {
             ex.printStackTrace();
-            return null;
+            return false;
         }
 
-        return account;
+        return true;
     }
 
     public boolean checkIfAccountAlreadyExists(String email){

@@ -4,6 +4,7 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
 <h:head>
     <title>Create Account</title>
@@ -12,8 +13,7 @@
 <h:body>
 <h1>Create Account</h1>
 
-    <h:form id="inputform">
-
+    <h:form id="registerdetailform">
 
         <h:panelGrid id="grid" columns="3" cellpadding="5">
             <p:outputLabel for="firstname" value="Firstname:"/>
@@ -21,21 +21,19 @@
             <p:message for="firstname"/>
 
             <p:outputLabel for="lastname" value="Lastname:"/>
-            <p:password id="lastname" value="#{accountModel.loggedInAccount.lastname}"/>
+            <p:inputText id="lastname" value="#{accountModel.loggedInAccount.lastname}"/>
             <p:message for="lastname"/>
 
-            <p:outputLabel for="defaultCurrency" value="Default currency"/>
+            <p:outputLabel for="defaultCurrency" value="Default currency:"/>
             <p:password id="defaultCurrency" value="#{accountModel.loggedInAccount.defaultCurrencyId}"/>
             <p:message for="defaultCurrency"/>
-
 
             <p:outputLabel for="business" value="Is business account"/>
             <p:selectBooleanCheckbox id="business" value="#{accountModel.loggedInAccount.businessAccount}"/>
 
         </h:panelGrid>
 
-
-        <p:commandButton id="submitButton" value="Submit" update="grid" action="#{accountModel.doCreateAccount()}"/>
+        <p:commandButton value="Register" update="grid" action="#{accountModel.doCreateAccount()}"/>
     </h:form>
 
 </h:body>
