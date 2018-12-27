@@ -6,16 +6,15 @@ import de.othr.cryptopal.service.AccountService;
 import javax.enterprise.context.SessionScoped;
 import javax.enterprise.inject.Produces;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.io.Serializable;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
 @SessionScoped
-@javax.faces.bean.SessionScoped // TODO needed because Target Unreachable exception
-@ManagedBean
+@Named
 public class AccountModel implements Serializable {
 
     @Inject

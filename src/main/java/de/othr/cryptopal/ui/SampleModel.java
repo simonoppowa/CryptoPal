@@ -10,7 +10,6 @@ import java.io.Serializable;
 
 @Named
 @SessionScoped
-@ManagedBean
 public class SampleModel implements Serializable {
 
     @Inject

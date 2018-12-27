@@ -10,7 +10,6 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @ApplicationScoped
-@ManagedBean
 public class AccountService implements Serializable {
 
     @PersistenceContext

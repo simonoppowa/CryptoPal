@@ -7,7 +7,6 @@ import java.io.Serializable;
 
 
 @SessionScoped
-@ManagedBean
 @Named
 public class CredentialsModel implements Serializable {
 
