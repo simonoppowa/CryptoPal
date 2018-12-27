@@ -73,16 +73,16 @@ public class AccountModel implements Serializable {
     }
 
     public String doLogin() {
-        System.out.println("doRegister called with " + credentials.getEmail() + " " + credentials.getPassword());
+        System.out.println("doLogin called with " + credentials.getEmail() + " " + credentials.getPassword());
 
         boolean correctInput = true;
 
         if(credentials.getEmail() == null || credentials.getEmail().equals("")) {
-            addWarningMessage("fill_out_email_field", "loginfrom:email");
+            addWarningMessage("fill_out_email_field", "loginform:email");
             correctInput = false;
         }
         if(credentials.getPassword() == null || credentials.getPassword().equals("")) {
-            addWarningMessage("fill_out_password_field", "loginfrom:password");
+            addWarningMessage("fill_out_password_field", "loginform:password");
             correctInput = false;
         }
 
