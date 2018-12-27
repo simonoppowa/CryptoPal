@@ -75,17 +75,27 @@ public class AccountModel implements Serializable {
     public String doLogin() {
         System.out.println("doRegister called with " + credentials.getEmail() + " " + credentials.getPassword());
 
-        // TODO Check input
+        boolean correctInput = true;
 
-        loggedInAccount = accountService.getAccountByCredintials(credentials.getEmail(), credentials.getPassword());
-
-        if(loggedInAccount == null) {
-            addWarningMessage("no_account_found", "loginform:email");
-            return null;
-        } else {
-            System.out.println("Logged in with: " + loggedInAccount.getEmail() + " " + loggedInAccount.getPassword());
+        if(credentials.getEmail() == null || credentials.getEmail().equals("")) {
+            addWarningMessage("fill_out_email_field", "loginfrom:email");
+            correctInput = false;
+        }
+        if(credentials.getPassword() == null || credentials.getPassword().equals("")) {
+            addWarningMessage("fill_out_password_field", "loginfrom:password");
+            correctInput = false;
         }
 
+        if(correctInput) {
+            loggedInAccount = accountService.getAccountByCredintials(credentials.getEmail(), credentials.getPassword());
+
+            if(loggedInAccount == null) {
+                addWarningMessage("no_account_found", "loginform:email");
+            } else {
+                System.out.println("Logged in with: " + loggedInAccount.getEmail() + " " + loggedInAccount.getPassword());
+                return "home.faces";
+            }
+        }
         return null;
     }
 
