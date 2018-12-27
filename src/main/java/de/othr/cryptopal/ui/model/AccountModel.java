@@ -72,6 +72,23 @@ public class AccountModel implements Serializable {
         }
     }
 
+    public String doLogin() {
+        System.out.println("doRegister called with " + credentials.getEmail() + " " + credentials.getPassword());
+
+        // TODO Check input
+
+        loggedInAccount = accountService.getAccountByCredintials(credentials.getEmail(), credentials.getPassword());
+
+        if(loggedInAccount == null) {
+            addWarningMessage("no_account_found", "loginform:email");
+            return null;
+        } else {
+            System.out.println("Logged in with: " + loggedInAccount.getEmail() + " " + loggedInAccount.getPassword());
+        }
+
+        return null;
+    }
+
     public String doCreateAccount() {
         System.out.println("doCreateAccount called with " + loggedInAccount.toString());
 
@@ -118,7 +135,12 @@ public class AccountModel implements Serializable {
         Locale locale = facesContext.getViewRoot().getLocale();
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         ResourceBundle bundle = ResourceBundle.getBundle("messages", locale, classLoader);
-        return bundle.getString(msgKey);
+        if(bundle.containsKey(msgKey)) {
+            return bundle.getString(msgKey);
+        } else {
+            System.out.println("No message found in messages with key: " + msgKey);
+            return "Error";
+        }
     }
 
     public Account getLoggedInAccount() {

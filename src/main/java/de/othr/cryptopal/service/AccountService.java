@@ -4,10 +4,7 @@ import de.othr.cryptopal.entity.Account;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import javax.transaction.Transactional;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -20,22 +17,21 @@ public class AccountService implements Serializable {
     private EntityManager em;
 
     //TODO Remove
-//    @PostConstruct
-//    @Transactional
-//    public void createDummies() {
-//        Account account1 = new Account("max.mustermann@gmx.de", "123");
-//        Account account2 = new Account("manfred.mueller@gmail.com", "321");
-//        Account account3 = new Account("maria.meister@freenet.de", "test");
-//
-//        try {
-//            em.persist(account1);
-//            em.persist(account2);
-//            em.persist(account3);
-//        } catch(PersistenceException ex) {
-//            ex.printStackTrace();
-//        }
-//        System.out.println("Dummies created");
-//    }
+    @Transactional
+    public void createDummies() {
+        Account account1 = new Account("Max", "Mustermann", "max.mustermann@gmx.de", "123", "EUR", false);
+        Account account2 = new Account("Manfred", "Mueller", "manfred.mueller@gmail.de", "321", "EUR", false);
+        Account account3 = new Account("Maria", "Meister", "maria.meister@freenet.de", "test", "USD", true);
+
+        try {
+            em.persist(account1);
+            em.persist(account2);
+            em.persist(account3);
+        } catch(PersistenceException ex) {
+            ex.printStackTrace();
+        }
+        System.out.println("Dummies created");
+    }
 
     @Transactional
     public boolean createNewAccount(@NotNull Account account) {
@@ -48,6 +44,20 @@ public class AccountService implements Serializable {
         }
 
         return true;
+    }
+
+    @Transactional
+    public Account getAccountByCredintials(String email, String password) {
+
+        TypedQuery<Account> typedQuery = em.createNamedQuery(Account.FINDBYCREDETIALS, Account.class);
+        typedQuery.setParameter("email", email);
+        typedQuery.setParameter("password", password);
+
+        try {
+            return typedQuery.getSingleResult();
+        } catch(NoResultException ex) {
+            return null;
+        }
     }
 
     public boolean checkIfAccountAlreadyExists(String email){

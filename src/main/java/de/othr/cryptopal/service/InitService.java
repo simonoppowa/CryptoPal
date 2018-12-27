@@ -18,8 +18,14 @@ public class InitService implements Serializable {
     @Inject
     private CurrencyInformationService currencyInformationService;
 
+    @Inject
+    private AccountService accountService;
+
     public void init() {
         System.out.println("InitService called");
+
+        accountService.createDummies();
+
         currencyInformationService.getAllFiatCurrencies();
         currencyInformationService.getAllCryptoCurrencies();
     }
