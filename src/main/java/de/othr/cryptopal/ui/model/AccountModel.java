@@ -134,6 +134,10 @@ public class AccountModel implements Serializable {
         return null;
     }
 
+    public void doLogout() {
+        loggedInAccount = null;
+    }
+
     private void addWarningMessage(String message, String component) {
         FacesContext context = FacesContext.getCurrentInstance();
         context.addMessage(component, new FacesMessage(FacesMessage.SEVERITY_WARN,

@@ -2,6 +2,7 @@ package de.othr.cryptopal.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @NamedQueries({
@@ -25,6 +26,8 @@ public class Account implements Serializable {
     @Column(unique = true)
     private String email;
     private String password;
+    @OneToMany
+    private List<Wallet> wallets;
     private String defaultCurrencyId;
     private boolean isBusinessAccount;
 
