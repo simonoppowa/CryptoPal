@@ -3,7 +3,6 @@ package de.othr.cryptopal.service;
 import de.othr.cryptopal.entity.Account;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.faces.bean.ManagedBean;
 import javax.persistence.*;
 import javax.transaction.Transactional;
 import javax.validation.constraints.NotNull;
