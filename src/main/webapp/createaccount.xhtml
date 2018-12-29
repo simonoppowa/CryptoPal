@@ -24,19 +24,12 @@
         <p:inputText id="lastname" value="#{accountModel.loggedInAccount.lastname}"/>
         <p:message for="lastname"/>
 
-        </h:panelGrid>
-
-        <!--<p:outputLabel for="defaultCurrency" value="Default currency:"/>-->
-        <!--<p:password id="defaultCurrency" value="#{accountModel.loggedInAccount.defaultCurrencyId}"/>-->
-        <!--<p:message for="defaultCurrency"/>-->
-
-        <h:panelGrid columns="2" cellpadding="5">
             <p:outputLabel for="defaultCurrency" value="Default Currency: "/>
-            <p:selectOneMenu id="defaultCurrency" value="#{dropdownView.country}" style="width:150px">
-                <p:ajax listener="#{dropdownView.onCountryChange}" update="city"/>
-                <f:selectItem itemLabel="Select Country" itemValue="" noSelectionOption="true"/>
-                <f:selectItems value="#{dropdownView.countries}"/>
+            <p:selectOneMenu id="defaultCurrency" value="#{accountModel.currencyDropdownModel.selectedCurrency}" style="width:150px">
+                <f:selectItem itemLabel="Select Currency" itemValue="" noSelectionOption="true" />
+                <f:selectItems value="#{accountModel.currencyDropdownModel.supportedCurrencies}"/>
             </p:selectOneMenu>
+            <p:message for="defaultCurrency"/>
 
             <p:outputLabel for="business" value="Is business account"/>
             <p:selectBooleanCheckbox id="business" value="#{accountModel.loggedInAccount.businessAccount}"/>

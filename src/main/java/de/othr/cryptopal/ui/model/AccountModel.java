@@ -27,6 +27,9 @@ public class AccountModel implements Serializable {
     @Inject
     private CredentialsModel credentials;
 
+    @Inject
+    private CurrencyDropdownModel currencyDropdownModel;
+
     @Produces
     private Account loggedInAccount;
 
@@ -118,9 +121,11 @@ public class AccountModel implements Serializable {
             correctInput = false;
         }
         // Check if defaultCurrency is filled out
-        if(loggedInAccount.getDefaultCurrencyId() == null || loggedInAccount.getDefaultCurrencyId().equals("")) {
+        if(currencyDropdownModel.getSelectedCurrency() == null || currencyDropdownModel.getSelectedCurrency().equals("")) {
             addWarningMessage("fill_out_defaultcurrency_field", "registerdetailform:defaultCurrency");
             correctInput = false;
+        } else {
+            loggedInAccount.setDefaultCurrencyId(currencyDropdownModel.getSelectedCurrency());
         }
 
         if(correctInput) {
@@ -166,5 +171,13 @@ public class AccountModel implements Serializable {
 
     public void setLoggedInAccount(Account loggedInAccount) {
         this.loggedInAccount = loggedInAccount;
+    }
+
+    public CurrencyDropdownModel getCurrencyDropdownModel() {
+        return currencyDropdownModel;
+    }
+
+    public void setCurrencyDropdownModel(CurrencyDropdownModel currencyDropdownModel) {
+        this.currencyDropdownModel = currencyDropdownModel;
     }
 }

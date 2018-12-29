@@ -35,7 +35,7 @@ public class CurrencyInformationService implements Serializable {
             System.out.println(currency.toString());
         }
 
-        return null;
+        return currencies;
     }
 
     public List<Currency> getAllCryptoCurrencies() {
@@ -51,7 +51,7 @@ public class CurrencyInformationService implements Serializable {
             System.out.println(currency.toString());
         }
 
-        return null;
+        return currencies;
     }
 
     private JSONObject fetchFromURL(URL url) {
