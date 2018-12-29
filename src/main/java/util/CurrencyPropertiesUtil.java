@@ -1,11 +1,10 @@
 package util;
 
+import de.othr.cryptopal.entity.Currency;
+
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 public class CurrencyPropertiesUtil {
 
@@ -15,7 +14,7 @@ public class CurrencyPropertiesUtil {
     private static final String SUPPORTED_CRYPTO_CURRENCIES_KEY = "SUPPORTED_CRYPTO_CURRENCIES";
 
     private static String baseCurrencyId = setBaseCurrency();
-    private static List<String> supportedFiatCurrencyStrings = setSupportedFiatCurrencyStrings();
+    private static List<Currency> supportedFiatCurrencies = setSupportedFiatCurrencyStrings();
     private static List<String> supportedCryptoCurrencyStrings = setSupportedCryptoCurrencyStrings();
 
     private static String setBaseCurrency() {
@@ -29,17 +28,25 @@ public class CurrencyPropertiesUtil {
         return currency;
     }
 
-    private static List<String> setSupportedFiatCurrencyStrings() {
+    private static List<Currency> setSupportedFiatCurrencyStrings() {
+
+        List<Currency> supportedCurrencies = new ArrayList<>();
 
         Properties prop = getProperties();
 
         String supportedFiatCurrenciesString = prop.getProperty(SUPPORTED_FIAT_CURRENCIES_KEY);
 
-        List<String> strings = new LinkedList<>(Arrays.asList(supportedFiatCurrenciesString.split(", ")));
-        // Remove base currency (always 1.00)
-        strings.remove(baseCurrencyId);
+        // Split by lines
+        List<String> lines = new LinkedList<>(Arrays.asList(supportedFiatCurrenciesString.split("\\r?\\n")));
 
-        return strings;
+        for(String line : lines) {
+            System.out.println(line);
+            String[] values = line.split(", ");
+            Currency newCurrency = new Currency(values[0], values[1], values[2]);
+            supportedCurrencies.add(newCurrency);
+        }
+
+        return supportedCurrencies;
     }
 
     private static List<String> setSupportedCryptoCurrencyStrings() {
@@ -68,8 +75,8 @@ public class CurrencyPropertiesUtil {
         return baseCurrencyId;
     }
 
-    public static List<String> getSupportedFiatCurrencyStrings() {
-        return supportedFiatCurrencyStrings;
+    public static List<Currency> getSupportedFiatCurrencies() {
+        return supportedFiatCurrencies;
     }
 
     public static List<String> getSupportedCryptoCurrencyStrings() {

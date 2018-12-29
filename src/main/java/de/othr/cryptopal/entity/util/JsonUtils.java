@@ -18,23 +18,28 @@ public class JsonUtils {
 
     private static String BASE_CURRENCY_STRING = CurrencyPropertiesUtil.getBaseCurrency();
 
-    public static List<Currency> getFiatCurrenciesFromResponse(JSONObject jsonObject, List<String> currencies) {
+    public static List<Currency> getFiatCurrenciesFromResponse(JSONObject jsonObject, List<Currency> currencies) {
 
-        List<Currency> fetchedCurrencies = new ArrayList<>();
         try {
             JSONObject rates = jsonObject.getJSONObject(ECB_RATES_STRING);
 
-            for(String currencyString : currencies) {
-                double exchangeRate = Double.parseDouble(rates.getString(currencyString));
+            for(Currency currency : currencies) {
+                // Check if base currency
+                if(!currency.getCurrencyId().equals(BASE_CURRENCY_STRING)) {
+                    double exchangeRate = Double.parseDouble(rates.getString(currency.getCurrencyId()));
 
-                Currency currency = new Currency(currencyString, exchangeRate);
-                fetchedCurrencies.add(currency);
+                    currency.setExchangeRate(exchangeRate);
+                } else {
+                    // Set base currency to 1.00
+                    currency.setExchangeRate(1.00);
+                }
             }
+
         } catch (JSONException ex) {
             ex.printStackTrace();
         }
 
-        return fetchedCurrencies;
+        return currencies;
     }
 
     public static List<Currency> getCryptoCurrenciesFromResponse(JSONObject jsonObject, List<String> currencies) {

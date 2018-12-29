@@ -11,22 +11,32 @@
 </h:head>
 
 <h:body>
-<h1>Create Account</h1>
+    <h1>Create Account</h1>
 
     <h:form id="registerdetailform">
 
         <h:panelGrid id="grid" columns="3" cellpadding="5">
-            <p:outputLabel for="firstname" value="Firstname:"/>
-            <p:inputText id="firstname" value="#{accountModel.loggedInAccount.firstname}"/>
-            <p:message for="firstname"/>
+        <p:outputLabel for="firstname" value="Firstname:"/>
+        <p:inputText id="firstname" value="#{accountModel.loggedInAccount.firstname}"/>
+        <p:message for="firstname"/>
 
-            <p:outputLabel for="lastname" value="Lastname:"/>
-            <p:inputText id="lastname" value="#{accountModel.loggedInAccount.lastname}"/>
-            <p:message for="lastname"/>
+        <p:outputLabel for="lastname" value="Lastname:"/>
+        <p:inputText id="lastname" value="#{accountModel.loggedInAccount.lastname}"/>
+        <p:message for="lastname"/>
 
-            <p:outputLabel for="defaultCurrency" value="Default currency:"/>
-            <p:password id="defaultCurrency" value="#{accountModel.loggedInAccount.defaultCurrencyId}"/>
-            <p:message for="defaultCurrency"/>
+        </h:panelGrid>
+
+        <!--<p:outputLabel for="defaultCurrency" value="Default currency:"/>-->
+        <!--<p:password id="defaultCurrency" value="#{accountModel.loggedInAccount.defaultCurrencyId}"/>-->
+        <!--<p:message for="defaultCurrency"/>-->
+
+        <h:panelGrid columns="2" cellpadding="5">
+            <p:outputLabel for="defaultCurrency" value="Default Currency: "/>
+            <p:selectOneMenu id="defaultCurrency" value="#{dropdownView.country}" style="width:150px">
+                <p:ajax listener="#{dropdownView.onCountryChange}" update="city"/>
+                <f:selectItem itemLabel="Select Country" itemValue="" noSelectionOption="true"/>
+                <f:selectItems value="#{dropdownView.countries}"/>
+            </p:selectOneMenu>
 
             <p:outputLabel for="business" value="Is business account"/>
             <p:selectBooleanCheckbox id="business" value="#{accountModel.loggedInAccount.businessAccount}"/>

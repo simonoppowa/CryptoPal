@@ -13,6 +13,10 @@ public class Currency implements Serializable {
     @Id
     private String currencyId;
 
+    private String currencyName;
+
+    private String symbol;
+
     private double exchangeRate;
 
     public Currency() {
@@ -20,6 +24,12 @@ public class Currency implements Serializable {
 
     public Currency(String currencyId) {
         this.currencyId = currencyId;
+    }
+
+    public Currency(String currencyId, String currencyName, String symbol) {
+        this.currencyId = currencyId;
+        this.currencyName = currencyName;
+        this.symbol = symbol;
     }
 
     public Currency(String currencyId, double exchangeRate) {
@@ -33,6 +43,22 @@ public class Currency implements Serializable {
 
     public void setCurrencyId(String currencyId) {
         this.currencyId = currencyId;
+    }
+
+    public String getCurrencyName() {
+        return currencyName;
+    }
+
+    public void setCurrencyName(String currencyName) {
+        this.currencyName = currencyName;
+    }
+
+    public String getSymbol() {
+        return symbol;
+    }
+
+    public void setSymbol(String symbol) {
+        this.symbol = symbol;
     }
 
     public double getExchangeRate() {

@@ -26,10 +26,15 @@ public class Account implements Serializable {
     @Column(unique = true)
     private String email;
     private String password;
-    @OneToMany
+    @OneToMany(mappedBy = "account")
     private List<Wallet> wallets;
+    @OneToOne
+    private Wallet paymentWallet;
     private String defaultCurrencyId;
+    @ManyToOne
+    private Transaction transaction;
     private boolean isBusinessAccount;
+    private boolean isFrozen;
 
     public Account() {
     }
@@ -84,6 +89,30 @@ public class Account implements Serializable {
         this.password = password;
     }
 
+    public List<Wallet> getWallets() {
+        return wallets;
+    }
+
+    public void setWallets(List<Wallet> wallets) {
+        this.wallets = wallets;
+    }
+
+    public Wallet getPaymentWallet() {
+        return paymentWallet;
+    }
+
+    public void setPaymentWallet(Wallet paymentWallet) {
+        this.paymentWallet = paymentWallet;
+    }
+
+    public Transaction getTransaction() {
+        return transaction;
+    }
+
+    public void setTransaction(Transaction transaction) {
+        this.transaction = transaction;
+    }
+
     public String getDefaultCurrencyId() {
         return defaultCurrencyId;
     }
@@ -98,6 +127,14 @@ public class Account implements Serializable {
 
     public void setBusinessAccount(boolean businessAccount) {
         isBusinessAccount = businessAccount;
+    }
+
+    public boolean isFrozen() {
+        return isFrozen;
+    }
+
+    public void setFrozen(boolean frozen) {
+        isFrozen = frozen;
     }
 
     @Override

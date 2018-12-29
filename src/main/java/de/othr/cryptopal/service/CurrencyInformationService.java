@@ -15,18 +15,25 @@ import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @ApplicationScoped
 public class CurrencyInformationService implements Serializable {
 
-    private List<String> fiatCurrenciesToFetch = CurrencyPropertiesUtil.getSupportedFiatCurrencyStrings();
+    private List<Currency> fiatCurrenciesToFetch = CurrencyPropertiesUtil.getSupportedFiatCurrencies();
     private List<String> cryptoCurrenciesToFetch = CurrencyPropertiesUtil.getSupportedCryptoCurrencyStrings();
 
-
     public List<Currency> getAllFiatCurrencies() {
-        URL url = UrlUtils.buildFiatCurrencyUrl(fiatCurrenciesToFetch);
+
+        // Create list of currencyIds
+        List<String> currencyIds = new ArrayList<>();
+        for(Currency currency : fiatCurrenciesToFetch) {
+            currencyIds.add(currency.getCurrencyId());
+        }
+        // Remove base currency (always 1.00)
+        currencyIds.remove(CurrencyPropertiesUtil.getBaseCurrency());
+
+        URL url = UrlUtils.buildFiatCurrencyUrl(currencyIds);
         JSONObject jsonObject = fetchFromURL(url);
         List<Currency> currencies = JsonUtils.getFiatCurrenciesFromResponse(jsonObject, fiatCurrenciesToFetch);
 
@@ -78,6 +85,19 @@ public class CurrencyInformationService implements Serializable {
         return null;
     }
 
+    public List<Currency> getFiatCurrenciesToFetch() {
+        return fiatCurrenciesToFetch;
+    }
 
+    public void setFiatCurrenciesToFetch(List<Currency> fiatCurrenciesToFetch) {
+        this.fiatCurrenciesToFetch = fiatCurrenciesToFetch;
+    }
 
+    public List<String> getCryptoCurrenciesToFetch() {
+        return cryptoCurrenciesToFetch;
+    }
+
+    public void setCryptoCurrenciesToFetch(List<String> cryptoCurrenciesToFetch) {
+        this.cryptoCurrenciesToFetch = cryptoCurrenciesToFetch;
+    }
 }

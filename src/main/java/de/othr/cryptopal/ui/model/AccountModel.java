@@ -2,6 +2,7 @@ package de.othr.cryptopal.ui.model;
 
 import de.othr.cryptopal.entity.Account;
 import de.othr.cryptopal.service.AccountService;
+import de.othr.cryptopal.service.CurrencyInformationService;
 
 import javax.enterprise.context.SessionScoped;
 import javax.enterprise.inject.Produces;
@@ -19,6 +20,9 @@ public class AccountModel implements Serializable {
 
     @Inject
     private AccountService accountService;
+
+    @Inject
+    private CurrencyInformationService currencyInformationService;
 
     @Inject
     private CredentialsModel credentials;
