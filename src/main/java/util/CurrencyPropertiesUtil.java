@@ -15,7 +15,7 @@ public class CurrencyPropertiesUtil {
 
     private static String baseCurrencyId = setBaseCurrency();
     private static List<Currency> supportedFiatCurrencies = setSupportedFiatCurrencyStrings();
-    private static List<String> supportedCryptoCurrencyStrings = setSupportedCryptoCurrencyStrings();
+    private static List<Currency> supportedCryptoCurrencyStrings = setSupportedCryptoCurrencyStrings();
 
     private static String setBaseCurrency() {
 
@@ -30,32 +30,20 @@ public class CurrencyPropertiesUtil {
 
     private static List<Currency> setSupportedFiatCurrencyStrings() {
 
-        List<Currency> supportedCurrencies = new ArrayList<>();
-
         Properties prop = getProperties();
 
         String supportedFiatCurrenciesString = prop.getProperty(SUPPORTED_FIAT_CURRENCIES_KEY);
 
-        // Split by lines
-        List<String> lines = new LinkedList<>(Arrays.asList(supportedFiatCurrenciesString.split("\\r?\\n")));
-
-        for(String line : lines) {
-            System.out.println(line);
-            String[] values = line.split(", ");
-            Currency newCurrency = new Currency(values[0], values[1], values[2]);
-            supportedCurrencies.add(newCurrency);
-        }
-
-        return supportedCurrencies;
+        return getCurrenciesFromPropString(supportedFiatCurrenciesString);
     }
 
-    private static List<String> setSupportedCryptoCurrencyStrings() {
+    private static List<Currency> setSupportedCryptoCurrencyStrings() {
 
         Properties prop = getProperties();
 
-        String supportedFiatCurrenciesString = prop.getProperty(SUPPORTED_CRYPTO_CURRENCIES_KEY);
+        String supportedCryptoCurrenciesString = prop.getProperty(SUPPORTED_CRYPTO_CURRENCIES_KEY);
 
-        return Arrays.asList(supportedFiatCurrenciesString.split(", "));
+        return getCurrenciesFromPropString(supportedCryptoCurrenciesString);
     }
 
     private static Properties getProperties() {
@@ -71,6 +59,22 @@ public class CurrencyPropertiesUtil {
         return prop;
     }
 
+    private static List<Currency> getCurrenciesFromPropString(String string) {
+
+        List<Currency> supportedCurrencies = new ArrayList<>();
+
+        // Split by lines
+        List<String> lines = new LinkedList<>(Arrays.asList(string.split("\\r?\\n")));
+
+        for(String line : lines) {
+            System.out.println(line);
+            String[] values = line.split(", ");
+            Currency newCurrency = new Currency(values[0], values[1], values[2]);
+            supportedCurrencies.add(newCurrency);
+        }
+        return supportedCurrencies;
+    }
+
     public static String getBaseCurrency() {
         return baseCurrencyId;
     }
@@ -79,7 +83,7 @@ public class CurrencyPropertiesUtil {
         return supportedFiatCurrencies;
     }
 
-    public static List<String> getSupportedCryptoCurrencyStrings() {
+    public static List<Currency> getSupportedCryptoCurrencies() {
         return supportedCryptoCurrencyStrings;
     }
 

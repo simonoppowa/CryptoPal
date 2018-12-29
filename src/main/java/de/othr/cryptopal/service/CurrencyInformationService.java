@@ -21,17 +21,11 @@ import java.util.List;
 public class CurrencyInformationService implements Serializable {
 
     private List<Currency> fiatCurrenciesToFetch = CurrencyPropertiesUtil.getSupportedFiatCurrencies();
-    private List<String> cryptoCurrenciesToFetch = CurrencyPropertiesUtil.getSupportedCryptoCurrencyStrings();
+    private List<Currency> cryptoCurrenciesToFetch = CurrencyPropertiesUtil.getSupportedCryptoCurrencies();
 
     public List<Currency> getAllFiatCurrencies() {
 
-        // Create list of currencyIds
-        List<String> currencyIds = new ArrayList<>();
-        for(Currency currency : fiatCurrenciesToFetch) {
-            currencyIds.add(currency.getCurrencyId());
-        }
-        // Remove base currency (always 1.00)
-        currencyIds.remove(CurrencyPropertiesUtil.getBaseCurrency());
+        List<String> currencyIds = getListOfCurrencyIds(fiatCurrenciesToFetch);
 
         URL url = UrlUtils.buildFiatCurrencyUrl(currencyIds);
         JSONObject jsonObject = fetchFromURL(url);
@@ -45,7 +39,11 @@ public class CurrencyInformationService implements Serializable {
     }
 
     public List<Currency> getAllCryptoCurrencies() {
-        URL url = UrlUtils.buildCryptoCurrencyUrl(cryptoCurrenciesToFetch);
+
+        List<String> currencyIds = getListOfCurrencyIds(cryptoCurrenciesToFetch);
+
+
+        URL url = UrlUtils.buildCryptoCurrencyUrl(currencyIds);
         JSONObject jsonObject = fetchFromURL(url);
         List<Currency> currencies = JsonUtils.getCryptoCurrenciesFromResponse(jsonObject, cryptoCurrenciesToFetch);
 
@@ -85,6 +83,18 @@ public class CurrencyInformationService implements Serializable {
         return null;
     }
 
+    private List<String> getListOfCurrencyIds(List<Currency> currencies) {
+        // TODO optimize
+        List<String> currencyIds = new ArrayList<>();
+        for(Currency currency : currencies) {
+            currencyIds.add(currency.getCurrencyId());
+        }
+        // Remove base currency (always 1.00)
+        currencyIds.remove(CurrencyPropertiesUtil.getBaseCurrency());
+
+        return currencyIds;
+    }
+
     public List<Currency> getFiatCurrenciesToFetch() {
         return fiatCurrenciesToFetch;
     }
@@ -93,11 +103,11 @@ public class CurrencyInformationService implements Serializable {
         this.fiatCurrenciesToFetch = fiatCurrenciesToFetch;
     }
 
-    public List<String> getCryptoCurrenciesToFetch() {
+    public List<Currency> getCryptoCurrenciesToFetch() {
         return cryptoCurrenciesToFetch;
     }
 
-    public void setCryptoCurrenciesToFetch(List<String> cryptoCurrenciesToFetch) {
+    public void setCryptoCurrenciesToFetch(List<Currency> cryptoCurrenciesToFetch) {
         this.cryptoCurrenciesToFetch = cryptoCurrenciesToFetch;
     }
 }

@@ -42,23 +42,21 @@ public class JsonUtils {
         return currencies;
     }
 
-    public static List<Currency> getCryptoCurrenciesFromResponse(JSONObject jsonObject, List<String> currencies) {
-        List<Currency> fetchedCryptoCurrencies = new ArrayList<>();
+    public static List<Currency> getCryptoCurrenciesFromResponse(JSONObject jsonObject, List<Currency> currencies) {
 
         try {
-            for(String currencyString : currencies) {
-                JSONObject cryptoCurrencyJsonObject = jsonObject.getJSONObject(currencyString);
+            for(Currency currency : currencies) {
+                JSONObject cryptoCurrencyJsonObject = jsonObject.getJSONObject(currency.getCurrencyId());
 
                 double exchangeRate = Double.parseDouble(cryptoCurrencyJsonObject.getString(BASE_CURRENCY_STRING));
 
-                Currency currency = new Currency(currencyString, exchangeRate);
-                fetchedCryptoCurrencies.add(currency);
+                currency.setExchangeRate(exchangeRate);
             }
         } catch (JSONException ex) {
             ex.printStackTrace();
         }
 
-        return fetchedCryptoCurrencies;
+        return currencies;
     }
 
 }
