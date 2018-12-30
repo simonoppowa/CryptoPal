@@ -2,6 +2,8 @@ package de.othr.cryptopal.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -26,13 +28,13 @@ public class Account implements Serializable {
     @Column(unique = true)
     private String email;
     private String password;
-    @OneToMany(mappedBy = "account")
+    @OneToMany(mappedBy = "account", cascade=CascadeType.ALL)
     private List<Wallet> wallets;
     @OneToOne
     private Wallet paymentWallet;
     private String defaultCurrencyId;
-    @ManyToOne
-    private Transaction transaction;
+    @OneToMany(cascade=CascadeType.ALL)
+    private List<Transaction> transactions;
     private boolean isBusinessAccount;
     private boolean isFrozen;
 
@@ -47,6 +49,11 @@ public class Account implements Serializable {
         this.password = password;
         this.defaultCurrencyId = defaultCurrencyId;
         this.isBusinessAccount = isBusinessAccount;
+
+        this.wallets = new ArrayList<>();
+        Wallet defaultWallet = new Wallet("Default", this, new BigDecimal(0.00), new Currency(defaultCurrencyId));
+        this.wallets.add(defaultWallet);
+        this.paymentWallet = defaultWallet;
     }
 
     public long getAccountId() {
@@ -105,12 +112,12 @@ public class Account implements Serializable {
         this.paymentWallet = paymentWallet;
     }
 
-    public Transaction getTransaction() {
-        return transaction;
+    public List<Transaction> getTransactions() {
+        return transactions;
     }
 
-    public void setTransaction(Transaction transaction) {
-        this.transaction = transaction;
+    public void setTransactions(List<Transaction> transactions) {
+        this.transactions = transactions;
     }
 
     public String getDefaultCurrencyId() {
@@ -139,8 +146,10 @@ public class Account implements Serializable {
 
     @Override
     public String toString() {
-        return accountId + " " + firstname + " " + firstname + " " + email + " " + password + " " + defaultCurrencyId +
-                " " + isBusinessAccount;
+        return accountId + " " + firstname + " " + lastname + "\n   "
+                + email + " " + password + "\n   "
+                + defaultCurrencyId + " " + isBusinessAccount + "\n   "
+                + "Wallet: " + paymentWallet.toString();
     }
 
     @Override

@@ -1,13 +1,12 @@
 package de.othr.cryptopal.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-@Entity
+@Entity // Cannot be set as MappedSuperclass
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Transaction implements Serializable {
 
     @Id
@@ -24,8 +23,7 @@ public abstract class Transaction implements Serializable {
     public Transaction() {
     }
 
-    public Transaction(long transactionId, Wallet senderWallet, Wallet receiverWallet, BigDecimal amount, Currency paymentCurrency, Date timestamp) {
-        this.transactionId = transactionId;
+    public Transaction(Wallet senderWallet, Wallet receiverWallet, BigDecimal amount, Currency paymentCurrency, Date timestamp) {
         this.senderWallet = senderWallet;
         this.receiverWallet = receiverWallet;
         this.amount = amount;

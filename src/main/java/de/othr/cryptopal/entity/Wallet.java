@@ -1,9 +1,8 @@
 package de.othr.cryptopal.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -12,15 +11,24 @@ public class Wallet implements Serializable {
 
     @Id
     private long walletId;
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid2") // TODO generate address
     private String walletAddress;
     private String walletName;
     @ManyToOne
     private Account account;
     private BigDecimal credit;
-    @OneToOne
+    @OneToOne(cascade= CascadeType.ALL)
     private Currency currency;
 
     public Wallet() {
+    }
+
+    public Wallet(String walletName, Account account, BigDecimal credit, Currency currency) {
+        this.walletName = walletName;
+        this.account = account;
+        this.credit = credit;
+        this.currency = currency;
     }
 
     public long getWalletId() {
@@ -69,6 +77,11 @@ public class Wallet implements Serializable {
 
     public void setCurrency(Currency currency) {
         this.currency = currency;
+    }
+
+    @Override
+    public String toString() {
+        return walletId + " " + walletName + " " + walletAddress;
     }
 
     @Override

@@ -18,17 +18,22 @@ public class AccountService implements Serializable {
     @Transactional
     public void createDummies() {
         Account account1 = new Account("Max", "Mustermann", "max.mustermann@gmx.de", "123", "EUR", false);
-        Account account2 = new Account("Manfred", "Mueller", "manfred.mueller@gmail.de", "321", "EUR", false);
-        Account account3 = new Account("Maria", "Meister", "maria.meister@freenet.de", "test", "USD", true);
+//        Account account2 = new Account("Manfred", "Mueller", "manfred.mueller@gmail.de", "321", "EUR", false);
+//        Account account3 = new Account("Maria", "Meister", "maria.meister@freenet.de", "test", "USD", true);
 
         try {
             em.persist(account1);
-            em.persist(account2);
-            em.persist(account3);
+//            em.persist(account2);
+//            em.persist(account3);
         } catch(PersistenceException ex) {
             ex.printStackTrace();
         }
         System.out.println("Dummies created");
+
+        Account testAccount = getAccountByEmail("max.mustermann@gmx.de");
+
+        System.out.println(testAccount.toString());
+
     }
 
     @Transactional
@@ -42,6 +47,18 @@ public class AccountService implements Serializable {
         }
 
         return true;
+    }
+
+    @Transactional
+    public Account getAccountByEmail(String email) {
+        TypedQuery<Account> typedQuery = em.createNamedQuery(Account.FINDBYEMAIL, Account.class);
+        typedQuery.setParameter("email", email);
+
+        try {
+            return typedQuery.getSingleResult();
+        } catch (NoResultException ex) {
+            return null;
+        }
     }
 
     @Transactional
@@ -59,16 +76,9 @@ public class AccountService implements Serializable {
     }
 
     public boolean checkIfAccountAlreadyExists(String email){
+        Account account = getAccountByEmail(email);
 
-        TypedQuery<Account> typedQuery = em.createNamedQuery(Account.FINDBYEMAIL, Account.class);
-        typedQuery.setParameter("email", email);
-
-        try {
-            typedQuery.getSingleResult();
-            return true;
-        } catch (NoResultException ex) {
-            return false;
-        }
+        return account != null;
     }
 
     // TODO
