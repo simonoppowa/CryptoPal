@@ -21,8 +21,6 @@ public class AccountModel implements Serializable {
     @Inject
     private AccountService accountService;
 
-    @Inject
-    private CurrencyInformationService currencyInformationService;
 
     @Inject
     private CredentialsModel credentials;

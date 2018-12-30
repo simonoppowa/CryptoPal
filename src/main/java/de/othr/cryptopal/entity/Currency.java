@@ -4,6 +4,7 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 import java.io.Serializable;
 
 @Entity
@@ -17,7 +18,10 @@ public class Currency implements Serializable {
 
     private String symbol;
 
+    @Transient
     private double exchangeRate;
+
+    //TODO set currency type
 
     public Currency() {
     }

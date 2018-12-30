@@ -32,7 +32,8 @@ public class Account implements Serializable {
     private List<Wallet> wallets;
     @OneToOne
     private Wallet paymentWallet;
-    private String defaultCurrencyId;
+    @OneToOne
+    private Currency defaultCurrency;
     @OneToMany(cascade=CascadeType.ALL)
     private List<Transaction> transactions;
     private boolean isBusinessAccount;
@@ -41,17 +42,17 @@ public class Account implements Serializable {
     public Account() {
     }
 
-    public Account(String firstname, String lastname, String email, String password, String defaultCurrencyId,
+    public Account(String firstname, String lastname, String email, String password, Currency defaultCurrency,
                    boolean isBusinessAccount) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
         this.password = password;
-        this.defaultCurrencyId = defaultCurrencyId;
+        this.defaultCurrency = defaultCurrency;
         this.isBusinessAccount = isBusinessAccount;
 
         this.wallets = new ArrayList<>();
-        Wallet defaultWallet = new Wallet("Default", this, new BigDecimal(0.00), new Currency(defaultCurrencyId));
+        Wallet defaultWallet = new Wallet("Default", this, new BigDecimal(0.00), defaultCurrency);
         this.wallets.add(defaultWallet);
         this.paymentWallet = defaultWallet;
     }
@@ -120,12 +121,12 @@ public class Account implements Serializable {
         this.transactions = transactions;
     }
 
-    public String getDefaultCurrencyId() {
-        return defaultCurrencyId;
+    public Currency getDefaultCurrency() {
+        return defaultCurrency;
     }
 
-    public void setDefaultCurrencyId(String defaultCurrencyId) {
-        this.defaultCurrencyId = defaultCurrencyId;
+    public void setDefaultCurrencyId(Currency defaultCurrencyId) {
+        this.defaultCurrency = defaultCurrencyId;
     }
 
     public boolean isBusinessAccount() {
@@ -148,7 +149,7 @@ public class Account implements Serializable {
     public String toString() {
         return accountId + " " + firstname + " " + lastname + "\n   "
                 + email + " " + password + "\n   "
-                + defaultCurrencyId + " " + isBusinessAccount + "\n   "
+                + defaultCurrency.getCurrencyName() + " " + isBusinessAccount + "\n   "
                 + "Wallet: " + paymentWallet.toString();
     }
 

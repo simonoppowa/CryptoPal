@@ -34,8 +34,8 @@ public class CurrencyDropdownModel implements Serializable {
         }
     }
 
-    public String getSelectedCurrency() {
-        return selectedCurrency;
+    public Currency getSelectedCurrency() {
+        return currencyInformationService.getCurrencyFromMap(selectedCurrency);
     }
 
     public void setSelectedCurrency(String selectedCurrency) {

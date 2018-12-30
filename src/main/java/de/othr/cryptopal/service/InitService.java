@@ -26,7 +26,7 @@ public class InitService implements Serializable {
 
         accountService.createDummies();
 
-        currencyInformationService.getAllFiatCurrencies();
-        currencyInformationService.getAllCryptoCurrencies();
+//        currencyInformationService.getAllFiatCurrencies();
+//        currencyInformationService.getAllCryptoCurrencies();
     }
 }

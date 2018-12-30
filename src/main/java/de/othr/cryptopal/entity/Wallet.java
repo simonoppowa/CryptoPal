@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 public class Wallet implements Serializable {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long walletId;
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2") // TODO generate address
@@ -29,6 +30,7 @@ public class Wallet implements Serializable {
         this.account = account;
         this.credit = credit;
         this.currency = currency;
+        this.walletAddress = "0x345kj3245k234k";
     }
 
     public long getWalletId() {
@@ -81,7 +83,7 @@ public class Wallet implements Serializable {
 
     @Override
     public String toString() {
-        return walletId + " " + walletName + " " + walletAddress;
+        return walletId + " " + walletName + " " + walletAddress + " " + currency.getCurrencyName();
     }
 
     @Override

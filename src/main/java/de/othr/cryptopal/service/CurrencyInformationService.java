@@ -7,7 +7,8 @@ import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import util.CurrencyPropertiesUtil;
 
-import javax.faces.bean.ApplicationScoped;
+import javax.annotation.PostConstruct;
+import javax.enterprise.context.ApplicationScoped;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -15,13 +16,31 @@ import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @ApplicationScoped
 public class CurrencyInformationService implements Serializable {
 
     private List<Currency> fiatCurrenciesToFetch = CurrencyPropertiesUtil.getSupportedFiatCurrencies();
     private List<Currency> cryptoCurrenciesToFetch = CurrencyPropertiesUtil.getSupportedCryptoCurrencies();
+
+    private Map<String, Currency> currencyMap = new HashMap<>();
+
+    @PostConstruct
+    public void init() {
+        setAllCurrencies();
+    }
+
+    public void setAllCurrencies() {
+        getAllFiatCurrencies();
+        getAllCryptoCurrencies();
+    }
+
+    public Currency getCurrencyFromMap(String key) {
+        return currencyMap.get(key);
+    }
 
     public List<Currency> getAllFiatCurrencies() {
 
@@ -33,6 +52,7 @@ public class CurrencyInformationService implements Serializable {
 
         for(Currency currency : currencies) {
             System.out.println(currency.toString());
+            currencyMap.put(currency.getCurrencyId(), currency);
         }
 
         return currencies;
@@ -49,6 +69,7 @@ public class CurrencyInformationService implements Serializable {
 
         for(Currency currency : currencies) {
             System.out.println(currency.toString());
+            currencyMap.put(currency.getCurrencyId(), currency);
         }
 
         return currencies;
