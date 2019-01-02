@@ -1,6 +1,8 @@
 package de.othr.cryptopal.service;
 
 import de.othr.cryptopal.entity.Account;
+import de.othr.cryptopal.entity.Currency;
+import de.othr.cryptopal.entity.Wallet;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -11,6 +13,7 @@ import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 @ApplicationScoped
 public class AccountService implements Serializable {
@@ -24,6 +27,15 @@ public class AccountService implements Serializable {
     //TODO Remove
     @Transactional
     public void createDummies() {
+        Account cryptoPalAccount = new Account("CryptoPal", "Account",
+                "administration@cryptopal.com", "123",
+                currencyInformationService.getCurrencyFromMap("USD"), true);
+
+        cryptoPalAccount.getWallets().add(new Wallet("USD", cryptoPalAccount, new BigDecimal(100000),
+                currencyInformationService.getCurrencyFromMap("USD")));
+
+        createNewAccount(cryptoPalAccount);
+
         Account account1 = new Account("Max", "Mustermann", "max.mustermann@gmx.de", "123",
                 currencyInformationService.getCurrencyFromMap("EUR"), false);
 
@@ -36,12 +48,12 @@ public class AccountService implements Serializable {
 
         createNewAccount(account2);
 
-        Account testAccount1 = getAccountByEmail("max.mustermann@gmx.de");
-        Account testAccount2 = getAccountByEmail("manfred.mueller@gmail.de");
-
-
-        System.out.println(testAccount1.toString());
-        System.out.println(testAccount2.toString());
+//        Account testAccount1 = getAccountByEmail("max.mustermann@gmx.de");
+//        Account testAccount2 = getAccountByEmail("manfred.mueller@gmail.de");
+//
+//
+//        System.out.println(testAccount1.toString());
+//        System.out.println(testAccount2.toString());
 
         System.out.println("Dummies created");
     }
@@ -83,6 +95,25 @@ public class AccountService implements Serializable {
         } catch(NoResultException ex) {
             return null;
         }
+    }
+
+    @Transactional
+    public Wallet getAccountWallet(String email, Currency currency) {
+        TypedQuery<Wallet> typedQuery = em.createNamedQuery(Wallet.FINDWALLETBYACCOUNTCURRENCY, Wallet.class);
+        typedQuery.setParameter("email", email);
+        typedQuery.setParameter("currency" , currency.getCurrencyId());
+
+        try {
+            return typedQuery.getSingleResult();
+        } catch (NoResultException ex) {
+            return null;
+        }
+
+    }
+
+    @Transactional
+    public void updateAccount(Account account) {
+        em.merge(account);
     }
 
     public boolean checkIfAccountAlreadyExists(String email){

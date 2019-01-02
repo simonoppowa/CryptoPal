@@ -2,7 +2,7 @@ package de.othr.cryptopal.ui.model;
 
 import de.othr.cryptopal.entity.Account;
 import de.othr.cryptopal.service.AccountService;
-import de.othr.cryptopal.service.CurrencyInformationService;
+import de.othr.cryptopal.service.TransferService;
 
 import javax.enterprise.context.SessionScoped;
 import javax.enterprise.inject.Produces;
@@ -27,6 +27,9 @@ public class AccountModel implements Serializable {
 
     @Inject
     private CurrencyDropdownModel currencyDropdownModel;
+
+    @Inject
+    private TransferService transferService;
 
     @Produces
     private Account loggedInAccount;
@@ -104,7 +107,9 @@ public class AccountModel implements Serializable {
     }
 
     public String doCreateAccount() {
-        System.out.println("doCreateAccount called with " + loggedInAccount.toString());
+        System.out.println("doCreateAccount called with " + loggedInAccount.getFirstname() + " "
+                + loggedInAccount.getLastname() + " " + currencyDropdownModel.getSelectedCurrency() + " "
+                + loggedInAccount.isBusinessAccount());
 
         boolean correctInput = true;
 
@@ -123,7 +128,8 @@ public class AccountModel implements Serializable {
             addWarningMessage("fill_out_defaultcurrency_field", "registerdetailform:defaultCurrency");
             correctInput = false;
         } else {
-            loggedInAccount.setDefaultCurrencyId(currencyDropdownModel.getSelectedCurrency());
+            loggedInAccount.setDefaultCurrencyId(currencyDropdownModel.getSelectedCurrencyObject());
+            loggedInAccount.setDetails();
         }
 
         if(correctInput) {
@@ -132,6 +138,11 @@ public class AccountModel implements Serializable {
 
             if(accountCreated) {
                 System.out.println("New account created: " + loggedInAccount.toString());
+
+                // Set start money
+                //transferService.setStartMoney(loggedInAccount);
+
+
                 return "registersucess.faces";
             } else {
                 System.out.println("Error while creating account");

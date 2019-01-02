@@ -2,14 +2,17 @@ package de.othr.cryptopal.entity;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
+@NamedQueries(
+        @NamedQuery(name = Currency.FINDALL, query = "SELECT c FROM Currency c")
+)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Currency implements Serializable {
+
+    public static final String FINDALL = "Currency.findAll";
 
     @Id
     private String currencyId;

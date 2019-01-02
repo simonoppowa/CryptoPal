@@ -7,7 +7,12 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Entity
+@NamedQueries({
+        @NamedQuery(name = Wallet.FINDWALLETBYACCOUNTCURRENCY, query = "SELECT w FROM Wallet w WHERE w.account.email = :email AND w.currency.currencyId = :currency")
+})
 public class Wallet implements Serializable {
+
+    public static final String FINDWALLETBYACCOUNTCURRENCY = "Account.findAccountCurrency";
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -19,7 +24,7 @@ public class Wallet implements Serializable {
     @ManyToOne
     private Account account;
     private BigDecimal credit;
-    @OneToOne(cascade= CascadeType.ALL)
+    @OneToOne
     private Currency currency;
 
     public Wallet() {

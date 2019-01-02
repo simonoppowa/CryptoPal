@@ -30,12 +30,16 @@ public class CurrencyDropdownModel implements Serializable {
         supportedCurrencies = new HashMap<>();
         List<Currency> currencies = currencyInformationService.getAllFiatCurrencies();
         for(Currency currency : currencies) {
-            supportedCurrencies.put(currency.getCurrencyId(), currency.getCurrencyName());
+            supportedCurrencies.put(currency.getCurrencyId(), currency.getCurrencyId());
         }
     }
 
-    public Currency getSelectedCurrency() {
+    public Currency getSelectedCurrencyObject() {
         return currencyInformationService.getCurrencyFromMap(selectedCurrency);
+    }
+
+    public String getSelectedCurrency() {
+        return selectedCurrency;
     }
 
     public void setSelectedCurrency(String selectedCurrency) {

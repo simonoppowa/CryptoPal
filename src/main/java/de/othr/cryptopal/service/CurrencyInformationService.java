@@ -9,6 +9,9 @@ import util.CurrencyPropertiesUtil;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -28,14 +31,18 @@ public class CurrencyInformationService implements Serializable {
 
     private Map<String, Currency> currencyMap = new HashMap<>();
 
+    @PersistenceContext
+    private EntityManager em;
+
     @PostConstruct
     public void init() {
         setAllCurrencies();
     }
 
     public void setAllCurrencies() {
-        getAllFiatCurrencies();
-        getAllCryptoCurrencies();
+        List<Currency> fiatCurrencies = getAllFiatCurrencies();
+        List<Currency> cryptoCurrencies = getAllCryptoCurrencies();
+        persistCurrencies(fiatCurrencies, cryptoCurrencies);
     }
 
     public Currency getCurrencyFromMap(String key) {
@@ -51,7 +58,6 @@ public class CurrencyInformationService implements Serializable {
         List<Currency> currencies = JsonUtils.getFiatCurrenciesFromResponse(jsonObject, fiatCurrenciesToFetch);
 
         for(Currency currency : currencies) {
-            System.out.println(currency.toString());
             currencyMap.put(currency.getCurrencyId(), currency);
         }
 
@@ -62,17 +68,35 @@ public class CurrencyInformationService implements Serializable {
 
         List<String> currencyIds = getListOfCurrencyIds(cryptoCurrenciesToFetch);
 
-
         URL url = UrlUtils.buildCryptoCurrencyUrl(currencyIds);
         JSONObject jsonObject = fetchFromURL(url);
         List<Currency> currencies = JsonUtils.getCryptoCurrenciesFromResponse(jsonObject, cryptoCurrenciesToFetch);
 
         for(Currency currency : currencies) {
-            System.out.println(currency.toString());
             currencyMap.put(currency.getCurrencyId(), currency);
         }
 
         return currencies;
+    }
+
+    @Transactional
+    private void persistCurrencies(List<Currency>... currencies) {
+
+        for(List<Currency> currencyList : currencies) {
+            for(Currency currency : currencyList) {
+                em.persist(currency);
+            }
+        }
+        em.flush();
+
+        // Put currencies in map
+        for(List<Currency> currencyList : currencies) {
+            for(Currency currency : currencyList) {
+                System.out.println(currency.toString());
+                currencyMap.put(currency.getCurrencyId(), currency);
+            }
+        }
+
     }
 
     private JSONObject fetchFromURL(URL url) {

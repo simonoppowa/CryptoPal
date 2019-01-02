@@ -28,7 +28,7 @@ public class Account implements Serializable {
     @Column(unique = true)
     private String email;
     private String password;
-    @OneToMany(mappedBy = "account", cascade=CascadeType.ALL)
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
     private List<Wallet> wallets;
     @OneToOne
     private Wallet paymentWallet;
@@ -51,10 +51,16 @@ public class Account implements Serializable {
         this.defaultCurrency = defaultCurrency;
         this.isBusinessAccount = isBusinessAccount;
 
+        setDetails();
+    }
+
+    public void setDetails() {
         this.wallets = new ArrayList<>();
         Wallet defaultWallet = new Wallet("Default", this, new BigDecimal(0.00), defaultCurrency);
         this.wallets.add(defaultWallet);
         this.paymentWallet = defaultWallet;
+        this.transactions = new ArrayList<>();
+        isFrozen = false;
     }
 
     public long getAccountId() {
