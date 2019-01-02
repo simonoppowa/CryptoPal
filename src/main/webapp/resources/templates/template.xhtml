@@ -27,7 +27,7 @@
                     <p:menuitem value="Account" outcome="account">
                         <f:param name="i" value="3" />
                     </p:menuitem>
-                    <p:menuitem id="logout" value="Logout"/>
+                    <p:menuitem id="logout" value="Logout" action="accountModel.doLogout" outcome="index"/>
                 </p:tabMenu>
             </h:form>
         </ui:insert>
