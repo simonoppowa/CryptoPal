@@ -13,7 +13,7 @@ public abstract class Transaction implements Serializable {
     private long transactionId;
     @OneToOne
     private Wallet senderWallet;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL) //TODO remove cascade
     private Wallet receiverWallet;
     private BigDecimal amount;
     @OneToOne

@@ -2,6 +2,7 @@ package de.othr.cryptopal.service;
 
 import de.othr.cryptopal.entity.Account;
 import de.othr.cryptopal.entity.Currency;
+import de.othr.cryptopal.entity.Transfer;
 import de.othr.cryptopal.entity.Wallet;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -14,6 +15,7 @@ import javax.transaction.Transactional;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 
 @ApplicationScoped
 public class AccountService implements Serializable {
@@ -33,6 +35,9 @@ public class AccountService implements Serializable {
 
         cryptoPalAccount.getWallets().add(new Wallet("USD", cryptoPalAccount, new BigDecimal(100000),
                 currencyInformationService.getCurrencyFromMap("USD")));
+        cryptoPalAccount.getTransactions().add(new Transfer(cryptoPalAccount.getWallets().get(0), new Wallet("Test", cryptoPalAccount, new BigDecimal(2), currencyInformationService.getCurrencyFromMap("USD")), new BigDecimal(2), currencyInformationService.getCurrencyFromMap("USD"), new Date(System.currentTimeMillis()), "Message"));
+
+
 
         createNewAccount(cryptoPalAccount);
 
