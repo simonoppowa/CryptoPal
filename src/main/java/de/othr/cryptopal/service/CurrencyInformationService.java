@@ -96,7 +96,6 @@ public class CurrencyInformationService implements Serializable {
                 currencyMap.put(currency.getCurrencyId(), currency);
             }
         }
-
     }
 
     private JSONObject fetchFromURL(URL url) {
