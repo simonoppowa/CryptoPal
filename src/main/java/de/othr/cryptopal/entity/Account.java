@@ -1,5 +1,8 @@
 package de.othr.cryptopal.entity;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -28,13 +31,14 @@ public class Account implements Serializable {
     @Column(unique = true)
     private String email;
     private String password;
-    @OneToMany(mappedBy = "account", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<Wallet> wallets;
     @OneToOne
     private Wallet paymentWallet;
     @OneToOne
     private Currency defaultCurrency;
-    @OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER)
     private List<Transaction> transactions;
     private boolean isBusinessAccount;
     private boolean isFrozen;
@@ -105,6 +109,16 @@ public class Account implements Serializable {
 
     public List<Wallet> getWallets() {
         return wallets;
+    }
+
+    public Wallet getWalletByCurrency(Currency currency) {
+
+        for(Wallet tempWallet : wallets) {
+            if(tempWallet.getCurrency().equals(currency)) {
+                return tempWallet;
+            }
+        }
+        return null;
     }
 
     public void setWallets(List<Wallet> wallets) {

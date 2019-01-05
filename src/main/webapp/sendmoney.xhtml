@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xml:lang="en" lang="en">
+<h:head>
+    <title>Send Money</title>
+</h:head>
+<h:body>
+
+    <ui:composition template="resources/templates/template.xhtml">
+
+        <ui:define name="page-content">
+
+
+            <h:form id="inputform">
+                <h:panelGrid id="grid" columns="3" cellpadding="5">
+                    <p:outputLabel for="email" value="Reiceiver Email:"/>
+                    <p:inputText id="email" value="#{transferModel.receiverEmail}"/>
+                    <p:message for="email"/>
+
+                    <p:outputLabel for="wallet" value="Wallet:"/>
+                    <p:inputText id="wallet" value="#{transferModel.currencyString}"/>
+                    <p:message for="wallet"/>
+
+                    <p:outputLabel for="amount" value="Amount:"/>
+                    <p:inputNumber id="amount" value="#{transferModel.amount}"/>
+                    <p:message for="amount"/>
+
+                    <p:outputLabel for="message" value="Transfer message:"/>
+                    <p:inputText id="message" value="#{transferModel.transferMessage}"/>
+                    <p:message for="message"/>
+                </h:panelGrid>
+
+                <p:commandButton id="submitButton" value="Send Money" update="grid" action="#{transferModel.transferMoney}"/>
+            </h:form>
+
+        </ui:define>
+    </ui:composition>
+
+
+
+</h:body>
+</html>

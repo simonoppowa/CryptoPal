@@ -10,6 +10,7 @@ import java.util.Date;
 public abstract class Transaction implements Serializable {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long transactionId;
     @OneToOne
     private Wallet senderWallet;

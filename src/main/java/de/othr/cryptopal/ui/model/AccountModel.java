@@ -21,7 +21,6 @@ public class AccountModel implements Serializable {
     @Inject
     private AccountService accountService;
 
-
     @Inject
     private CredentialsModel credentials;
 
@@ -139,9 +138,10 @@ public class AccountModel implements Serializable {
             if(accountCreated) {
                 System.out.println("New account created: " + loggedInAccount.toString());
 
-                // Set start money
-                //transferService.setStartMoney(loggedInAccount);
 
+                // Set start money
+                transferService.setStartMoney(loggedInAccount);
+                //loggedInAccount = accountService.getAccountByCredintials(credentials.getEmail(), credentials.getPassword());
 
                 return "registersucess.faces";
             } else {
@@ -175,6 +175,10 @@ public class AccountModel implements Serializable {
     }
 
     public Account getLoggedInAccount() {
+        //TODO
+        if(loggedInAccount.getWallets() != null) {
+            loggedInAccount = accountService.getAccountByEmail(loggedInAccount.getEmail());
+        }
         return loggedInAccount;
     }
 
