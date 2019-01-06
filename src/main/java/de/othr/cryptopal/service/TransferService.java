@@ -60,7 +60,7 @@ public class TransferService extends AbstractService<Transfer> {
         }
 
         // SEND MONEY
-        senderWallet.setCredit(senderWallet.getCredit().divide(amount));
+        senderWallet.setCredit(senderWallet.getCredit().subtract(amount));
         receiverWallet.setCredit(receiverWallet.getCredit().add(amount));
 
         em.persist(transaction);

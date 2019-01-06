@@ -6,17 +6,12 @@ import de.othr.cryptopal.service.TransferService;
 
 import javax.enterprise.context.SessionScoped;
 import javax.enterprise.inject.Produces;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.io.Serializable;
-import java.util.Locale;
-import java.util.ResourceBundle;
 
 @SessionScoped
 @Named
-public class AccountModel implements Serializable {
+public class AccountModel extends AbstractModel {
 
     @Inject
     private AccountService accountService;
@@ -154,24 +149,6 @@ public class AccountModel implements Serializable {
 
     public void doLogout() {
         loggedInAccount = null;
-    }
-
-    private void addWarningMessage(String message, String component) {
-        FacesContext context = FacesContext.getCurrentInstance();
-        context.addMessage(component, new FacesMessage(FacesMessage.SEVERITY_WARN,
-                "INFO", getMessage(context, message)));
-    }
-
-    private String getMessage(FacesContext facesContext, String msgKey) {
-        Locale locale = facesContext.getViewRoot().getLocale();
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        ResourceBundle bundle = ResourceBundle.getBundle("messages", locale, classLoader);
-        if(bundle.containsKey(msgKey)) {
-            return bundle.getString(msgKey);
-        } else {
-            System.out.println("No message found in messages with key: " + msgKey);
-            return "Error";
-        }
     }
 
     public Account getLoggedInAccount() {

@@ -10,12 +10,11 @@ import de.othr.cryptopal.service.TransferService;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.io.Serializable;
 import java.math.BigDecimal;
 
 @SessionScoped
 @Named
-public class TransferModel implements Serializable {
+public class TransferModel extends AbstractModel {
 
     @Inject
     private AccountModel accountModel;
@@ -38,27 +37,55 @@ public class TransferModel implements Serializable {
     }
 
     public void transferMoney() {
-        System.out.println("transferMoney called with: " + receiverEmail + " " + currencyString
-                + " " + amount.toPlainString() + " " + transferMessage);
+        System.out.print("transferMoney called with: " + receiverEmail + " " + currencyString
+                + " " + transferMessage);
+        if(amount != null) {
+            System.out.println(amount.toPlainString());
+        }
 
+        boolean correctInput = true;
+
+        // Check if receiver email field is filled out
+        if(receiverEmail == null || receiverEmail.equals("")) {
+            addWarningMessage("fill_out_email_field", "sendform:email");
+            correctInput = false;
+        }
+        Account receiver = accountService.getAccountByEmail(receiverEmail);
+
+        if(receiver == null) {
+            addWarningMessage("no_receiver_account_found", "sendform:email");
+            correctInput = false;
+        }
+
+        // Check wallet
         Currency senderCurrency = currencyInformationService.getCurrencyFromMap(currencyString);
 
         if(senderCurrency == null) {
-            System.out.println("Currency not found: " + currencyString);
-            return;
+            addWarningMessage("currency_not_found", "sendform:wallet");
+            correctInput = false;
         }
 
         Wallet senderWallet = accountModel.getLoggedInAccount().getWalletByCurrency(senderCurrency);
 
-        Account receiver = accountService.getAccountByEmail(receiverEmail);
+        // Check if amount input is valid
+        if(amount == null) {
+            addWarningMessage("fill_out_amount_field", "sendform:amount");
+            correctInput = false;
 
-        if(receiver == null) {
-            System.out.println("Account not found with email: " + receiverEmail);
-            return;
+        } else if(senderWallet.getCredit().subtract(amount).longValue() < 0){
+            addWarningMessage("not_enough_credit", "senderform:amount");
+            correctInput = false;
         }
 
+        // Check if message input is valid
+        if(transferMessage == null || transferMessage.equals("")) {
+            addWarningMessage("fill_out_transfer_message", "sendform:message");
+            correctInput = false;
+        }
 
-        transferService.sendMoney(senderWallet, receiverEmail, amount, transferMessage);
+        if(correctInput) {
+            transferService.sendMoney(senderWallet, receiverEmail, amount, transferMessage);
+        }
 
     }
 
