@@ -6,23 +6,21 @@ import de.othr.cryptopal.entity.Wallet;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 import java.math.BigDecimal;
 
 @ApplicationScoped
-public class AccountService implements Serializable {
+public class AccountService extends AbstractService<Account> {
 
     @Inject
     private CurrencyInformationService currencyInformationService;
 
-    @PersistenceContext
-    private EntityManager em;
+    public AccountService() {
+        super(Account.class);
+    }
 
     //TODO Remove
     @Transactional
@@ -117,7 +115,7 @@ public class AccountService implements Serializable {
 
     @Transactional
     public void updateAccount(Account account) {
-        em.merge(account);
+        merge(account);
     }
 
     public boolean checkIfAccountAlreadyExists(String email){

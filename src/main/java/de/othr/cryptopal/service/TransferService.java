@@ -12,16 +12,17 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @SessionScoped
-public class TransferService implements Serializable {
-
-    @PersistenceContext
-    private EntityManager em;
+public class TransferService extends AbstractService<Transfer> {
 
     @Inject
     private AccountService accountService;
 
     @Inject
     private CurrencyInformationService currencyInformationService;
+
+    public TransferService() {
+        super(Transfer.class);
+    }
 
     @Transactional
     public void setStartMoney(Account account) {

@@ -24,15 +24,16 @@ import java.util.List;
 import java.util.Map;
 
 @ApplicationScoped
-public class CurrencyInformationService implements Serializable {
+public class CurrencyInformationService extends AbstractService<Currency> {
 
     private List<Currency> fiatCurrenciesToFetch = CurrencyPropertiesUtil.getSupportedFiatCurrencies();
     private List<Currency> cryptoCurrenciesToFetch = CurrencyPropertiesUtil.getSupportedCryptoCurrencies();
 
     private Map<String, Currency> currencyMap = new HashMap<>();
 
-    @PersistenceContext
-    private EntityManager em;
+    public CurrencyInformationService() {
+        super(Currency.class);
+    }
 
     @PostConstruct
     public void init() {

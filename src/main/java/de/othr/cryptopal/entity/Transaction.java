@@ -80,6 +80,7 @@ public abstract class Transaction implements Serializable {
         this.timestamp = timestamp;
     }
 
+    // TODO make abstract
     public String getDetails() {
 
         if(this instanceof Transfer) {
