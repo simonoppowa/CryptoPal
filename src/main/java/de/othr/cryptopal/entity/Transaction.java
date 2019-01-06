@@ -80,6 +80,15 @@ public abstract class Transaction implements Serializable {
         this.timestamp = timestamp;
     }
 
+    public String getDetails() {
+
+        if(this instanceof Transfer) {
+            Transfer transfer = (Transfer) this;
+            return transfer.getTransferMessage();
+        }
+        return "";
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
