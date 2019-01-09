@@ -29,8 +29,9 @@ public class AccountService extends AbstractService<Account> {
                 "administration@cryptopal.com", "123",
                 currencyInformationService.getCurrencyFromMap("USD"), true);
 
-        cryptoPalAccount.getWallets().add(new Wallet("USD", cryptoPalAccount, new BigDecimal(100000),
-                currencyInformationService.getCurrencyFromMap("USD")));
+        cryptoPalAccount.getWalletByCurrency(currencyInformationService.getCurrencyFromMap("USD")).setCredit(new BigDecimal(10000));
+        cryptoPalAccount.getWallets().add(new Wallet("EUR", cryptoPalAccount, new BigDecimal(100000),
+                currencyInformationService.getCurrencyFromMap("EUR")));
         //cryptoPalAccount.getTransactions().add(new Transfer(cryptoPalAccount.getWallets().get(0), new Wallet("Test", cryptoPalAccount, new BigDecimal(2), currencyInformationService.getCurrencyFromMap("USD")), new BigDecimal(2), currencyInformationService.getCurrencyFromMap("USD"), new Date(System.currentTimeMillis()), "Message"));
 
         //em.persist(new Transfer(cryptoPalAccount.getWallets().get(0), new Wallet("Test", cryptoPalAccount, new BigDecimal(2), currencyInformationService.getCurrencyFromMap("USD")), new BigDecimal(2), currencyInformationService.getCurrencyFromMap("USD"), new Date(System.currentTimeMillis()), "Message"));

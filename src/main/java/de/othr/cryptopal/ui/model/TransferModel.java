@@ -73,7 +73,7 @@ public class TransferModel extends AbstractModel {
             correctInput = false;
 
         } else if(senderWallet.getCredit().subtract(amount).longValue() < 0){
-            addWarningMessage("not_enough_credit", "senderform:amount");
+            addWarningMessage("not_enough_credit", "sendform:amount");
             correctInput = false;
         }
 
