@@ -84,7 +84,9 @@ public class PaymentService extends TransactionService<Payment> {
     }
 
     @Transactional
-    public PaymentDTO checkPaymentInfo(long transactionId, String email, String password) throws PaymentException {
+    public PaymentDTO checkPaymentInfo(@WebParam(name = "transactionId") long transactionId,
+                                       @WebParam(name = "email") String email,
+                                       @WebParam(name = "password") String password) throws PaymentException {
 
         Account account = accountService.getAccountByCredintials(email, password);
 
@@ -94,11 +96,11 @@ public class PaymentService extends TransactionService<Payment> {
 
         Transaction transaction = findTransactionById(transactionId);
 
-        if(!(transaction instanceof Payment) || !(transaction.getSenderWallet().getAccount() == account)
-                || !(transaction.getReceiverWallet().getAccount() == account)) {
-            throw new PaymentException("No payment with id found");
-        } else {
+        if(transaction instanceof Payment && (transaction.getSenderWallet().getAccount() == account
+                || transaction.getReceiverWallet().getAccount() == account)) {
             return new PaymentDTO((Payment) transaction);
+        } else {
+            throw new PaymentException("No payment with id found");
         }
     }
 }
