@@ -6,8 +6,15 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity // Cannot be set as MappedSuperclass
+@NamedQueries({
+        @NamedQuery(name = Transaction.FINDALL, query = "SELECT t FROM Transaction t"),
+        @NamedQuery(name = Transaction.FINDBYID, query = "SELECT t FROM Transaction t WHERE t.id = :id")
+})
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Transaction implements Serializable {
+
+    public static final String FINDALL = "Transaction.findAll";
+    public static final String FINDBYID = "Transaction.findById";
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

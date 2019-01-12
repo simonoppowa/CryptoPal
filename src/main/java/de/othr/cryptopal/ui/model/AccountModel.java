@@ -148,6 +148,7 @@ public class AccountModel extends AbstractModel {
     }
 
     public void doLogout() {
+        System.out.println("doLogout called");
         loggedInAccount = null;
     }
 

@@ -1,8 +1,6 @@
 package de.othr.cryptopal.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
 

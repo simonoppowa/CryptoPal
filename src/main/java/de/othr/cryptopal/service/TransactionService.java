@@ -3,6 +3,8 @@ package de.othr.cryptopal.service;
 import de.othr.cryptopal.entity.*;
 
 import javax.inject.Inject;
+import javax.persistence.NoResultException;
+import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
 
@@ -19,6 +21,18 @@ public abstract class TransactionService<T> extends AbstractService<Transaction>
 
     public TransactionService(Class<T> entityClass) {
         super(Transaction.class);
+    }
+
+    @Transactional
+    Transaction findTransactionById(long transactionId) {
+        TypedQuery<Transaction> typedQuery = em.createNamedQuery(Transaction.FINDBYID, Transaction.class);
+        typedQuery.setParameter("id", transactionId);
+
+        try {
+            return typedQuery.getSingleResult();
+        } catch (NoResultException ex) {
+            return null;
+        }
     }
 
     @Transactional(value = Transactional.TxType.REQUIRES_NEW)
