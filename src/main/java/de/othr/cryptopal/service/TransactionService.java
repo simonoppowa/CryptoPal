@@ -21,7 +21,7 @@ public abstract class TransactionService<T> extends AbstractService<Transaction>
         super(Transaction.class);
     }
 
-    @Transactional
+    @Transactional(value = Transactional.TxType.REQUIRES_NEW)
     void executeTransaction(Transaction transaction, Account receiver) {
         Currency transactionCurrency = transaction.getPaymentCurrency();
         Account sender = transaction.getSenderWallet().getAccount();
@@ -34,7 +34,7 @@ public abstract class TransactionService<T> extends AbstractService<Transaction>
 
         if(receiverWallet == null) {
             receiverWallet = new Wallet(transactionCurrency.getCurrencyName(),
-                    sender, new BigDecimal(0.00), transactionCurrency);
+                    receiver, new BigDecimal(0.00), transactionCurrency);
             em.persist(receiverWallet);
             receiver.getWallets().add(receiverWallet);
         }

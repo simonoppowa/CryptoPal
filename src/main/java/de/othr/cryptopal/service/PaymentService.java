@@ -3,6 +3,7 @@ package de.othr.cryptopal.service;
 import de.othr.cryptopal.entity.Account;
 import de.othr.cryptopal.entity.Currency;
 import de.othr.cryptopal.entity.Payment;
+import de.othr.cryptopal.service.dto.PaymentDTO;
 
 import javax.enterprise.context.SessionScoped;
 import javax.jws.WebMethod;
@@ -18,13 +19,13 @@ public class PaymentService extends TransactionService<Payment> {
 
     @WebMethod
     @Transactional
-    public Payment pay(@WebParam(name = "senderEmail") String senderEmail,
-                    @WebParam(name = "senderPassword") String senderPassword,
-                    @WebParam(name = "receiverEmail") String receiverEmail,
-                    @WebParam(name = "amount") BigDecimal amount,
-                    @WebParam(name = "currencyId") String currencyCode,
-                    @WebParam(name = "paymentComment") String comment,
-                    @WebParam(name = "taxInPercentage") double tax) {
+    public PaymentDTO pay(@WebParam(name = "senderEmail") String senderEmail,
+                          @WebParam(name = "senderPassword") String senderPassword,
+                          @WebParam(name = "receiverEmail") String receiverEmail,
+                          @WebParam(name = "amount") BigDecimal amount,
+                          @WebParam(name = "currencyId") String currencyCode,
+                          @WebParam(name = "paymentComment") String comment,
+                          @WebParam(name = "taxInPercentage") double tax) {
 
         Account sender = accountService.getAccountByCredintials(senderEmail, senderPassword);
 
@@ -58,6 +59,11 @@ public class PaymentService extends TransactionService<Payment> {
 
         executeTransaction(payment, receiver);
 
-        return payment;
+        // Assign newly created wallet if necessary
+        if(payment.getReceiverWallet() == null) {
+            payment.setReceiverWallet(receiver.getWalletByCurrency(paymentCurrency));
+        }
+
+        return new PaymentDTO(payment);
     }
 }
