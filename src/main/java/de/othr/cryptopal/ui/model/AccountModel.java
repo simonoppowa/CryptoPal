@@ -8,6 +8,7 @@ import javax.enterprise.context.SessionScoped;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.transaction.Transactional;
 
 @SessionScoped
 @Named
@@ -28,6 +29,7 @@ public class AccountModel extends AbstractModel {
     @Produces
     private Account loggedInAccount;
 
+    @Transactional // TODO Remove
     public String doRegister() {
         System.out.println("doRegister called with " + credentials.getEmail() + " " + credentials.getPassword() + " "
                 + credentials.getConfirmPassword());
@@ -73,6 +75,7 @@ public class AccountModel extends AbstractModel {
         }
     }
 
+    @Transactional //TODO Remove
     public String doLogin() {
         System.out.println("doLogin called with " + credentials.getEmail() + " " + credentials.getPassword());
 

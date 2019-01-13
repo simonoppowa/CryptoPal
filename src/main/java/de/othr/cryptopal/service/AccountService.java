@@ -4,6 +4,7 @@ import de.othr.cryptopal.entity.Account;
 import de.othr.cryptopal.entity.Currency;
 import de.othr.cryptopal.entity.Wallet;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.NoResultException;
@@ -22,7 +23,7 @@ public class AccountService extends AbstractService<Account> {
         super(Account.class);
     }
 
-    //TODO Remove
+    @PostConstruct
     @Transactional
     public void createDummies() {
         Account cryptoPalAccount = new Account("CryptoPal", "Account",
@@ -61,7 +62,7 @@ public class AccountService extends AbstractService<Account> {
         System.out.println("Dummies created");
     }
 
-    @Transactional
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
     public boolean createNewAccount(@NotNull Account account) {
 
         try {

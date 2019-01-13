@@ -9,7 +9,6 @@ import javax.persistence.PersistenceContext;
 import java.io.Serializable;
 
 @ApplicationScoped
-@ManagedBean
 public class InitService implements Serializable {
 
     @PersistenceContext
@@ -24,7 +23,7 @@ public class InitService implements Serializable {
     public void init() {
         System.out.println("InitService called");
 
-        accountService.createDummies();
+        //accountService.createDummies();
 
 //        currencyInformationService.getAllFiatCurrencies();
 //        currencyInformationService.getAllCryptoCurrencies();
