@@ -43,7 +43,7 @@ public abstract class TransactionService<T> extends AbstractService<Transaction>
         // Attach senderWallet
         Wallet senderWallet = accountService.getAccountWallet(transaction.getSenderWallet()
                 .getAccount().getEmail(), transactionCurrency);
-        Wallet receiverWallet = transaction.getReceiverWallet();
+        Wallet receiverWallet = accountService.getAccountWallet(receiver.getEmail(), transactionCurrency);
         BigDecimal amount = transaction.getAmount();
 
         // Create new wallet for currency
@@ -59,13 +59,9 @@ public abstract class TransactionService<T> extends AbstractService<Transaction>
         receiverWallet.setCredit(receiverWallet.getCredit().add(amount));
 
         em.persist(transaction);
-        //em.flush();
-        // TODO fix unique index error
+
         sender.getTransactions().add(transaction);
-
         receiver.getTransactions().add(transaction);
-
-
     }
 
 }

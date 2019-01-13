@@ -20,7 +20,9 @@
                 <f:facet name="header">
                     Transactions
                 </f:facet>
-                #{transaction.transactionId}: #{transaction.amount} #{transaction.paymentCurrency.currencyId} #{transaction.details}
+                <h:outputText value="ID: #{transaction.transactionId}: #{transaction.amount} #{transaction.paymentCurrency.currencyId} #{transaction.details}"
+                              style="#{transaction.isOutgoing(accountModel.loggedInAccount) ? 'color:red': 'color:green'}" />
+
             </p:dataList>
 
 

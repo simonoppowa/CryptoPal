@@ -10,7 +10,7 @@ import java.util.Date;
         @NamedQuery(name = Transaction.FINDALL, query = "SELECT t FROM Transaction t"),
         @NamedQuery(name = Transaction.FINDBYID, query = "SELECT t FROM Transaction t WHERE t.id = :id")
 })
-//@Inheritance(strategy = InheritanceType.JOINED)
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Transaction implements Serializable {
 
     public static final String FINDALL = "Transaction.findAll";
@@ -85,6 +85,10 @@ public abstract class Transaction implements Serializable {
 
     public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public boolean isOutgoing(Account account) {
+        return senderWallet.getAccount().equals(account);
     }
 
     public abstract String getDetails();
