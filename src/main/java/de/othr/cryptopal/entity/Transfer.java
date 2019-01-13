@@ -30,6 +30,11 @@ public class Transfer extends Transaction {
     }
 
     @Override
+    public String getTransactionType() {
+        return "Transfer";
+    }
+
+    @Override
     public String getDetails() {
         return transferMessage;
     }

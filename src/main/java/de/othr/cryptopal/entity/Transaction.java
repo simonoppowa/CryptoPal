@@ -91,6 +91,8 @@ public abstract class Transaction implements Serializable {
         return senderWallet.getAccount().equals(account);
     }
 
+    public abstract String getTransactionType();
+
     public abstract String getDetails();
 
     @Override

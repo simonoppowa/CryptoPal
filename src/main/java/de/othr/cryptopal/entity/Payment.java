@@ -48,6 +48,11 @@ public class Payment extends Transaction{
     }
 
     @Override
+    public String getTransactionType() {
+        return "Payment";
+    }
+
+    @Override
     public String getDetails() {
         return comment;
     }

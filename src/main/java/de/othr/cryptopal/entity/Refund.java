@@ -41,6 +41,11 @@ public class Refund extends Transaction {
     }
 
     @Override
+    public String getTransactionType() {
+        return "Refund";
+    }
+
+    @Override
     public String getDetails() {
         return reason;
     }
