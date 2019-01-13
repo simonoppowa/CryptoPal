@@ -46,6 +46,7 @@ public abstract class TransactionService<T> extends AbstractService<Transaction>
         Wallet receiverWallet = transaction.getReceiverWallet();
         BigDecimal amount = transaction.getAmount();
 
+        // Create new wallet for currency
         if(receiverWallet == null) {
             receiverWallet = new Wallet(transactionCurrency.getCurrencyName(),
                     receiver, new BigDecimal(0.00), transactionCurrency);
@@ -58,13 +59,13 @@ public abstract class TransactionService<T> extends AbstractService<Transaction>
         receiverWallet.setCredit(receiverWallet.getCredit().add(amount));
 
         em.persist(transaction);
-
+        //em.flush();
         // TODO fix unique index error
-        //sender.getTransactions().add(transaction);
+        sender.getTransactions().add(transaction);
 
         receiver.getTransactions().add(transaction);
 
-        em.flush();
+
     }
 
 }

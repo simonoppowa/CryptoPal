@@ -39,4 +39,10 @@ public class Refund extends Transaction {
     public void setPayment(Payment payment) {
         this.payment = payment;
     }
+
+    @Override
+    public String getDetails() {
+        return reason;
+    }
+
 }

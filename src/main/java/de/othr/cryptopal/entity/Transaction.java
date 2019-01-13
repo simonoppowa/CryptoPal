@@ -10,7 +10,7 @@ import java.util.Date;
         @NamedQuery(name = Transaction.FINDALL, query = "SELECT t FROM Transaction t"),
         @NamedQuery(name = Transaction.FINDBYID, query = "SELECT t FROM Transaction t WHERE t.id = :id")
 })
-@Inheritance(strategy = InheritanceType.JOINED)
+//@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Transaction implements Serializable {
 
     public static final String FINDALL = "Transaction.findAll";
@@ -21,7 +21,7 @@ public abstract class Transaction implements Serializable {
     private long transactionId;
     @OneToOne
     private Wallet senderWallet;
-    @OneToOne(cascade = CascadeType.ALL) //TODO remove cascade
+    @OneToOne
     private Wallet receiverWallet;
     private BigDecimal amount;
     @OneToOne
@@ -87,15 +87,7 @@ public abstract class Transaction implements Serializable {
         this.timestamp = timestamp;
     }
 
-    // TODO make abstract
-    public String getDetails() {
-
-        if(this instanceof Transfer) {
-            Transfer transfer = (Transfer) this;
-            return transfer.getTransferMessage();
-        }
-        return "";
-    }
+    public abstract String getDetails();
 
     @Override
     public boolean equals(Object o) {

@@ -2,6 +2,9 @@ package de.othr.cryptopal.service.dto;
 
 import de.othr.cryptopal.entity.Refund;
 
+/**
+ * A Refund class to share with PaymentService to not expose entity classes
+ */
 public class RefundDTO {
 
     private long transactionId;

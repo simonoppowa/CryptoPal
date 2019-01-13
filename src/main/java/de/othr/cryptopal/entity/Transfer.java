@@ -28,4 +28,9 @@ public class Transfer extends Transaction {
     public void setTransferMessage(String transferMessage) {
         this.transferMessage = transferMessage;
     }
+
+    @Override
+    public String getDetails() {
+        return transferMessage;
+    }
 }

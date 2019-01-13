@@ -46,4 +46,9 @@ public class Payment extends Transaction{
     public void setPaymentFee(long paymentFee) {
         this.paymentFee = paymentFee;
     }
+
+    @Override
+    public String getDetails() {
+        return comment;
+    }
 }

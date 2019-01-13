@@ -38,7 +38,7 @@ public class Account implements Serializable {
     private Wallet paymentWallet;
     @OneToOne
     private Currency defaultCurrency;
-    @OneToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Transaction> transactions;
     private boolean isBusinessAccount;
     private boolean isFrozen;
