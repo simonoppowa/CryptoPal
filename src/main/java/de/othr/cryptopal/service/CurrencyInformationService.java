@@ -9,19 +9,15 @@ import util.CurrencyPropertiesUtil;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import javax.persistence.NoResultException;
+import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @ApplicationScoped
 public class CurrencyInformationService extends AbstractService<Currency> {
@@ -41,9 +37,15 @@ public class CurrencyInformationService extends AbstractService<Currency> {
     }
 
     public void setAllCurrencies() {
-        List<Currency> fiatCurrencies = getAllFiatCurrencies();
-        List<Currency> cryptoCurrencies = getAllCryptoCurrencies();
-        persistCurrencies(fiatCurrencies, cryptoCurrencies);
+        List<Currency> currenciesFromDB = loadCurrenciesFromDB();
+        // Check if currencies already in DB
+        if(currenciesFromDB == null || currenciesFromDB.isEmpty()) {
+            List<Currency> fiatCurrencies = getAllFiatCurrencies();
+            List<Currency> cryptoCurrencies = getAllCryptoCurrencies();
+            persistCurrencies(fiatCurrencies, cryptoCurrencies);
+        } else {
+            putCurrenciesInMap(currenciesFromDB);
+        }
     }
 
     public Currency getCurrencyFromMap(String key) {
@@ -52,17 +54,26 @@ public class CurrencyInformationService extends AbstractService<Currency> {
 
     public List<Currency> getAllFiatCurrencies() {
 
-        List<String> currencyIds = getListOfCurrencyIds(fiatCurrenciesToFetch);
+        if(currencyMap.isEmpty()) {
+            List<String> currencyIds = getListOfCurrencyIds(fiatCurrenciesToFetch);
 
-        URL url = UrlUtils.buildFiatCurrencyUrl(currencyIds);
-        JSONObject jsonObject = fetchFromURL(url);
-        List<Currency> currencies = JsonUtils.getFiatCurrenciesFromResponse(jsonObject, fiatCurrenciesToFetch);
+            URL url = UrlUtils.buildFiatCurrencyUrl(currencyIds);
+            JSONObject jsonObject = fetchFromURL(url);
+            List<Currency> currencies = JsonUtils.getFiatCurrenciesFromResponse(jsonObject, fiatCurrenciesToFetch);
 
+            fiatCurrenciesToFetch = currencies;
+            putCurrenciesInMap(currencies);
+
+            return currencies;
+        } else {
+            return fiatCurrenciesToFetch;
+        }
+    }
+
+    public void putCurrenciesInMap(List<Currency> currencies) {
         for(Currency currency : currencies) {
             currencyMap.put(currency.getCurrencyId(), currency);
         }
-
-        return currencies;
     }
 
     public List<Currency> getAllCryptoCurrencies() {
@@ -73,9 +84,7 @@ public class CurrencyInformationService extends AbstractService<Currency> {
         JSONObject jsonObject = fetchFromURL(url);
         List<Currency> currencies = JsonUtils.getCryptoCurrenciesFromResponse(jsonObject, cryptoCurrenciesToFetch);
 
-        for(Currency currency : currencies) {
-            currencyMap.put(currency.getCurrencyId(), currency);
-        }
+        putCurrenciesInMap(currencies);
 
         return currencies;
     }
@@ -92,10 +101,18 @@ public class CurrencyInformationService extends AbstractService<Currency> {
 
         // Put currencies in map
         for(List<Currency> currencyList : currencies) {
-            for(Currency currency : currencyList) {
-                System.out.println(currency.toString());
-                currencyMap.put(currency.getCurrencyId(), currency);
-            }
+            putCurrenciesInMap(currencyList);
+        }
+    }
+
+    @Transactional
+    private List<Currency> loadCurrenciesFromDB() {
+        TypedQuery<Currency> typedQuery = em.createNamedQuery(Currency.FINDALL, Currency.class);
+
+        try {
+            return typedQuery.getResultList();
+        } catch(NoResultException ex) {
+            return null;
         }
     }
 

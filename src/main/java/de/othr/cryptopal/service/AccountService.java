@@ -25,41 +25,11 @@ public class AccountService extends AbstractService<Account> {
 
     @PostConstruct
     @Transactional
-    public void createDummies() {
-        Account cryptoPalAccount = new Account("CryptoPal", "Account",
-                "administration@cryptopal.com", "123",
-                currencyInformationService.getCurrencyFromMap("USD"), true);
-
-        cryptoPalAccount.getWalletByCurrency(currencyInformationService.getCurrencyFromMap("USD")).setCredit(new BigDecimal(10000));
-        cryptoPalAccount.getWallets().add(new Wallet("EUR", cryptoPalAccount, new BigDecimal(100000),
-                currencyInformationService.getCurrencyFromMap("EUR")));
-        //cryptoPalAccount.getTransactions().add(new Transfer(cryptoPalAccount.getWallets().get(0), new Wallet("Test", cryptoPalAccount, new BigDecimal(2), currencyInformationService.getCurrencyFromMap("USD")), new BigDecimal(2), currencyInformationService.getCurrencyFromMap("USD"), new Date(System.currentTimeMillis()), "Message"));
-
-        //em.persist(new Transfer(cryptoPalAccount.getWallets().get(0), new Wallet("Test", cryptoPalAccount, new BigDecimal(2), currencyInformationService.getCurrencyFromMap("USD")), new BigDecimal(2), currencyInformationService.getCurrencyFromMap("USD"), new Date(System.currentTimeMillis()), "Message"));
-
-
-        createNewAccount(cryptoPalAccount);
-
-        Account account1 = new Account("Max", "Mustermann", "max.mustermann@gmx.de", "123",
-                currencyInformationService.getCurrencyFromMap("EUR"), false);
-
-//        Account account3 = new Account("Maria", "Meister", "maria.meister@freenet.de", "test", "USD", true);
-
-        createNewAccount(account1);
-
-        Account account2 = new Account("Manfred", "Mueller", "manfred.mueller@gmail.de", "321",
-                currencyInformationService.getCurrencyFromMap("USD"), false);
-
-        createNewAccount(account2);
-
-//        Account testAccount1 = getAccountByEmail("max.mustermann@gmx.de");
-//        Account testAccount2 = getAccountByEmail("manfred.mueller@gmail.de");
-//
-//
-//        System.out.println(testAccount1.toString());
-//        System.out.println(testAccount2.toString());
-
-        System.out.println("Dummies created");
+    public void init() {
+        System.out.println("Initializing AccountService");
+        if(getAccountByEmail("administration@cryptopal.com") == null) {
+            createInitAccounts();
+        }
     }
 
     @Transactional(Transactional.TxType.REQUIRES_NEW)
@@ -126,8 +96,51 @@ public class AccountService extends AbstractService<Account> {
         return account != null;
     }
 
-    // TODO
-    private void checkIfAccountNameIsBanned() {
+    @Transactional
+    public void createInitAccounts() {
 
+        // CREATE ADMINISTRATION ACCOUNT
+        Account cryptoPalAccount = new Account("CryptoPal", "Account",
+                "administration@cryptopal.com", "123",
+                currencyInformationService.getCurrencyFromMap("USD"), true);
+
+        cryptoPalAccount.getWalletByCurrency(currencyInformationService.getCurrencyFromMap("USD")).setCredit(new BigDecimal(10000));
+        cryptoPalAccount.getWallets().add(new Wallet("EUR", cryptoPalAccount, new BigDecimal(100000),
+                currencyInformationService.getCurrencyFromMap("EUR")));
+
+        createNewAccount(cryptoPalAccount);
+
+        // CREATE DUMMY ACCOUNTS
+        Account dummy1 = new Account("Max", "Mustermann", "max.mustermann@gmx.de", "123",
+                currencyInformationService.getCurrencyFromMap("EUR"), false);
+
+        createNewAccount(dummy1);
+
+        Account dummy2 = new Account("Manfred", "Mueller", "manfred.mueller@gmail.de", "321",
+                currencyInformationService.getCurrencyFromMap("USD"), false);
+
+        createNewAccount(dummy2);
+
+        // CREATE PARTNER ACCOUNTS
+        Account partner1 = new Account("BlueBox", "Business", "business@blueboxgames.de", "12345",
+                currencyInformationService.getCurrencyFromMap("USD"), true);
+        partner1.getWallets().add(new Wallet("EUR", cryptoPalAccount, new BigDecimal(500),
+                currencyInformationService.getCurrencyFromMap("EUR")));
+
+        createNewAccount(partner1);
+
+
+        Account partner2 = new Account("BlackCaste", "Business", "business@blackcastle.de", "12345",
+                currencyInformationService.getCurrencyFromMap("USD"), true);
+        partner2.getWallets().add(new Wallet("EUR", cryptoPalAccount, new BigDecimal(500),
+                currencyInformationService.getCurrencyFromMap("EUR")));
+
+        createNewAccount(partner2);
+
+        System.out.println("Init Accounts created");
+    }
+
+    private void checkIfAccountNameIsBanned() {
+        // TODO ban account names with "admin", "support"...
     }
 }

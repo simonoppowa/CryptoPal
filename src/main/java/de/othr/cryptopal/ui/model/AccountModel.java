@@ -34,6 +34,9 @@ public class AccountModel extends AbstractModel {
         System.out.println("doRegister called with " + credentials.getEmail() + " " + credentials.getPassword() + " "
                 + credentials.getConfirmPassword());
 
+        // TODO Check
+        accountService.init();
+
         boolean correctInput = true;
 
         // Check if email field is filled out
@@ -78,6 +81,8 @@ public class AccountModel extends AbstractModel {
     @Transactional //TODO Remove
     public String doLogin() {
         System.out.println("doLogin called with " + credentials.getEmail() + " " + credentials.getPassword());
+
+        accountService.init();
 
         boolean correctInput = true;
 
