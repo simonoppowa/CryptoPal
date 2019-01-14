@@ -7,13 +7,14 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:f="http://xmlns.jcp.org/jsf/core"
       xml:lang="en" lang="en">
 <h:head>
+    <h:outputStylesheet library="css" name="styles.css"/>
 </h:head>
 <h:body>
 
     <div id="top">
+        <h1>CryptoPal</h1>
         <ui:insert name="top">
-            <h1>Cryptopal</h1>
-            <h:form>
+            <h:form id="menubar">
                 <p:tabMenu activeIndex="#{param.i}">
                     <p:menuitem value="Home" outcome="home">
                         <f:param name="i" value="0"/>
@@ -47,9 +48,10 @@
             </ui:insert>
         </div>
     </div>
-    <div id="bottom">
+    <div id="footer" align="center">
         <ui:insert name="bottom">
-            About
+            2019 Simon Oppowa
+            <p:link value="Code available at Github" outcome="https://github.com/simonoppowa/CryptoPal"/>
         </ui:insert>
     </div>
 </h:body>
