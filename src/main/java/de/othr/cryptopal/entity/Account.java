@@ -40,20 +40,20 @@ public class Account implements Serializable {
     private Currency defaultCurrency;
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Transaction> transactions;
-    private boolean isBusinessAccount;
     private boolean isFrozen;
+    private AccountType accountType;
 
     public Account() {
     }
 
     public Account(String firstname, String lastname, String email, String password, Currency defaultCurrency,
-                   boolean isBusinessAccount) {
+                   AccountType accountType) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
         this.password = password;
         this.defaultCurrency = defaultCurrency;
-        this.isBusinessAccount = isBusinessAccount;
+        this.accountType = accountType;
 
         setDetails();
     }
@@ -149,12 +149,17 @@ public class Account implements Serializable {
         this.defaultCurrency = defaultCurrencyId;
     }
 
-    public boolean isBusinessAccount() {
-        return isBusinessAccount;
+
+    public void setDefaultCurrency(Currency defaultCurrency) {
+        this.defaultCurrency = defaultCurrency;
     }
 
-    public void setBusinessAccount(boolean businessAccount) {
-        isBusinessAccount = businessAccount;
+    public AccountType getAccountType() {
+        return accountType;
+    }
+
+    public void setAccountType(AccountType accountType) {
+        this.accountType = accountType;
     }
 
     public boolean isFrozen() {
@@ -165,12 +170,28 @@ public class Account implements Serializable {
         isFrozen = frozen;
     }
 
+    public boolean isBusinessAccount() {
+        return accountType == AccountType.BUSINESS || accountType == AccountType.PARTNER_BUSINESS;
+    }
+
     @Override
     public String toString() {
+        String defaultCurrencyString;
+        if(defaultCurrency != null) {
+            defaultCurrencyString = defaultCurrency.toString();
+        } else {
+            defaultCurrencyString = "No default currency defined";
+        }
+        String paymentWalletString;
+        if(paymentWallet != null) {
+            paymentWalletString = paymentWallet.toString();
+        } else {
+            paymentWalletString = "No payment wallet defined";
+        }
         return accountId + " " + firstname + " " + lastname + "\n   "
                 + email + " " + password + "\n   "
-                + defaultCurrency.getCurrencyName() + " " + isBusinessAccount + "\n   "
-                + "Wallet: " + paymentWallet.toString();
+                + defaultCurrencyString  + "\n   "
+                + "Wallet: " + paymentWalletString;
     }
 
     @Override

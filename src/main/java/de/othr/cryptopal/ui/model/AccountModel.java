@@ -1,6 +1,7 @@
 package de.othr.cryptopal.ui.model;
 
 import de.othr.cryptopal.entity.Account;
+import de.othr.cryptopal.entity.AccountType;
 import de.othr.cryptopal.service.AccountService;
 import de.othr.cryptopal.service.TransferService;
 
@@ -29,6 +30,8 @@ public class AccountModel extends AbstractModel {
 
     @Produces
     private Account loggedInAccount;
+
+    private boolean isBusinessAccount;
 
     @Transactional // TODO Remove
     public String doRegister() {
@@ -112,7 +115,7 @@ public class AccountModel extends AbstractModel {
     public String doCreateAccount() {
         logger.log(Level.INFO, "doCreateAccount called with " + loggedInAccount.getFirstname() + " "
                 + loggedInAccount.getLastname() + " " + currencyDropdownModel.getSelectedCurrency() + " "
-                + loggedInAccount.isBusinessAccount());
+                + isBusinessAccount);
 
         boolean correctInput = true;
 
@@ -135,7 +138,19 @@ public class AccountModel extends AbstractModel {
             loggedInAccount.setDetails();
         }
 
+        // Account Type
+        if(isBusinessAccount) {
+            loggedInAccount.setAccountType(AccountType.BUSINESS);
+        } else {
+            loggedInAccount.setAccountType(AccountType.PRIVATE);
+        }
+
+
+
         if(correctInput) {
+
+            // Default currency
+
 
             boolean accountCreated = accountService.createNewAccount(loggedInAccount);
 
@@ -177,5 +192,13 @@ public class AccountModel extends AbstractModel {
 
     public void setCurrencyDropdownModel(CurrencyDropdownModel currencyDropdownModel) {
         this.currencyDropdownModel = currencyDropdownModel;
+    }
+
+    public boolean isBusinessAccount() {
+        return isBusinessAccount;
+    }
+
+    public void setBusinessAccount(boolean businessAccount) {
+        isBusinessAccount = businessAccount;
     }
 }

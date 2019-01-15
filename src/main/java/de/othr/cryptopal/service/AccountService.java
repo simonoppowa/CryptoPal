@@ -1,6 +1,7 @@
 package de.othr.cryptopal.service;
 
 import de.othr.cryptopal.entity.Account;
+import de.othr.cryptopal.entity.AccountType;
 import de.othr.cryptopal.entity.Currency;
 import de.othr.cryptopal.entity.Wallet;
 
@@ -103,7 +104,7 @@ public class AccountService extends AbstractService<Account> {
         // CREATE ADMINISTRATION ACCOUNT
         Account cryptoPalAccount = new Account("CryptoPal", "Account",
                 "administration@cryptopal.com", "123",
-                currencyInformationService.getCurrencyFromMap("USD"), true);
+                currencyInformationService.getCurrencyFromMap("USD"), AccountType.ADMINISTRATION);
 
         cryptoPalAccount.getWalletByCurrency(currencyInformationService.getCurrencyFromMap("USD")).setCredit(new BigDecimal(10000));
         cryptoPalAccount.getWallets().add(new Wallet("EUR", cryptoPalAccount, new BigDecimal(100000),
@@ -113,18 +114,18 @@ public class AccountService extends AbstractService<Account> {
 
         // CREATE DUMMY ACCOUNTS
         Account dummy1 = new Account("Max", "Mustermann", "max.mustermann@gmx.de", "123",
-                currencyInformationService.getCurrencyFromMap("EUR"), false);
+                currencyInformationService.getCurrencyFromMap("EUR"), AccountType.PRIVATE);
 
         createNewAccount(dummy1);
 
         Account dummy2 = new Account("Manfred", "Mueller", "manfred.mueller@gmail.de", "321",
-                currencyInformationService.getCurrencyFromMap("USD"), false);
+                currencyInformationService.getCurrencyFromMap("USD"), AccountType.PRIVATE);
 
         createNewAccount(dummy2);
 
         // CREATE PARTNER ACCOUNTS
         Account partner1 = new Account("BlueBox", "Business", "business@blueboxgames.de", "12345",
-                currencyInformationService.getCurrencyFromMap("USD"), true);
+                currencyInformationService.getCurrencyFromMap("USD"), AccountType.PARTNER_BUSINESS);
         partner1.getWallets().add(new Wallet("EUR", cryptoPalAccount, new BigDecimal(500),
                 currencyInformationService.getCurrencyFromMap("EUR")));
 
@@ -132,7 +133,7 @@ public class AccountService extends AbstractService<Account> {
 
 
         Account partner2 = new Account("BlackCaste", "Business", "business@blackcastle.de", "12345",
-                currencyInformationService.getCurrencyFromMap("USD"), true);
+                currencyInformationService.getCurrencyFromMap("USD"), AccountType.PARTNER_BUSINESS);
         partner2.getWallets().add(new Wallet("EUR", cryptoPalAccount, new BigDecimal(500),
                 currencyInformationService.getCurrencyFromMap("EUR")));
 
