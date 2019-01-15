@@ -14,21 +14,26 @@
 <h:body>
 
     <h:form id="inputform">
-        <h:panelGrid id="grid" columns="3" cellpadding="5">
-            <p:outputLabel for="email" value="Email:"/>
-            <p:inputText id="email" value="#{credentialsModel.email}"/>
-            <p:message for="email"/>
+        <div align="center">
 
-            <p:outputLabel for="password" value="Password:"/>
-            <p:password id="password" value="#{credentialsModel.password}" feedback="true"/>
-            <p:message for="password"/>
+            <h:panelGrid id="grid" columns="3" cellpadding="5">
+                <p:outputLabel for="email" value="Email:"/>
+                <p:inputText id="email" value="#{credentialsModel.email}"/>
+                <p:message for="email"/>
 
-            <p:outputLabel for="confirmPassword" value="Confirm Password:"/>
-            <p:password id="confirmPassword" value="#{credentialsModel.confirmPassword}"/>
-            <p:message for="confirmPassword"/>
-        </h:panelGrid>
+                <p:outputLabel for="password" value="Password:"/>
+                <p:password id="password" value="#{credentialsModel.password}" feedback="true"/>
+                <p:message for="password"/>
 
-        <p:commandButton id="submitButton" value="Register" update="grid" action="#{accountModel.doRegister}"/>
+                <p:outputLabel for="confirmPassword" value="Confirm Password:"/>
+                <p:password id="confirmPassword" value="#{credentialsModel.confirmPassword}"/>
+                <p:message for="confirmPassword"/>
+            </h:panelGrid>
+
+            <p:commandButton id="submitButton" value="Register" update="grid" action="#{accountModel.doRegister}"/>
+
+        </div>
+
     </h:form>
 
 </h:body>
