@@ -1,14 +1,19 @@
 package de.othr.cryptopal.service;
 
 
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import java.io.Serializable;
 import java.util.List;
+import java.util.logging.Logger;
 
 public abstract class AbstractService<T> implements Serializable {
+
+    @Inject
+    protected Logger logger;
 
     @PersistenceContext
     protected EntityManager em;

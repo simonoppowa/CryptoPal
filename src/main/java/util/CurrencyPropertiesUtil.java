@@ -21,11 +21,7 @@ public class CurrencyPropertiesUtil {
 
         Properties prop = getProperties();
 
-        String currency = prop.getProperty(BASE_CURRENCY_KEY);
-
-        System.out.println("Loaded base currency from properties: " + currency);
-
-        return currency;
+        return prop.getProperty(BASE_CURRENCY_KEY);
     }
 
     private static List<Currency> setSupportedFiatCurrencyStrings() {
@@ -67,7 +63,6 @@ public class CurrencyPropertiesUtil {
         List<String> lines = new LinkedList<>(Arrays.asList(string.split("\\r?\\n")));
 
         for(String line : lines) {
-            System.out.println(line);
             String[] values = line.split(", ");
             Currency newCurrency = new Currency(values[0], values[1], values[2]);
             supportedCurrencies.add(newCurrency);

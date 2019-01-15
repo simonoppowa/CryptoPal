@@ -2,11 +2,17 @@ package de.othr.cryptopal.ui.model;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public abstract class AbstractModel implements Serializable {
+
+    @Inject
+    protected Logger logger;
 
     protected void addWarningMessage(String message, String component) {
         FacesContext context = FacesContext.getCurrentInstance();
@@ -25,7 +31,7 @@ public abstract class AbstractModel implements Serializable {
         if(bundle.containsKey(msgKey)) {
             return bundle.getString(msgKey);
         } else {
-            System.out.println("No message found in messages with key: " + msgKey);
+            logger.log(Level.WARNING, "No message found in messages with key: " + msgKey);
             return "Error";
         }
     }

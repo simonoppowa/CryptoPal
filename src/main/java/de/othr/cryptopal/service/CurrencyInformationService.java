@@ -18,6 +18,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.*;
+import java.util.logging.Level;
 
 @ApplicationScoped
 public class CurrencyInformationService extends AbstractService<Currency> {
@@ -57,7 +58,7 @@ public class CurrencyInformationService extends AbstractService<Currency> {
         if(currencyMap.isEmpty()) {
             List<String> currencyIds = getListOfCurrencyIds(fiatCurrenciesToFetch);
 
-            URL url = UrlUtils.buildFiatCurrencyUrl(currencyIds);
+            URL url = UrlUtils.buildFiatCurrencyUrl(logger, currencyIds);
             JSONObject jsonObject = fetchFromURL(url);
             List<Currency> currencies = JsonUtils.getFiatCurrenciesFromResponse(jsonObject, fiatCurrenciesToFetch);
 
@@ -80,7 +81,7 @@ public class CurrencyInformationService extends AbstractService<Currency> {
 
         List<String> currencyIds = getListOfCurrencyIds(cryptoCurrenciesToFetch);
 
-        URL url = UrlUtils.buildCryptoCurrencyUrl(currencyIds);
+        URL url = UrlUtils.buildCryptoCurrencyUrl(logger, currencyIds);
         JSONObject jsonObject = fetchFromURL(url);
         List<Currency> currencies = JsonUtils.getCryptoCurrenciesFromResponse(jsonObject, cryptoCurrenciesToFetch);
 
@@ -133,7 +134,7 @@ public class CurrencyInformationService extends AbstractService<Currency> {
 
                 JSONObject jsonObject = new JSONObject(output);
 
-                System.out.println("Fetched: " + jsonObject);
+                logger.log(Level.INFO, "Fetched: " + jsonObject);
 
                 return jsonObject;
             }

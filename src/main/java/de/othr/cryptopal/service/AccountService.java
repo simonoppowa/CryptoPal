@@ -12,6 +12,7 @@ import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.util.logging.Level;
 
 @ApplicationScoped
 public class AccountService extends AbstractService<Account> {
@@ -26,7 +27,7 @@ public class AccountService extends AbstractService<Account> {
     @PostConstruct
     @Transactional
     public void init() {
-        System.out.println("Initializing AccountService");
+        logger.log(Level.INFO, "Initializing AccountService");
         if(getAccountByEmail("administration@cryptopal.com") == null) {
             createInitAccounts();
         }
@@ -137,7 +138,7 @@ public class AccountService extends AbstractService<Account> {
 
         createNewAccount(partner2);
 
-        System.out.println("Init Accounts created");
+        logger.log(Level.INFO, "Init Accounts created");
     }
 
     private void checkIfAccountNameIsBanned() {

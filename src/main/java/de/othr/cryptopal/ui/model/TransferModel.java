@@ -11,6 +11,7 @@ import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.math.BigDecimal;
+import java.util.logging.Level;
 
 @SessionScoped
 @Named
@@ -37,11 +38,12 @@ public class TransferModel extends AbstractModel {
     }
 
     public void transferMoney() {
-        System.out.print("transferMoney called with: " + receiverEmail + " " + currencyString
-                + " " + transferMessage);
+        String amountString = "0.00";
         if(amount != null) {
-            System.out.println(amount.toPlainString());
+            amountString = amount.toPlainString();
         }
+        logger.log(Level.INFO, "transferMoney called with: " + receiverEmail + " " + currencyString
+                + " " + transferMessage + " " + amountString);
 
         boolean correctInput = true;
 

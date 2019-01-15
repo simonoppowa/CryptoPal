@@ -2,14 +2,13 @@ package de.othr.cryptopal.service;
 
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.faces.bean.ManagedBean;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.io.Serializable;
+import java.util.logging.Level;
 
 @ApplicationScoped
-public class InitService implements Serializable {
+public class InitService extends AbstractService {
 
     @PersistenceContext
     private EntityManager em;
@@ -21,11 +20,11 @@ public class InitService implements Serializable {
     private AccountService accountService;
 
     public void init() {
-        System.out.println("InitService called");
+        logger.log(Level.INFO, "InitService called");
 
         //accountService.createDummies();
 
-//        currencyInformationService.getAllFiatCurrencies();
-//        currencyInformationService.getAllCryptoCurrencies();
+        currencyInformationService.getAllFiatCurrencies();
+        currencyInformationService.getAllCryptoCurrencies();
     }
 }

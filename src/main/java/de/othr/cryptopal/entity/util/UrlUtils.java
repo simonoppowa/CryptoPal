@@ -6,6 +6,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class UrlUtils {
 
@@ -18,7 +20,7 @@ public class UrlUtils {
     private static final String CRYPTOCOMPARE_FSYM_SYMBOL = "?fsyms=";
     private static final String CRYPTOCOMPARE_TSYM_SYMBOL = "&tsyms=";
 
-    public static URL buildFiatCurrencyUrl(List<String> currenciesToFetch) {
+    public static URL buildFiatCurrencyUrl(Logger logger, List<String> currenciesToFetch) {
 
         String urlString = EXCHANGE_RATES_BASE_URL + BASE_CURRENCY_ID + EXCHANGE_RATES_RATES_SYMBOLS;
 
@@ -33,17 +35,17 @@ public class UrlUtils {
             }
 
         }
-        System.out.println("URL built: " + urlString);
+        logger.log(Level.INFO,"URL built: " + urlString );
 
         try {
             return new URL(urlString);
         } catch (MalformedURLException ex) {
-            System.out.println("Error while building ECB URL");
+            logger.log(Level.WARNING, "Error while building ECB URL");
+            return null;
         }
-        return null;
     }
 
-    public static URL buildCryptoCurrencyUrl(List<String> currenciesToFetch) {
+    public static URL buildCryptoCurrencyUrl(Logger logger, List<String> currenciesToFetch) {
         String urlString = CRYPTOCOMPARE_BASE_URL.concat(CRYPTOCOMPARE_FSYM_SYMBOL);
 
         Iterator<String> iterator = currenciesToFetch.iterator();
@@ -61,13 +63,13 @@ public class UrlUtils {
         }
         urlString += (CRYPTOCOMPARE_TSYM_SYMBOL + BASE_CURRENCY_ID);
 
-        System.out.println("URL built: " + urlString);
+        logger.log(Level.INFO, "URL built: " + urlString);
 
         try {
             return new URL(urlString);
         } catch (MalformedURLException ex) {
-            System.out.println("Error while building CryptoCompare URL");
+            logger.log(Level.INFO, "Error while building CryptoCompare URL");
+            return null;
         }
-        return null;
     }
 }

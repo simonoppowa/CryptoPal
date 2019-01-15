@@ -33,14 +33,12 @@ public class PaymentService extends TransactionService<Payment> {
 
         if(sender == null) {
             // Return account not found
-            System.out.println("Sender not found");
             throw new PaymentException("No sender with email and password combination found");
         }
 
         Account receiver = accountService.getAccountByEmail(receiverEmail);
 
         if(receiver == null) {
-            System.out.println("Receiver not found");
             throw new PaymentException("No receiver with email found");
         }
 
@@ -48,23 +46,19 @@ public class PaymentService extends TransactionService<Payment> {
         Currency paymentCurrency = currencyInformationService.getCurrencyFromMap(currencyCode);
 
         if(paymentCurrency == null) {
-            System.out.println("Currency not found");
             throw new PaymentException("No currency with id " + currencyCode + " found");
         }
 
         // Check sender wallet
         if(sender.getWalletByCurrency(paymentCurrency) == null) {
-            System.out.print("Sender has no currency wallet");
             throw new PaymentException("Sender has no wallet with currency " + currencyCode);
         }
 
         // Check amount
         BigDecimal newCredit = sender.getWalletByCurrency(paymentCurrency).getCredit().subtract(amount);
         if(newCredit == null) {
-            System.out.println("Not a valid amount input");
             throw new PaymentException("Not a valid amount input");
         } else if(newCredit.compareTo(BigDecimal.ZERO) < 0) {
-            System.out.println("Not enough credit");
             throw new PaymentException("Not enough credit to pay");
         }
 

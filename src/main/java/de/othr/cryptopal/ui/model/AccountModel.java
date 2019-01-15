@@ -9,6 +9,7 @@ import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.transaction.Transactional;
+import java.util.logging.Level;
 
 @SessionScoped
 @Named
@@ -31,7 +32,7 @@ public class AccountModel extends AbstractModel {
 
     @Transactional // TODO Remove
     public String doRegister() {
-        System.out.println("doRegister called with " + credentials.getEmail() + " " + credentials.getPassword() + " "
+        logger.log(Level.INFO, "doRegister called with " + credentials.getEmail() + " " + credentials.getPassword() + " "
                 + credentials.getConfirmPassword());
 
         // TODO Check
@@ -80,7 +81,7 @@ public class AccountModel extends AbstractModel {
 
     @Transactional //TODO Remove
     public String doLogin() {
-        System.out.println("doLogin called with " + credentials.getEmail() + " " + credentials.getPassword());
+        logger.log(Level.INFO, "doLogin called with " + credentials.getEmail() + " " + credentials.getPassword());
 
         accountService.init();
 
@@ -101,7 +102,7 @@ public class AccountModel extends AbstractModel {
             if(loggedInAccount == null) {
                 addWarningMessage("no_account_found", "loginform:email");
             } else {
-                System.out.println("Logged in with: " + loggedInAccount.getEmail() + " " + loggedInAccount.getPassword());
+                logger.log(Level.INFO, "Logged in with: " + loggedInAccount.getEmail() + " " + loggedInAccount.getPassword());
                 return "home.faces";
             }
         }
@@ -109,7 +110,7 @@ public class AccountModel extends AbstractModel {
     }
 
     public String doCreateAccount() {
-        System.out.println("doCreateAccount called with " + loggedInAccount.getFirstname() + " "
+        logger.log(Level.INFO, "doCreateAccount called with " + loggedInAccount.getFirstname() + " "
                 + loggedInAccount.getLastname() + " " + currencyDropdownModel.getSelectedCurrency() + " "
                 + loggedInAccount.isBusinessAccount());
 
@@ -139,16 +140,14 @@ public class AccountModel extends AbstractModel {
             boolean accountCreated = accountService.createNewAccount(loggedInAccount);
 
             if(accountCreated) {
-                System.out.println("New account created: " + loggedInAccount.toString());
-
+                logger.log(Level.INFO, "New account created: " + loggedInAccount.toString());
 
                 // Set start money
                 transferService.setStartMoney(loggedInAccount);
-                //loggedInAccount = accountService.getAccountByCredintials(credentials.getEmail(), credentials.getPassword());
 
                 return "registersucess.faces";
             } else {
-                System.out.println("Error while creating account");
+                logger.log(Level.WARNING, "Error while creating account");
                 addWarningMessage("critical_account_creation_error", null);
             }
         }
@@ -156,7 +155,7 @@ public class AccountModel extends AbstractModel {
     }
 
     public void doLogout() {
-        System.out.println("doLogout called");
+        logger.log(Level.INFO, "doLogout called");
         loggedInAccount = null;
     }
 
