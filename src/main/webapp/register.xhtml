@@ -13,28 +13,37 @@
 
 <h:body>
 
-    <h:form id="inputform">
-        <div align="center">
+    <ui:composition template="resources/templates/template.xhtml">
 
-            <h:panelGrid id="grid" columns="3" cellpadding="5">
-                <p:outputLabel for="email" value="Email:"/>
-                <p:inputText id="email" value="#{credentialsModel.email}"/>
-                <p:message for="email"/>
+        <ui:define name="top"/>
+        <ui:define name="page-content">
 
-                <p:outputLabel for="password" value="Password:"/>
-                <p:password id="password" value="#{credentialsModel.password}" feedback="true"/>
-                <p:message for="password"/>
+            <h:form id="inputform">
+                <div align="center">
 
-                <p:outputLabel for="confirmPassword" value="Confirm Password:"/>
-                <p:password id="confirmPassword" value="#{credentialsModel.confirmPassword}"/>
-                <p:message for="confirmPassword"/>
-            </h:panelGrid>
+                    <h:panelGrid id="grid" columns="3" cellpadding="5">
+                        <p:outputLabel for="email" value="Email:"/>
+                        <p:inputText id="email" value="#{credentialsModel.email}"/>
+                        <p:message for="email"/>
 
-            <p:commandButton id="submitButton" value="Register" update="grid" action="#{accountModel.doRegister}"/>
+                        <p:outputLabel for="password" value="Password:"/>
+                        <p:password id="password" value="#{credentialsModel.password}" feedback="true"/>
+                        <p:message for="password"/>
 
-        </div>
+                        <p:outputLabel for="confirmPassword" value="Confirm Password:"/>
+                        <p:password id="confirmPassword" value="#{credentialsModel.confirmPassword}"/>
+                        <p:message for="confirmPassword"/>
+                    </h:panelGrid>
 
-    </h:form>
+                    <p:commandButton id="submitButton" value="Register" update="grid" action="#{accountModel.doRegister}"/>
+
+                </div>
+
+            </h:form>
+
+        </ui:define>
+
+    </ui:composition>
 
 </h:body>
 </html>
