@@ -1,6 +1,8 @@
 package de.othr.cryptopal.service;
 
+import de.othr.cryptopal.entity.Account;
 import de.othr.cryptopal.entity.Currency;
+import de.othr.cryptopal.entity.Wallet;
 import de.othr.cryptopal.entity.util.JsonUtils;
 import de.othr.cryptopal.entity.util.UrlUtils;
 import org.codehaus.jettison.json.JSONException;
@@ -8,23 +10,28 @@ import org.codehaus.jettison.json.JSONObject;
 import util.CurrencyPropertiesUtil;
 
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
+import javax.ejb.Schedule;
+import javax.ejb.Singleton;
+import javax.ejb.TransactionAttribute;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
-import javax.transaction.Transactional;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 
-@ApplicationScoped
+@Singleton
 public class CurrencyInformationService extends AbstractService<Currency> {
 
-    private List<Currency> fiatCurrenciesToFetch = CurrencyPropertiesUtil.getSupportedFiatCurrencies();
-    private List<Currency> cryptoCurrenciesToFetch = CurrencyPropertiesUtil.getSupportedCryptoCurrencies();
+    private List<Currency> fiatCurrencies;
+    private List<Currency> cryptoCurrencies;
 
     private Map<String, Currency> currencyMap = new HashMap<>();
 
@@ -35,18 +42,45 @@ public class CurrencyInformationService extends AbstractService<Currency> {
     @PostConstruct
     public void init() {
         setAllCurrencies();
+        fetchAllPrices();
+    }
+
+    // TODO make 24h
+
+    /**
+     * Fetches new currency prices every interval
+     */
+    @Schedule(
+            second = "*",
+            minute = "*",
+            hour = "*/10",
+            persistent = false
+    )
+    private void fetchNewPrices() {
+        fetchAllPrices();
+        logger.log(Level.INFO, "Currency prices updated");
     }
 
     public void setAllCurrencies() {
         List<Currency> currenciesFromDB = loadCurrenciesFromDB();
         // Check if currencies already in DB
         if(currenciesFromDB == null || currenciesFromDB.isEmpty()) {
-            List<Currency> fiatCurrencies = getAllFiatCurrencies();
-            List<Currency> cryptoCurrencies = getAllCryptoCurrencies();
+            fiatCurrencies = CurrencyPropertiesUtil.getSupportedFiatCurrencies();
+            cryptoCurrencies = CurrencyPropertiesUtil.getSupportedCryptoCurrencies();
+            putCurrenciesInMap(fiatCurrencies);
+            putCurrenciesInMap(cryptoCurrencies);
             persistCurrencies(fiatCurrencies, cryptoCurrencies);
         } else {
             putCurrenciesInMap(currenciesFromDB);
         }
+    }
+
+
+    private void fetchAllPrices() {
+        fetchAllFiatCurrencyPrices();
+        fetchAllCryptoCurrencyPrices();
+
+
     }
 
     public Currency getCurrencyFromMap(String key) {
@@ -56,18 +90,34 @@ public class CurrencyInformationService extends AbstractService<Currency> {
     public List<Currency> getAllFiatCurrencies() {
 
         if(currencyMap.isEmpty()) {
-            List<String> currencyIds = getListOfCurrencyIds(fiatCurrenciesToFetch);
+            fetchAllFiatCurrencyPrices();
+        }
+        return fiatCurrencies;
+    }
 
-            URL url = UrlUtils.buildFiatCurrencyUrl(logger, currencyIds);
-            JSONObject jsonObject = fetchFromURL(url);
-            List<Currency> currencies = JsonUtils.getFiatCurrenciesFromResponse(jsonObject, fiatCurrenciesToFetch);
+    private void fetchAllFiatCurrencyPrices() {
+        List<String> currencyIds = getListOfCurrencyIds(fiatCurrencies);
 
-            fiatCurrenciesToFetch = currencies;
-            putCurrenciesInMap(currencies);
+        URL url = UrlUtils.buildFiatCurrencyUrl(logger, currencyIds);
+        JSONObject jsonObject = fetchFromURL(url);
+        List<Currency> currencies = JsonUtils.getFiatCurrenciesFromResponse(jsonObject, fiatCurrencies);
 
-            return currencies;
-        } else {
-            return fiatCurrenciesToFetch;
+        fiatCurrencies = currencies;
+        for(Currency currency : currencies) {
+            currencyMap.get(currency.getCurrencyId()).setExchangeRate(currency.getExchangeRate());
+        }
+    }
+
+    private void fetchAllCryptoCurrencyPrices() {
+
+        List<String> currencyIds = getListOfCurrencyIds(cryptoCurrencies);
+
+        URL url = UrlUtils.buildCryptoCurrencyUrl(logger, currencyIds);
+        JSONObject jsonObject = fetchFromURL(url);
+        List<Currency> currencies = JsonUtils.getCryptoCurrenciesFromResponse(jsonObject, cryptoCurrencies);
+
+        for(Currency currency : currencies) {
+            currencyMap.get(currency.getCurrencyId()).setExchangeRate(currency.getExchangeRate());
         }
     }
 
@@ -77,20 +127,7 @@ public class CurrencyInformationService extends AbstractService<Currency> {
         }
     }
 
-    public List<Currency> getAllCryptoCurrencies() {
-
-        List<String> currencyIds = getListOfCurrencyIds(cryptoCurrenciesToFetch);
-
-        URL url = UrlUtils.buildCryptoCurrencyUrl(logger, currencyIds);
-        JSONObject jsonObject = fetchFromURL(url);
-        List<Currency> currencies = JsonUtils.getCryptoCurrenciesFromResponse(jsonObject, cryptoCurrenciesToFetch);
-
-        putCurrenciesInMap(currencies);
-
-        return currencies;
-    }
-
-    @Transactional
+    @TransactionAttribute
     private void persistCurrencies(List<Currency>... currencies) {
 
         for(List<Currency> currencyList : currencies) {
@@ -106,7 +143,7 @@ public class CurrencyInformationService extends AbstractService<Currency> {
         }
     }
 
-    @Transactional
+    @TransactionAttribute
     private List<Currency> loadCurrenciesFromDB() {
         TypedQuery<Currency> typedQuery = em.createNamedQuery(Currency.FINDALL, Currency.class);
 
@@ -158,19 +195,33 @@ public class CurrencyInformationService extends AbstractService<Currency> {
         return currencyIds;
     }
 
-    public List<Currency> getFiatCurrenciesToFetch() {
-        return fiatCurrenciesToFetch;
+    public BigDecimal calcualteFullPortfolioPrice(Account account) {
+        List<Wallet> wallets = account.getWallets();
+
+        BigDecimal fullAmount = new BigDecimal(0);
+        Currency baseCurrency = getCurrencyFromMap(CurrencyPropertiesUtil.getBaseCurrency());
+
+
+        for(Wallet wallet : wallets) {
+            BigDecimal exchangeRate = new BigDecimal(getCurrencyFromMap(baseCurrency.getCurrencyId()).getExchangeRate());
+            fullAmount.add(wallet.getCredit().multiply(exchangeRate));
+        }
+        return fullAmount;
     }
 
-    public void setFiatCurrenciesToFetch(List<Currency> fiatCurrenciesToFetch) {
-        this.fiatCurrenciesToFetch = fiatCurrenciesToFetch;
+    public List<Currency> getFiatCurrencies() {
+        return fiatCurrencies;
     }
 
-    public List<Currency> getCryptoCurrenciesToFetch() {
-        return cryptoCurrenciesToFetch;
+    public void setFiatCurrencies(List<Currency> fiatCurrencies) {
+        this.fiatCurrencies = fiatCurrencies;
     }
 
-    public void setCryptoCurrenciesToFetch(List<Currency> cryptoCurrenciesToFetch) {
-        this.cryptoCurrenciesToFetch = cryptoCurrenciesToFetch;
+    public List<Currency> getCryptoCurrencies() {
+        return cryptoCurrencies;
+    }
+
+    public void setCryptoCurrencies(List<Currency> cryptoCurrencies) {
+        this.cryptoCurrencies = cryptoCurrencies;
     }
 }

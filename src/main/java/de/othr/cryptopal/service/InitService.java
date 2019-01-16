@@ -24,7 +24,7 @@ public class InitService extends AbstractService {
 
         //accountService.createDummies();
 
-        currencyInformationService.getAllFiatCurrencies();
-        currencyInformationService.getAllCryptoCurrencies();
+//        currencyInformationService.getAllFiatCurrencies();
+//        currencyInformationService.getAllCryptoCurrencies();
     }
 }

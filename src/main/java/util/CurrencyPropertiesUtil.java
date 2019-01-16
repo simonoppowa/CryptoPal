@@ -1,6 +1,7 @@
 package util;
 
 import de.othr.cryptopal.entity.Currency;
+import de.othr.cryptopal.entity.CurrencyType;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,7 +31,7 @@ public class CurrencyPropertiesUtil {
 
         String supportedFiatCurrenciesString = prop.getProperty(SUPPORTED_FIAT_CURRENCIES_KEY);
 
-        return getCurrenciesFromPropString(supportedFiatCurrenciesString);
+        return getCurrenciesFromPropString(supportedFiatCurrenciesString, CurrencyType.FIAT);
     }
 
     private static List<Currency> setSupportedCryptoCurrencyStrings() {
@@ -39,7 +40,7 @@ public class CurrencyPropertiesUtil {
 
         String supportedCryptoCurrenciesString = prop.getProperty(SUPPORTED_CRYPTO_CURRENCIES_KEY);
 
-        return getCurrenciesFromPropString(supportedCryptoCurrenciesString);
+        return getCurrenciesFromPropString(supportedCryptoCurrenciesString, CurrencyType.CRYPTO);
     }
 
     private static Properties getProperties() {
@@ -55,7 +56,7 @@ public class CurrencyPropertiesUtil {
         return prop;
     }
 
-    private static List<Currency> getCurrenciesFromPropString(String string) {
+    private static List<Currency> getCurrenciesFromPropString(String string, CurrencyType currencyType) {
 
         List<Currency> supportedCurrencies = new ArrayList<>();
 
@@ -64,7 +65,7 @@ public class CurrencyPropertiesUtil {
 
         for(String line : lines) {
             String[] values = line.split(", ");
-            Currency newCurrency = new Currency(values[0], values[1], values[2]);
+            Currency newCurrency = new Currency(values[0], values[1], values[2], currencyType);
             supportedCurrencies.add(newCurrency);
         }
         return supportedCurrencies;

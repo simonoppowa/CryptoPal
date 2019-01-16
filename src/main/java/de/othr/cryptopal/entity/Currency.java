@@ -24,7 +24,7 @@ public class Currency implements Serializable {
     @Transient
     private double exchangeRate;
 
-    //TODO set currency type
+    private CurrencyType currencyType;
 
     public Currency() {
     }
@@ -33,10 +33,11 @@ public class Currency implements Serializable {
         this.currencyId = currencyId;
     }
 
-    public Currency(String currencyId, String currencyName, String symbol) {
+    public Currency(String currencyId, String currencyName, String symbol, CurrencyType currencyType) {
         this.currencyId = currencyId;
         this.currencyName = currencyName;
         this.symbol = symbol;
+        this.currencyType = currencyType;
     }
 
     public Currency(String currencyId, double exchangeRate) {
@@ -74,6 +75,14 @@ public class Currency implements Serializable {
 
     public void setExchangeRate(double exchangeRate) {
         this.exchangeRate = exchangeRate;
+    }
+
+    public CurrencyType getCurrencyType() {
+        return currencyType;
+    }
+
+    public void setCurrencyType(CurrencyType currencyType) {
+        this.currencyType = currencyType;
     }
 
     @Override
