@@ -109,6 +109,8 @@ public class AccountService extends AbstractService<Account> {
         cryptoPalAccount.getWalletByCurrency(currencyInformationService.getCurrencyFromMap("USD")).setCredit(new BigDecimal(10000));
         cryptoPalAccount.getWallets().add(new Wallet("EUR", cryptoPalAccount, new BigDecimal(100000),
                 currencyInformationService.getCurrencyFromMap("EUR")));
+        cryptoPalAccount.getWallets().add(new Wallet("JPY", cryptoPalAccount, new BigDecimal(100000),
+                currencyInformationService.getCurrencyFromMap("JPY")));
 
         createNewAccount(cryptoPalAccount);
 

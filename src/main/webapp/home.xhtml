@@ -13,9 +13,13 @@
 
     <ui:define name="page-content">
 
-        <h:form>
-            CONTENT
-        </h:form>
+        <div style="width: 300px" align="center">
+            <h:form>
+                <p:panel id="portfolio" header="Currenct Portfolio Price">
+                    <h:outputText value="#{statisticsModel.fullAccountPrice} USD" />
+                </p:panel>
+            </h:form>
+        </div>
     </ui:define>
 </ui:composition>
 

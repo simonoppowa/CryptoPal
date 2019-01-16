@@ -19,6 +19,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -46,14 +47,11 @@ public class CurrencyInformationService extends AbstractService<Currency> {
     }
 
     // TODO make 24h
-
     /**
      * Fetches new currency prices every interval
      */
     @Schedule(
-            second = "*",
-            minute = "*",
-            hour = "*/10",
+            minute = "*/1",
             persistent = false
     )
     private void fetchNewPrices() {
@@ -79,8 +77,6 @@ public class CurrencyInformationService extends AbstractService<Currency> {
     private void fetchAllPrices() {
         fetchAllFiatCurrencyPrices();
         fetchAllCryptoCurrencyPrices();
-
-
     }
 
     public Currency getCurrencyFromMap(String key) {
@@ -195,7 +191,7 @@ public class CurrencyInformationService extends AbstractService<Currency> {
         return currencyIds;
     }
 
-    public BigDecimal calcualteFullPortfolioPrice(Account account) {
+    public BigDecimal calculateFullPortfolioPrice(Account account) {
         List<Wallet> wallets = account.getWallets();
 
         BigDecimal fullAmount = new BigDecimal(0);
@@ -203,10 +199,12 @@ public class CurrencyInformationService extends AbstractService<Currency> {
 
 
         for(Wallet wallet : wallets) {
-            BigDecimal exchangeRate = new BigDecimal(getCurrencyFromMap(baseCurrency.getCurrencyId()).getExchangeRate());
-            fullAmount.add(wallet.getCredit().multiply(exchangeRate));
+            BigDecimal exchangeRate = new BigDecimal(currencyMap.get(wallet.getCurrency().getCurrencyId()).getExchangeRate());
+            BigDecimal exchangeRateBaseTo = new BigDecimal(1);
+            exchangeRate = exchangeRateBaseTo.divide(exchangeRate, 10, RoundingMode.HALF_UP);
+            fullAmount = fullAmount.add(wallet.getCredit().multiply(exchangeRate));
         }
-        return fullAmount;
+        return fullAmount.setScale(2, RoundingMode.HALF_UP);
     }
 
     public List<Currency> getFiatCurrencies() {
