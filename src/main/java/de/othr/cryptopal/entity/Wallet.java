@@ -1,5 +1,6 @@
 package de.othr.cryptopal.entity;
 
+import de.othr.cryptopal.entity.util.WalletAddressGenerator;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -17,8 +18,8 @@ public class Wallet implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long walletId;
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2") // TODO generate address
+//    @GenericGenerator(name = "wallet_address", strategy = "de.othr.cryptopal.entity.util.WalletAddressGenerator")
+//    @GeneratedValue(generator = "wallet_address") // Doesn't work with non id attributes
     private String walletAddress;
     private String walletName;
     @ManyToOne
@@ -31,11 +32,11 @@ public class Wallet implements Serializable {
     }
 
     public Wallet(String walletName, Account account, BigDecimal credit, Currency currency) {
+        this.walletAddress = WalletAddressGenerator.generate();
         this.walletName = walletName;
         this.account = account;
         this.credit = credit;
         this.currency = currency;
-        this.walletAddress = "0x345kj3245k234k";
     }
 
     public long getWalletId() {
