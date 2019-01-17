@@ -22,11 +22,10 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Level;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Singleton
 public class CurrencyInformationService extends AbstractService<Currency> {
@@ -205,6 +204,14 @@ public class CurrencyInformationService extends AbstractService<Currency> {
             fullAmount = fullAmount.add(wallet.getCredit().multiply(exchangeRate));
         }
         return fullAmount.setScale(2, RoundingMode.HALF_UP);
+    }
+
+    public List<Currency> getAllCurrencies() {
+        return concatenatedList(fiatCurrencies, cryptoCurrencies);
+    }
+    public static <T> List<T> concatenatedList(List<T>... collections) {
+        // Use Streams to concat lists
+        return Arrays.stream(collections).flatMap(Collection::stream).collect(Collectors.toList());
     }
 
     public List<Currency> getFiatCurrencies() {

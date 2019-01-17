@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core" xml:lang="en" lang="en">
+<h:head>
+    <title>Exchange Currency</title>
+</h:head>
+<h:body>
+
+    <ui:composition template="resources/templates/template.xhtml">
+
+        <ui:define name="page-content">
+
+            <div align="center">
+                <h2>Exchange Currencies</h2>
+
+                <h:form id="registerdetailform">
+
+                    <h:panelGrid id="grid" columns="2" cellpadding="5">
+                        <p:panel id="from" header="From">
+                            <p:outputLabel for="amount" value="Amount: "/>
+                            <p:inputNumber id="amount" value="#{exchangeModel.amount}"/>
+
+                            <p:selectOneListbox value="#{exchangeModel.selectedCurrency}" converter="CurrencyConverter" var="c">
+                                <f:selectItems value="#{exchangeModel.availableCurrencies}" var="selectedCurrency" itemLabel="#{selectedCurrency.currencyName}" itemValue="#{selectedCurrency}"/>
+                                <p:column>
+                                    <h:outputText value="#{c.currencyName}"/>
+                                </p:column>
+                            </p:selectOneListbox>
+                        </p:panel>
+
+                        <p:panel id="to" header="To">
+                            <p:outputLabel for="amountOut" value="Amount: "/>
+                            <p:inputNumber id="amountOut" value="#{exchangeModel.amount}" disabled="true"/>
+
+                            <p:selectOneListbox value="#{exchangeModel.outputCurrency}" converter="CurrencyConverter" var="c">
+                                <f:selectItems value="#{exchangeModel.allCurrencies}" var="selectedCurrency" itemLabel="#{selectedCurrency.currencyName}" itemValue="#{selectedCurrency}"/>
+                                <p:column>
+                                    <h:outputText value="#{c.currencyName}"/>
+                                </p:column>
+                            </p:selectOneListbox>
+                        </p:panel>
+
+                    </h:panelGrid>
+
+                    <p:commandButton value="Exchange" update="grid"/>
+                </h:form>
+            </div>
+
+        </ui:define>
+
+    </ui:composition>
+
+</h:body>
+</html>

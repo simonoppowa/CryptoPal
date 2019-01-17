@@ -17,33 +17,35 @@
         <ui:define name="top"/>
         <ui:define name="page-content">
 
-            <h2>Create Account</h2>
+            <div align="center">
+                <h2>Create Account</h2>
 
-            <h:form id="registerdetailform">
+                <h:form id="registerdetailform">
 
-                <h:panelGrid id="grid" columns="3" cellpadding="5">
-                    <p:outputLabel for="firstname" value="Firstname:"/>
-                    <p:inputText id="firstname" value="#{accountModel.loggedInAccount.firstname}"/>
-                    <p:message for="firstname"/>
+                    <h:panelGrid id="grid" columns="3" cellpadding="5">
+                        <p:outputLabel for="firstname" value="Firstname:"/>
+                        <p:inputText id="firstname" value="#{accountModel.loggedInAccount.firstname}"/>
+                        <p:message for="firstname"/>
 
-                    <p:outputLabel for="lastname" value="Lastname:"/>
-                    <p:inputText id="lastname" value="#{accountModel.loggedInAccount.lastname}"/>
-                    <p:message for="lastname"/>
+                        <p:outputLabel for="lastname" value="Lastname:"/>
+                        <p:inputText id="lastname" value="#{accountModel.loggedInAccount.lastname}"/>
+                        <p:message for="lastname"/>
 
-                    <p:outputLabel for="defaultCurrency" value="Default Currency: "/>
-                    <p:selectOneMenu id="defaultCurrency" value="#{accountModel.currencyDropdownModel.selectedCurrency}" style="width:150px">
-                        <f:selectItem itemLabel="Select Currency" itemValue="" noSelectionOption="true" />
-                        <f:selectItems value="#{accountModel.currencyDropdownModel.supportedCurrencies}"/>
-                    </p:selectOneMenu>
-                    <p:message for="defaultCurrency"/>
+                        <p:outputLabel for="defaultCurrency" value="Default Currency: "/>
+                        <p:selectOneMenu id="defaultCurrency" value="#{accountModel.currencyDropdownModel.selectedCurrency}" style="width:150px">
+                            <f:selectItem itemLabel="Select Currency" itemValue="" noSelectionOption="true" />
+                            <f:selectItems value="#{accountModel.currencyDropdownModel.supportedCurrencies}"/>
+                        </p:selectOneMenu>
+                        <p:message for="defaultCurrency"/>
 
-                    <p:outputLabel for="business" value="Is business account"/>
-                    <p:selectBooleanCheckbox id="business" value="#{accountModel.businessAccount}"/>
+                        <p:outputLabel for="business" value="Is business account"/>
+                        <p:selectBooleanCheckbox id="business" value="#{accountModel.businessAccount}"/>
 
-                </h:panelGrid>
+                    </h:panelGrid>
 
-                <p:commandButton value="Register" update="grid" action="#{accountModel.doCreateAccount()}"/>
-            </h:form>
+                    <p:commandButton value="Register" update="grid" action="#{accountModel.doCreateAccount()}"/>
+                </h:form>
+            </div>
 
         </ui:define>
 
