@@ -22,10 +22,13 @@
                     <h:panelGrid id="grid" columns="2" cellpadding="5">
                         <p:panel id="from" header="From">
                             <p:outputLabel for="amount" value="Amount: "/>
-                            <p:inputNumber id="amount" value="#{exchangeModel.amount}"/>
+                            <p:inputNumber id="amount" value="#{exchangeModel.amount}">
+                                <f:ajax listener="#{exchangeModel.calculateOutputAmount}" render="grid" />
+                            </p:inputNumber>
 
-                            <p:selectOneListbox value="#{exchangeModel.selectedCurrency}" converter="CurrencyConverter" var="c">
+                            <p:selectOneListbox id="firstbox" value="#{exchangeModel.selectedCurrency}" converter="#{currencyConverter}" var="c">
                                 <f:selectItems value="#{exchangeModel.availableCurrencies}" var="selectedCurrency" itemLabel="#{selectedCurrency.currencyName}" itemValue="#{selectedCurrency}"/>
+                                <p:ajax event="change" update="grid"/>
                                 <p:column>
                                     <h:outputText value="#{c.currencyName}"/>
                                 </p:column>
@@ -34,10 +37,11 @@
 
                         <p:panel id="to" header="To">
                             <p:outputLabel for="amountOut" value="Amount: "/>
-                            <p:inputNumber id="amountOut" value="#{exchangeModel.amount}" disabled="true"/>
+                            <p:inputNumber id="amountOut" value="#{exchangeModel.outputAmount}" disabled="true"/>
 
-                            <p:selectOneListbox value="#{exchangeModel.outputCurrency}" converter="CurrencyConverter" var="c">
-                                <f:selectItems value="#{exchangeModel.allCurrencies}" var="selectedCurrency" itemLabel="#{selectedCurrency.currencyName}" itemValue="#{selectedCurrency}"/>
+                            <p:selectOneListbox id="secondbox" value="#{exchangeModel.outputCurrency}" converter="#{currencyConverter}" var="c">
+                                <p:ajax event="change" update="to"/>
+                                <f:selectItems value="#{exchangeModel.allCurrencies}" var="selectedOutputCurrency" itemLabel="#{selectedOutputCurrency.currencyName}" itemValue="#{selectedOutputCurrency}"/>
                                 <p:column>
                                     <h:outputText value="#{c.currencyName}"/>
                                 </p:column>

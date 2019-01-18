@@ -8,8 +8,11 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import javax.inject.Inject;
+import javax.inject.Named;
 
 @FacesConverter("CurrencyConverter")
+@Named // Fixes Bug with with EJB injection
+// (https://stackoverflow.com/questions/20632388/injecting-dao-give-nullpointerexception)
 public class CurrencyConverter implements Converter {
 
     @Inject
@@ -35,6 +38,6 @@ public class CurrencyConverter implements Converter {
         if(!value.getClass().equals(Currency.class)) {
             return null;
         }
-        return ((Currency)value).getCurrencyName();
+        return ((Currency)value).getCurrencyId();
     }
 }
