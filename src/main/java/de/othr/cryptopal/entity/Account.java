@@ -14,7 +14,8 @@ import java.util.List;
         @NamedQuery(name = Account.FINDALL, query = "SELECT a FROM Account a"),
         @NamedQuery(name = Account.FINDBYCREDETIALS, query = "SELECT a FROM Account a WHERE a.email = :email AND a.password = :password"),
         @NamedQuery(name = Account.FINDBYEMAIL, query = "SELECT a FROM Account a WHERE a.email = :email"),
-        @NamedQuery(name = Account.FINDBYID,query = "SELECT a FROM Account a WHERE a.id = :id")
+        @NamedQuery(name = Account.FINDBYID, query = "SELECT a FROM Account a WHERE a.id = :id"),
+        @NamedQuery(name = Account.FINDADMINISTRATION, query = "SELECT a FROM Account a WHERE a.accountType = :type")
 })
 public class Account implements Serializable {
 
@@ -22,6 +23,7 @@ public class Account implements Serializable {
     public static final String FINDBYCREDETIALS = "Account.findByCredentials";
     public static final String FINDBYEMAIL = "Account.findByEmail";
     public static final String FINDBYID = "Account.findById";
+    public static final String FINDADMINISTRATION = "Account.findAdmin";
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

@@ -98,6 +98,17 @@ public class AccountService extends AbstractService<Account> {
         return account != null;
     }
 
+    public Account getAdministrationAccount() {
+        TypedQuery<Account> typedQuery = em.createNamedQuery(Account.FINDADMINISTRATION, Account.class);
+        typedQuery.setParameter("type", AccountType.ADMINISTRATION);
+
+        try {
+            return typedQuery.getSingleResult();
+        } catch (NoResultException ex){
+            return null;
+        }
+    }
+
     @Transactional
     public void createInitAccounts() {
 

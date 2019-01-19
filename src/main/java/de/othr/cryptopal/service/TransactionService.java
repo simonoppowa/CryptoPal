@@ -36,7 +36,7 @@ public abstract class TransactionService<T> extends AbstractService<Transaction>
     }
 
     @Transactional(value = Transactional.TxType.REQUIRES_NEW)
-    void executeTransaction(Transaction transaction, Account receiver) {
+    synchronized void executeTransaction(Transaction transaction, Account receiver) {
         Currency transactionCurrency = transaction.getPaymentCurrency();
         Account sender = transaction.getSenderWallet().getAccount();
 
@@ -48,9 +48,7 @@ public abstract class TransactionService<T> extends AbstractService<Transaction>
 
         // Create new wallet for currency
         if(receiverWallet == null) {
-            receiverWallet = new Wallet(transactionCurrency.getCurrencyName(),
-                    receiver, new BigDecimal(0.00), transactionCurrency);
-            em.persist(receiverWallet);
+            receiverWallet = createNewWallet(receiver, transactionCurrency);
             receiver.getWallets().add(receiverWallet);
         }
 
@@ -62,6 +60,47 @@ public abstract class TransactionService<T> extends AbstractService<Transaction>
 
         sender.getTransactions().add(transaction);
         receiver.getTransactions().add(transaction);
+    }
+
+    @Transactional(value = Transactional.TxType.REQUIRES_NEW)
+    synchronized void executeTwoCurrencyTransaction(Transaction transaction) {
+        if(transaction instanceof Exchange) {
+            Exchange exchange = (Exchange) transaction;
+
+            BigDecimal fromAmount = exchange.getAmount();
+            BigDecimal toAmount  = exchange.getToAmount();
+
+            Account sender = accountService.getAccountByEmail(exchange.getSenderWallet().getAccount().getEmail());
+            Account receiver = accountService.getAccountByEmail(exchange.getReceiverWallet().getAccount().getEmail());
+
+            // Attach
+            Wallet fromSenderWallet = sender.getWalletByCurrency(exchange.getPaymentCurrency());
+            Wallet toSenderWallet = sender.getWalletByCurrency(exchange.getToCurrency());
+
+            Wallet fromReceiverWallet = receiver.getWalletByCurrency(exchange.getPaymentCurrency());
+            Wallet toReceiverWallet = receiver.getWalletByCurrency(exchange.getToCurrency());
+
+            if(toSenderWallet == null) {
+                toSenderWallet = createNewWallet(sender, exchange.getToCurrency());
+                sender.getWallets().add(toSenderWallet);
+            }
+
+            // EXCHANGE
+            fromSenderWallet.setCredit(fromSenderWallet.getCredit().subtract(fromAmount));
+            fromReceiverWallet.setCredit(fromReceiverWallet.getCredit().add(fromAmount));
+
+            toSenderWallet.setCredit(toSenderWallet.getCredit().add(toAmount));
+            toReceiverWallet.setCredit(toReceiverWallet.getCredit().subtract(toAmount));
+
+            em.persist(exchange);
+
+            sender.getTransactions().add(exchange);
+            receiver.getTransactions().add(exchange);
+        }
+    }
+
+    private Wallet createNewWallet(Account account, Currency currency) {
+        return new Wallet(currency.getCurrencyName(), account, new BigDecimal(0), currency);
     }
 
 }

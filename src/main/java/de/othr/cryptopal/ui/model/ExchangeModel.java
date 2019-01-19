@@ -2,11 +2,10 @@ package de.othr.cryptopal.ui.model;
 
 import de.othr.cryptopal.entity.Currency;
 import de.othr.cryptopal.entity.Wallet;
-import de.othr.cryptopal.service.AccountService;
 import de.othr.cryptopal.service.CurrencyInformationService;
+import de.othr.cryptopal.service.ExchangeService;
 
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -25,6 +24,9 @@ public class ExchangeModel extends AbstractModel {
 
     @Inject
     private CurrencyInformationService currencyInformationService;
+
+    @Inject
+    private ExchangeService exchangeService;
 
     private BigDecimal amount;
     private BigDecimal outputAmount;
@@ -54,9 +56,26 @@ public class ExchangeModel extends AbstractModel {
         logger.log(Level.INFO, "Calculating new outputAmount " + amount
                 + " " + selectedCurrency.getCurrencyId() + " " + outputCurrency.getCurrencyId());
 
+        if(amount == null) {
+            outputAmount = new BigDecimal(0);
+            return;
+        }
+
         BigDecimal toBaseCurrency = amount.divide(new BigDecimal(selectedCurrency.getExchangeRate()), 20, RoundingMode.HALF_UP);
 
         outputAmount = toBaseCurrency.multiply(new BigDecimal(outputCurrency.getExchangeRate()));
+    }
+
+    public void doExchange() {
+        // Check input
+
+
+        Wallet senderWallet = accountModel.getLoggedInAccount().getWalletByCurrency(selectedCurrency);
+
+
+
+        exchangeService.exchangeCurrency(senderWallet, outputCurrency, amount, outputAmount);
+
     }
 
     public BigDecimal getAmount() {
