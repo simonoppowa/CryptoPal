@@ -14,6 +14,7 @@ import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.logging.Level;
 
 @ApplicationScoped
@@ -61,7 +62,7 @@ public class AccountService extends AbstractService<Account> {
     }
 
     @Transactional
-    public Account getAccountByCredintials(String email, String password) {
+    public Account getAccountByCredentials(String email, String password) {
 
         TypedQuery<Account> typedQuery = em.createNamedQuery(Account.FINDBYCREDETIALS, Account.class);
         typedQuery.setParameter("email", email);
@@ -111,7 +112,7 @@ public class AccountService extends AbstractService<Account> {
     }
 
     @Transactional
-    public void createInitAccounts() {
+    private void createInitAccounts() {
 
         String baseCurrency = CurrencyPropertiesUtil.getBaseCurrency();
 
@@ -154,7 +155,7 @@ public class AccountService extends AbstractService<Account> {
         // CREATE PARTNER ACCOUNTS
         Account partner1 = new Account("BlueBox", "Business", "business@blueboxgames.de", "12345",
                 currencyInformationService.getCurrencyFromMap("USD"), AccountType.PARTNER_BUSINESS);
-        partner1.getWallets().add(new Wallet("EUR", cryptoPalAccount, new BigDecimal(500),
+        partner1.getWallets().add(new Wallet("EUR", partner1, new BigDecimal(500),
                 currencyInformationService.getCurrencyFromMap("EUR")));
 
         createNewAccount(partner1);
@@ -162,7 +163,7 @@ public class AccountService extends AbstractService<Account> {
 
         Account partner2 = new Account("BlackCaste", "Business", "business@blackcastle.de", "12345",
                 currencyInformationService.getCurrencyFromMap("USD"), AccountType.PARTNER_BUSINESS);
-        partner2.getWallets().add(new Wallet("EUR", cryptoPalAccount, new BigDecimal(500),
+        partner2.getWallets().add(new Wallet("EUR", partner2, new BigDecimal(500),
                 currencyInformationService.getCurrencyFromMap("EUR")));
 
         createNewAccount(partner2);

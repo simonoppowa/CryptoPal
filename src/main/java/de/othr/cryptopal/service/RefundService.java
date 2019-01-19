@@ -25,7 +25,7 @@ public class RefundService extends TransactionService<Refund> {
                             @WebParam(name = "transactionId") long transactionId,
                             @WebParam(name = "reason") String reason) throws RefundException {
 
-        Account sender = accountService.getAccountByCredintials(email, password);
+        Account sender = accountService.getAccountByCredentials(email, password);
 
         if(sender == null) {
             throw new RefundException("No sender with email and password combination found");

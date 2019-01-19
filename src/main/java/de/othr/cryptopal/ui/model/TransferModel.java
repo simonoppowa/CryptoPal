@@ -7,10 +7,13 @@ import de.othr.cryptopal.service.AccountService;
 import de.othr.cryptopal.service.CurrencyInformationService;
 import de.othr.cryptopal.service.TransferService;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 
 @SessionScoped
@@ -29,10 +32,21 @@ public class TransferModel extends AbstractModel {
     @Inject
     private CurrencyInformationService currencyInformationService;
 
+    private Map<String, Currency> currencyMap;
+
     private String receiverEmail;
-    private String currencyString;
+    private Currency currency;
     private BigDecimal amount;
     private String transferMessage;
+
+    @PostConstruct
+    private void getAvailableCurrencies() {
+        currencyMap = new HashMap<>();
+        // Populate map
+        for(Wallet wallet : accountModel.getLoggedInAccount().getWallets()) {
+            currencyMap.put(wallet.getCurrency().getCurrencyId(), wallet.getCurrency());
+        }
+    }
 
     public TransferModel() {
     }
@@ -42,7 +56,7 @@ public class TransferModel extends AbstractModel {
         if(amount != null) {
             amountString = amount.toPlainString();
         }
-        logger.log(Level.INFO, "transferMoney called with: " + receiverEmail + " " + currencyString
+        logger.log(Level.INFO, "transferMoney called with: " + receiverEmail + " " + currency.getCurrencyId()
                 + " " + transferMessage + " " + amountString);
 
         boolean correctInput = true;
@@ -59,15 +73,12 @@ public class TransferModel extends AbstractModel {
             correctInput = false;
         }
 
-        // Check wallet
-        Currency senderCurrency = currencyInformationService.getCurrencyFromMap(currencyString);
-
-        if(senderCurrency == null) {
-            addWarningMessage("currency_not_found", "sendform:wallet");
+        if(currency == null) {
+            addWarningMessage("currency_not_found", "sendform:currency");
             correctInput = false;
         }
 
-        Wallet senderWallet = accountModel.getLoggedInAccount().getWalletByCurrency(senderCurrency);
+        Wallet senderWallet = accountModel.getLoggedInAccount().getWalletByCurrency(currency);
 
         // Check if amount input is valid
         if(amount == null) {
@@ -87,6 +98,7 @@ public class TransferModel extends AbstractModel {
 
         if(correctInput) {
             transferService.sendMoney(senderWallet, receiverEmail, amount, transferMessage);
+            addInfoMessage("success_transfer", "sendform");
         }
 
     }
@@ -99,12 +111,12 @@ public class TransferModel extends AbstractModel {
         this.receiverEmail = receiverEmail;
     }
 
-    public String getCurrencyString() {
-        return currencyString;
+    public Currency getCurrency() {
+        return currency;
     }
 
-    public void setCurrencyString(String currencyString) {
-        this.currencyString = currencyString;
+    public void setCurrency(Currency currency) {
+        this.currency = currency;
     }
 
     public BigDecimal getAmount() {
@@ -121,5 +133,13 @@ public class TransferModel extends AbstractModel {
 
     public void setTransferMessage(String transferMessage) {
         this.transferMessage = transferMessage;
+    }
+
+    public Map<String, Currency> getCurrencyMap() {
+        return currencyMap;
+    }
+
+    public void setCurrencyMap(Map<String, Currency> currencyMap) {
+        this.currencyMap = currencyMap;
     }
 }

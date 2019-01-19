@@ -9,7 +9,8 @@ import java.math.BigDecimal;
 
 @Entity
 @NamedQueries({
-        @NamedQuery(name = Wallet.FINDWALLETBYACCOUNTCURRENCY, query = "SELECT w FROM Wallet w WHERE w.account.email = :email AND w.currency.currencyId = :currency")
+        @NamedQuery(name = Wallet.FINDWALLETBYACCOUNTCURRENCY,
+                query = "SELECT w FROM Wallet w WHERE w.account.email = :email AND w.currency.currencyId = :currency")
 })
 public class Wallet implements Serializable {
 

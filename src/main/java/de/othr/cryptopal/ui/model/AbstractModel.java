@@ -14,13 +14,22 @@ public abstract class AbstractModel implements Serializable {
     @Inject
     protected Logger logger;
 
-    protected void addWarningMessage(String message, String component) {
+    protected void addInfoMessage(String message, String component) {
         FacesContext context = FacesContext.getCurrentInstance();
-        context.addMessage(component, new FacesMessage(FacesMessage.SEVERITY_WARN,
+        context.addMessage(component, new FacesMessage(FacesMessage.SEVERITY_INFO,
                 "INFO", getMessage(context, message)));
     }
 
+    protected void addWarningMessage(String message, String component) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.addMessage(component, new FacesMessage(FacesMessage.SEVERITY_WARN,
+                "WARN", getMessage(context, message)));
+    }
+
     protected void addErrorMessage(String message, String component) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.addMessage(component, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                "ERROR", getMessage(context, message)));
 
     }
 
@@ -32,7 +41,7 @@ public abstract class AbstractModel implements Serializable {
             return bundle.getString(msgKey);
         } else {
             logger.log(Level.WARNING, "No message found in messages with key: " + msgKey);
-            return "Error";
+            return bundle.getString("default_info_message");
         }
     }
 }

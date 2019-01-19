@@ -3,7 +3,7 @@
         PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:p="http://primefaces.org/ui"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://xmlns.jcp.org/jsf/core"
       xml:lang="en" lang="en">
 <h:head>
     <title>Send Money</title>
@@ -15,15 +15,23 @@
         <ui:define name="page-content">
 
 
+
             <h:form id="sendform">
+                <p:message for="sendform">
+                    <p:autoUpdate />
+                </p:message>
+
                 <h:panelGrid id="grid" columns="3" cellpadding="5">
                     <p:outputLabel for="email" value="Reiceiver Email:"/>
                     <p:inputText id="email" value="#{transferModel.receiverEmail}"/>
                     <p:message for="email"/>
 
-                    <p:outputLabel for="wallet" value="Wallet:"/>
-                    <p:inputText id="wallet" value="#{transferModel.currencyString}"/>
-                    <p:message for="wallet"/>
+                    <p:outputLabel for="currency" value="Currency: "/>
+                    <p:selectOneMenu id="currency" value="#{transferModel.currency}" converter="#{currencyConverter}"
+                                     style="width:150px">
+                        <f:selectItems value="#{transferModel.currencyMap}" />
+                    </p:selectOneMenu>
+                    <p:message for="currency"/>
 
                     <p:outputLabel for="amount" value="Amount:"/>
                     <p:inputNumber id="amount" value="#{transferModel.amount}"/>
@@ -34,12 +42,12 @@
                     <p:message for="message"/>
                 </h:panelGrid>
 
-                <p:commandButton id="submitButton" value="Send Money" update="grid" action="#{transferModel.transferMoney}"/>
+                <p:commandButton id="submitButton" value="Send Money" update="grid"
+                                 action="#{transferModel.transferMoney}"/>
             </h:form>
 
         </ui:define>
     </ui:composition>
-
 
 
 </h:body>

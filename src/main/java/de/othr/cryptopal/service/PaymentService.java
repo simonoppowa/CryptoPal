@@ -29,7 +29,7 @@ public class PaymentService extends TransactionService<Payment> {
                           @WebParam(name = "paymentComment") String comment,
                           @WebParam(name = "taxInPercentage") double tax) throws PaymentException {
 
-        Account sender = accountService.getAccountByCredintials(senderEmail, senderPassword);
+        Account sender = accountService.getAccountByCredentials(senderEmail, senderPassword);
 
         if(sender == null) {
             // Return account not found
@@ -82,7 +82,7 @@ public class PaymentService extends TransactionService<Payment> {
                                        @WebParam(name = "email") String email,
                                        @WebParam(name = "password") String password) throws PaymentException {
 
-        Account account = accountService.getAccountByCredintials(email, password);
+        Account account = accountService.getAccountByCredentials(email, password);
 
         if(account == null) {
             throw new PaymentException("No account with email password combination found");

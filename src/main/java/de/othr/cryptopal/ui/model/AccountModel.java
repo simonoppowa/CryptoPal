@@ -100,7 +100,7 @@ public class AccountModel extends AbstractModel {
         }
 
         if(correctInput) {
-            loggedInAccount = accountService.getAccountByCredintials(credentials.getEmail(), credentials.getPassword());
+            loggedInAccount = accountService.getAccountByCredentials(credentials.getEmail(), credentials.getPassword());
 
             if(loggedInAccount == null) {
                 addWarningMessage("no_account_found", "loginform:email");
