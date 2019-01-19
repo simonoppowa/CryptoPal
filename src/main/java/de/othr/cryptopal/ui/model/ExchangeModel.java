@@ -11,6 +11,7 @@ import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -53,7 +54,9 @@ public class ExchangeModel extends AbstractModel {
         logger.log(Level.INFO, "Calculating new outputAmount " + amount
                 + " " + selectedCurrency.getCurrencyId() + " " + outputCurrency.getCurrencyId());
 
-        outputAmount = amount.multiply(new BigDecimal(outputCurrency.getExchangeRate()));
+        BigDecimal toBaseCurrency = amount.divide(new BigDecimal(selectedCurrency.getExchangeRate()), 20, RoundingMode.HALF_UP);
+
+        outputAmount = toBaseCurrency.multiply(new BigDecimal(outputCurrency.getExchangeRate()));
     }
 
     public BigDecimal getAmount() {

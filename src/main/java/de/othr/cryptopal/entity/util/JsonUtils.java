@@ -50,7 +50,7 @@ public class JsonUtils {
 
                 double exchangeRate = Double.parseDouble(cryptoCurrencyJsonObject.getString(BASE_CURRENCY_STRING));
 
-                currency.setExchangeRate(exchangeRate);
+                currency.setExchangeRate(1 / exchangeRate);
             }
         } catch (JSONException ex) {
             ex.printStackTrace();
