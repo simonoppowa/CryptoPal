@@ -1,5 +1,6 @@
 package de.othr.cryptopal.ui.model;
 
+import de.othr.cryptopal.entity.Account;
 import de.othr.cryptopal.entity.Currency;
 import de.othr.cryptopal.entity.Wallet;
 import de.othr.cryptopal.service.CurrencyInformationService;
@@ -66,16 +67,35 @@ public class ExchangeModel extends AbstractModel {
         outputAmount = toBaseCurrency.multiply(new BigDecimal(outputCurrency.getExchangeRate()));
     }
 
+    // TODO add validation messages
     public void doExchange() {
+        Account account = accountModel.getLoggedInAccount();
+
         // Check input
+        if(amount == null || amount.compareTo(BigDecimal.ZERO) == 0) {
+            addWarningMessage("wrong_input_amount", null);
+            return;
+        }
 
+        if(selectedCurrency.equals(outputCurrency)) {
+            addWarningMessage("same_currency", null);
+            return;
+        }
 
-        Wallet senderWallet = accountModel.getLoggedInAccount().getWalletByCurrency(selectedCurrency);
+        if(outputAmount == null || outputAmount.setScale(2, RoundingMode.HALF_UP)
+                .compareTo(BigDecimal.ZERO) == 0) {
+            addWarningMessage("output_nothing", null);
+            return;
+        }
 
+        Wallet senderWallet = account.getWalletByCurrency(selectedCurrency);
 
+        if(senderWallet.getCredit().subtract(amount).longValue() < 0) {
+            addWarningMessage("not_enough_credit_exchange", null);
+            return;
+        }
 
         exchangeService.exchangeCurrency(senderWallet, outputCurrency, amount, outputAmount);
-
     }
 
     public BigDecimal getAmount() {

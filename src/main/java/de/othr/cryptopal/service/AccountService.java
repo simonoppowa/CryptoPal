@@ -4,6 +4,7 @@ import de.othr.cryptopal.entity.Account;
 import de.othr.cryptopal.entity.AccountType;
 import de.othr.cryptopal.entity.Currency;
 import de.othr.cryptopal.entity.Wallet;
+import util.CurrencyPropertiesUtil;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
@@ -112,16 +113,30 @@ public class AccountService extends AbstractService<Account> {
     @Transactional
     public void createInitAccounts() {
 
+        String baseCurrency = CurrencyPropertiesUtil.getBaseCurrency();
+
         // CREATE ADMINISTRATION ACCOUNT
         Account cryptoPalAccount = new Account("CryptoPal", "Account",
                 "administration@cryptopal.com", "123",
-                currencyInformationService.getCurrencyFromMap("USD"), AccountType.ADMINISTRATION);
+                currencyInformationService.getCurrencyFromMap(baseCurrency), AccountType.ADMINISTRATION);
 
-        cryptoPalAccount.getWalletByCurrency(currencyInformationService.getCurrencyFromMap("USD")).setCredit(new BigDecimal(10000));
-        cryptoPalAccount.getWallets().add(new Wallet("EUR", cryptoPalAccount, new BigDecimal(100000),
-                currencyInformationService.getCurrencyFromMap("EUR")));
-        cryptoPalAccount.getWallets().add(new Wallet("JPY", cryptoPalAccount, new BigDecimal(100000),
-                currencyInformationService.getCurrencyFromMap("JPY")));
+        Wallet baseWallet = cryptoPalAccount.getWalletByCurrency(
+                currencyInformationService.getCurrencyFromMap(baseCurrency));
+
+        baseWallet.setWalletName(baseCurrency + " Wallet");
+        baseWallet.setCredit(new BigDecimal(100000));
+        cryptoPalAccount.getWallets().add(new Wallet("EUR Wallet", cryptoPalAccount,
+                new BigDecimal(100000), currencyInformationService.getCurrencyFromMap("EUR")));
+        cryptoPalAccount.getWallets().add(new Wallet("GBP Wallet", cryptoPalAccount,
+                new BigDecimal(100000), currencyInformationService.getCurrencyFromMap("GBP")));
+        cryptoPalAccount.getWallets().add(new Wallet("JPY Wallet", cryptoPalAccount,
+                new BigDecimal(100000), currencyInformationService.getCurrencyFromMap("JPY")));
+        cryptoPalAccount.getWallets().add(new Wallet("BTC Wallet", cryptoPalAccount,
+                new BigDecimal(20), currencyInformationService.getCurrencyFromMap("BTC")));
+        cryptoPalAccount.getWallets().add(new Wallet("ETH Wallet", cryptoPalAccount,
+                new BigDecimal(10000), currencyInformationService.getCurrencyFromMap("ETH")));
+        cryptoPalAccount.getWallets().add(new Wallet("XRP Wallet", cryptoPalAccount,
+                new BigDecimal(100000), currencyInformationService.getCurrencyFromMap("XRP")));
 
         createNewAccount(cryptoPalAccount);
 
