@@ -44,12 +44,11 @@ public class CurrencyInformationService extends AbstractService<Currency> {
         fetchAllPrices();
     }
 
-    // TODO make 24h
     /**
-     * Fetches new currency prices every interval
+     * Fetches new currency prices every day at 12 AM
      */
     @Schedule(
-            minute = "*/1",
+            minute="*",
             persistent = false
     )
     private void fetchNewPrices() {
@@ -115,7 +114,7 @@ public class CurrencyInformationService extends AbstractService<Currency> {
         }
     }
 
-    public void putCurrenciesInMap(List<Currency> currencies) {
+    private void putCurrenciesInMap(List<Currency> currencies) {
         for(Currency currency : currencies) {
             currencyMap.put(currency.getCurrencyId(), currency);
         }
