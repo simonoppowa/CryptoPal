@@ -7,7 +7,7 @@ import de.othr.cryptopal.entity.util.JsonUtils;
 import de.othr.cryptopal.entity.util.UrlUtils;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
-import util.CurrencyPropertiesUtil;
+import de.othr.cryptopal.util.CurrencyPropertiesUtil;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Schedule;
@@ -25,7 +25,6 @@ import java.net.URL;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Singleton
 public class CurrencyInformationService extends AbstractService<Currency> {

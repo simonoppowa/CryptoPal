@@ -1,6 +1,6 @@
 package de.othr.cryptopal.entity.util;
 
-import util.CurrencyPropertiesUtil;
+import de.othr.cryptopal.util.CurrencyPropertiesUtil;
 
 import java.net.MalformedURLException;
 import java.net.URL;

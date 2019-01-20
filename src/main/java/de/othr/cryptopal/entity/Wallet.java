@@ -19,7 +19,7 @@ public class Wallet implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long walletId;
-//    @GenericGenerator(name = "wallet_address", strategy = "de.othr.cryptopal.entity.util.WalletAddressGenerator")
+//    @GenericGenerator(name = "wallet_address", strategy = "de.othr.cryptopal.entity.de.othr.cryptopal.util.WalletAddressGenerator")
 //    @GeneratedValue(generator = "wallet_address") // Doesn't work with non id attributes
     private String walletAddress;
     private String walletName;

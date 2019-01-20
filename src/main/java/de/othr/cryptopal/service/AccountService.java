@@ -4,7 +4,7 @@ import de.othr.cryptopal.entity.Account;
 import de.othr.cryptopal.entity.AccountType;
 import de.othr.cryptopal.entity.Currency;
 import de.othr.cryptopal.entity.Wallet;
-import util.CurrencyPropertiesUtil;
+import de.othr.cryptopal.util.CurrencyPropertiesUtil;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
@@ -14,7 +14,6 @@ import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.logging.Level;
 
 @ApplicationScoped

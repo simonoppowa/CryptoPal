@@ -1,0 +1,242 @@
+<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://service.oth.swr.de/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" name="OrderServiceService" targetNamespace="http://service.oth.swr.de/">
+  <wsdl:types>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://service.oth.swr.de/" elementFormDefault="unqualified" targetNamespace="http://service.oth.swr.de/" version="1.0">
+
+  <xs:element name="allOrders" type="tns:allOrders"/>
+
+  <xs:element name="allOrdersResponse" type="tns:allOrdersResponse"/>
+
+  <xs:element name="buyGame" type="tns:buyGame"/>
+
+  <xs:element name="buyGameResponse" type="tns:buyGameResponse"/>
+
+  <xs:element name="getGameTitel" type="tns:getGameTitel"/>
+
+  <xs:element name="getGameTitelResponse" type="tns:getGameTitelResponse"/>
+
+  <xs:complexType name="allOrders">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="tns:user"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="user">
+    <xs:complexContent>
+      <xs:extension base="tns:stringIdEntity">
+        <xs:sequence>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="gamesId" nillable="true" type="tns:game"/>
+          <xs:element minOccurs="0" name="mailAdress" type="xs:string"/>
+          <xs:element minOccurs="0" name="nachname" type="xs:string"/>
+          <xs:element minOccurs="0" name="passwordHash" type="xs:string"/>
+          <xs:element minOccurs="0" name="salt" type="xs:string"/>
+          <xs:element name="status" type="xs:boolean"/>
+          <xs:element minOccurs="0" name="vorname" type="xs:string"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="stringIdEntity">
+    <xs:complexContent>
+      <xs:extension base="tns:singleIdEntity">
+        <xs:sequence/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType abstract="true" name="singleIdEntity">
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:complexType name="game">
+    <xs:complexContent>
+      <xs:extension base="tns:stringIdEntity">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="availableStatus" type="tns:status"/>
+          <xs:element minOccurs="0" name="descr" type="xs:string"/>
+          <xs:element minOccurs="0" name="developerId" type="xs:string"/>
+          <xs:element minOccurs="0" name="gameDeveloper" type="tns:gameDeveloper"/>
+          <xs:element name="price" type="xs:double"/>
+          <xs:element minOccurs="0" name="shopId" type="xs:string"/>
+          <xs:element minOccurs="0" name="title" type="xs:string"/>
+          <xs:element minOccurs="0" name="version" type="tns:updates"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="gameDeveloper">
+    <xs:complexContent>
+      <xs:extension base="tns:stringIdEntity">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="developerName" type="xs:string"/>
+          <xs:element minOccurs="0" name="email" type="tns:email"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="games" nillable="true" type="tns:game"/>
+          <xs:element minOccurs="0" name="password" type="xs:string"/>
+          <xs:element minOccurs="0" name="salt" type="xs:string"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="email">
+    <xs:complexContent>
+      <xs:extension base="tns:stringIdEntity">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="mailAdress" type="xs:string"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="updates">
+    <xs:complexContent>
+      <xs:extension base="tns:generatedIdEntity">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="id" type="xs:long"/>
+          <xs:element minOccurs="0" name="update" type="xs:base64Binary"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="generatedIdEntity">
+    <xs:complexContent>
+      <xs:extension base="tns:singleIdEntity">
+        <xs:sequence/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="allOrdersResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:order"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="order">
+    <xs:complexContent>
+      <xs:extension base="tns:generatedIdEntity">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="datum" type="xs:dateTime"/>
+          <xs:element minOccurs="0" name="game" type="tns:game"/>
+          <xs:element minOccurs="0" name="user" type="tns:user"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="buyGame">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="tns:game"/>
+      <xs:element minOccurs="0" name="arg1" type="tns:user"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="buyGameResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:order"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="getGameTitel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="xs:long"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="getGameTitelResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:simpleType name="status">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="AVAILABLE"/>
+      <xs:enumeration value="BOUGHT"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="buyGame">
+    <wsdl:part element="tns:buyGame" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getGameTitelResponse">
+    <wsdl:part element="tns:getGameTitelResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="allOrders">
+    <wsdl:part element="tns:allOrders" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="buyGameResponse">
+    <wsdl:part element="tns:buyGameResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getGameTitel">
+    <wsdl:part element="tns:getGameTitel" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="allOrdersResponse">
+    <wsdl:part element="tns:allOrdersResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="OrderService">
+    <wsdl:operation name="allOrders">
+      <wsdl:input message="tns:allOrders" name="allOrders">
+    </wsdl:input>
+      <wsdl:output message="tns:allOrdersResponse" name="allOrdersResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="buyGame">
+      <wsdl:input message="tns:buyGame" name="buyGame">
+    </wsdl:input>
+      <wsdl:output message="tns:buyGameResponse" name="buyGameResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getGameTitel">
+      <wsdl:input message="tns:getGameTitel" name="getGameTitel">
+    </wsdl:input>
+      <wsdl:output message="tns:getGameTitelResponse" name="getGameTitelResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="OrderServiceServiceSoapBinding" type="tns:OrderService">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="allOrders">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="allOrders">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="allOrdersResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="buyGame">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="buyGame">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="buyGameResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getGameTitel">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getGameTitel">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getGameTitelResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="OrderServiceService">
+    <wsdl:port binding="tns:OrderServiceServiceSoapBinding" name="OrderServicePort">
+      <soap:address location="http://localhost:8080/blackcastle-01/OrderService"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

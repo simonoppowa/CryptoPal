@@ -1,4 +1,4 @@
-package util;
+package de.othr.cryptopal.util;
 
 import de.othr.cryptopal.entity.Currency;
 import de.othr.cryptopal.entity.CurrencyType;
