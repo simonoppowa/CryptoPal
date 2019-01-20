@@ -1,5 +1,8 @@
 package de.othr.cryptopal.entity;
 
+import de.othr.blackcastle.OrderService;
+import de.othr.blackcastle.OrderServiceService;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -54,6 +57,18 @@ public class Payment extends Transaction{
 
     @Override
     public String getDetails() {
+        // If the payment is made to a partner business, the exact article name is returned
+        if(getReceiverWallet().getAccount().isPartnerAccount()) {
+            long gameId;
+            try {
+                gameId = Long.parseLong(String.valueOf(comment));
+            } catch (Exception ex) {
+                return comment;
+            }
+            OrderServiceService service = new OrderServiceService();
+            OrderService stub = service.getOrderServicePort();
+            return stub.getGameTitel(gameId);
+        }
         return comment;
     }
 }

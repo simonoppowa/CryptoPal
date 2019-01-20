@@ -176,6 +176,10 @@ public class Account implements Serializable {
         return accountType == AccountType.BUSINESS || accountType == AccountType.PARTNER_BUSINESS;
     }
 
+    public boolean isPartnerAccount() {
+        return accountType == AccountType.PARTNER_BUSINESS;
+    }
+
     @Override
     public String toString() {
         String defaultCurrencyString;
