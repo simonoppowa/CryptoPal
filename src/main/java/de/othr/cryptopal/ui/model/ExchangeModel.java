@@ -96,6 +96,7 @@ public class ExchangeModel extends AbstractModel {
         }
 
         exchangeService.exchangeCurrency(senderWallet, outputCurrency, amount, outputAmount);
+        addInfoMessage("success_exchange", null);
     }
 
     public BigDecimal getAmount() {

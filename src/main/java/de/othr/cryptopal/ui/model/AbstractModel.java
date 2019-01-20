@@ -17,19 +17,19 @@ public abstract class AbstractModel implements Serializable {
     protected void addInfoMessage(String message, String component) {
         FacesContext context = FacesContext.getCurrentInstance();
         context.addMessage(component, new FacesMessage(FacesMessage.SEVERITY_INFO,
-                "INFO", getMessage(context, message)));
+                getMessage(context, "success"), getMessage(context, message)));
     }
 
     protected void addWarningMessage(String message, String component) {
         FacesContext context = FacesContext.getCurrentInstance();
         context.addMessage(component, new FacesMessage(FacesMessage.SEVERITY_WARN,
-                "WARN", getMessage(context, message)));
+                getMessage(context, "info"), getMessage(context, message)));
     }
 
     protected void addErrorMessage(String message, String component) {
         FacesContext context = FacesContext.getCurrentInstance();
         context.addMessage(component, new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                "ERROR", getMessage(context, message)));
+                getMessage(context, "error"), getMessage(context, message)));
 
     }
 
