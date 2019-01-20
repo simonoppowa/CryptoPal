@@ -14,7 +14,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 
 @SessionScoped
 @Named
@@ -54,8 +53,8 @@ public class ExchangeModel extends AbstractModel {
     }
 
     public void calculateOutputAmount() {
-        logger.log(Level.INFO, "Calculating new outputAmount " + amount
-                + " " + selectedCurrency.getCurrencyId() + " " + outputCurrency.getCurrencyId());
+//        logger.log(Level.INFO, "Calculating new outputAmount " + amount
+//                + " " + selectedCurrency.getCurrencyId() + " " + outputCurrency.getCurrencyId());
 
         if(amount == null) {
             outputAmount = new BigDecimal(0);
@@ -133,6 +132,12 @@ public class ExchangeModel extends AbstractModel {
     }
 
     public List<Currency> getAvailableCurrencies() {
+        List<Wallet> wallets = accountModel.getLoggedInAccount().getWallets();
+        for(Wallet wallet : wallets) {
+            if(!availableCurrencies.contains(wallet.getCurrency())) {
+                availableCurrencies.add(wallet.getCurrency());
+            }
+        }
         return availableCurrencies;
     }
 

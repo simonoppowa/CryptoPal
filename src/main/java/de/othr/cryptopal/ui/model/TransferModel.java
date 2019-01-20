@@ -13,6 +13,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
@@ -136,6 +137,14 @@ public class TransferModel extends AbstractModel {
     }
 
     public Map<String, Currency> getCurrencyMap() {
+        List<Wallet> walletList = accountModel.getLoggedInAccount().getWallets();
+
+        for(Wallet wallet : walletList) {
+            if(!currencyMap.containsKey(wallet.getCurrency().getCurrencyId())) {
+                currencyMap.put(wallet.getCurrency().getCurrencyId(), wallet.getCurrency());
+            }
+        }
+
         return currencyMap;
     }
 
