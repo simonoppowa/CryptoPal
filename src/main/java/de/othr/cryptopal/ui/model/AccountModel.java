@@ -35,8 +35,8 @@ public class AccountModel extends AbstractModel {
 
     @Transactional // TODO Remove
     public String doRegister() {
-        logger.log(Level.INFO, "doRegister called with " + credentials.getEmail() + " " + credentials.getPassword() + " "
-                + credentials.getConfirmPassword());
+//        logger.log(Level.INFO, "doRegister called with " + credentials.getEmail() + " " + credentials.getPassword() + " "
+//                + credentials.getConfirmPassword());
 
         // TODO Check
         accountService.init();
@@ -84,7 +84,7 @@ public class AccountModel extends AbstractModel {
 
     @Transactional //TODO Remove
     public String doLogin() {
-        logger.log(Level.INFO, "doLogin called with " + credentials.getEmail() + " " + credentials.getPassword());
+//        logger.log(Level.INFO, "doLogin called with " + credentials.getEmail() + " " + credentials.getPassword());
 
         accountService.init();
 
@@ -145,12 +145,7 @@ public class AccountModel extends AbstractModel {
             loggedInAccount.setAccountType(AccountType.PRIVATE);
         }
 
-
-
         if(correctInput) {
-
-            // Default currency
-
 
             boolean accountCreated = accountService.createNewAccount(loggedInAccount);
 
@@ -175,7 +170,6 @@ public class AccountModel extends AbstractModel {
     }
 
     public Account getLoggedInAccount() {
-        //TODO
         if(loggedInAccount.getWallets() != null) {
             loggedInAccount = accountService.getAccountByEmail(loggedInAccount.getEmail());
         }

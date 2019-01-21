@@ -33,9 +33,8 @@ public class RefundService extends TransactionService<Refund> {
 
         Transaction transaction = findTransactionById(transactionId);
 
-        // Check if already refunded
+        // TODO Check if already refunded
 
-        // TODO to TransactionService
         if(!(transaction instanceof Payment) || !(transaction.getSenderWallet().getAccount() == sender)) {
             throw new RefundException("No payment with id found");
         } else {

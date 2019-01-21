@@ -62,7 +62,7 @@ public class PaymentService extends TransactionService<Payment> {
             throw new PaymentException("Not enough credit to pay");
         }
 
-        // TODO tax and paymentFee
+        // TODO Implement tax and paymentFee
         Payment payment = new Payment(sender.getWalletByCurrency(paymentCurrency),
                 receiver.getWalletByCurrency(paymentCurrency),
                 amount, paymentCurrency, new Date(System.currentTimeMillis()), comment, 0, 0);

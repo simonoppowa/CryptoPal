@@ -9,7 +9,7 @@ Ein Bezahldienst in Form von PayPal mit Unterstützung für Crypto-Währungen wi
 * Rückerstattungen von Online Produkten/Services
 * Senden von Geld an andere Nutzer
 * Live Währungspreise (von Europäischer Zentralbank und CryptoCompare.com)
-* Austausch von Währungen
+* Austausch von Währungen (EUR, USD, GBP, JPY, BTC, ETH, XRP)
 * Einsehen von Beträgen und Transaktionen
 
 ### TODOs
@@ -18,6 +18,11 @@ Ein Bezahldienst in Form von PayPal mit Unterstützung für Crypto-Währungen wi
 * Implement different languages function
 * Change account information / delete account function
 * Make models @ConversationScoped
+* Implement taxes and payment fee
+
+### Partner Projekte
+* Importiert PaymentService / RefundService: BlackCastle, BlueBox
+* OrderService wird importiert von: BlackCastle (Zusätzliche Details in Payment wird angezeigt)
 
 
 ### Sources:
