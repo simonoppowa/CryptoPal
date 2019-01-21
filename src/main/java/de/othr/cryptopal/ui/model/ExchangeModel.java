@@ -5,6 +5,7 @@ import de.othr.cryptopal.entity.Currency;
 import de.othr.cryptopal.entity.Wallet;
 import de.othr.cryptopal.service.CurrencyInformationService;
 import de.othr.cryptopal.service.ExchangeService;
+import de.othr.cryptopal.service.qualifier.ExchangeServiceQualifier;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
@@ -25,7 +26,7 @@ public class ExchangeModel extends AbstractModel {
     @Inject
     private CurrencyInformationService currencyInformationService;
 
-    @Inject
+    @Inject @ExchangeServiceQualifier
     private ExchangeService exchangeService;
 
     private BigDecimal amount;

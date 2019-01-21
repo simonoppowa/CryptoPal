@@ -69,6 +69,8 @@ public abstract class TransactionService<T> extends AbstractService<Transaction>
     synchronized void executeTwoCurrencyTransaction(Transaction transaction) {
         if(transaction instanceof Exchange) {
             Exchange exchange = (Exchange) transaction;
+            Currency fromCurrency = currencyInformationService.mergeCurrenciesWithDB(exchange.getPaymentCurrency());
+            Currency toCurrency = currencyInformationService.mergeCurrenciesWithDB(exchange.getToCurrency());
 
             BigDecimal fromAmount = exchange.getAmount();
             BigDecimal toAmount  = exchange.getToAmount();
@@ -77,14 +79,14 @@ public abstract class TransactionService<T> extends AbstractService<Transaction>
             Account receiver = accountService.getAccountByEmail(exchange.getReceiverWallet().getAccount().getEmail());
 
             // Attach
-            Wallet fromSenderWallet = sender.getWalletByCurrency(exchange.getPaymentCurrency());
-            Wallet toSenderWallet = sender.getWalletByCurrency(exchange.getToCurrency());
+            Wallet fromSenderWallet = sender.getWalletByCurrency(fromCurrency);
+            Wallet toSenderWallet = sender.getWalletByCurrency(toCurrency);
 
-            Wallet fromReceiverWallet = receiver.getWalletByCurrency(exchange.getPaymentCurrency());
-            Wallet toReceiverWallet = receiver.getWalletByCurrency(exchange.getToCurrency());
+            Wallet fromReceiverWallet = receiver.getWalletByCurrency(fromCurrency);
+            Wallet toReceiverWallet = receiver.getWalletByCurrency(toCurrency);
 
             if(toSenderWallet == null) {
-                toSenderWallet = createNewWallet(sender, exchange.getToCurrency());
+                toSenderWallet = createNewWallet(sender, toCurrency);
                 sender.getWallets().add(toSenderWallet);
             }
 

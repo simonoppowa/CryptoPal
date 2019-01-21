@@ -29,22 +29,17 @@ public class AccountModel extends AbstractModel {
 
     @Inject @TransferServiceQualifier
     private ITransactionService transferService;
-//
-//    @Inject
-//    private TransferService transferService;
 
     @Produces
     private Account loggedInAccount;
 
     private boolean isBusinessAccount;
 
-    @Transactional // TODO Remove
+    @Transactional // Throws exception without
     public String doRegister() {
 //        logger.log(Level.INFO, "doRegister called with " + credentials.getEmail() + " " + credentials.getPassword() + " "
 //                + credentials.getConfirmPassword());
 
-        // TODO Check
-        accountService.init();
 
         boolean correctInput = true;
 
@@ -87,11 +82,9 @@ public class AccountModel extends AbstractModel {
         }
     }
 
-    @Transactional //TODO Remove
+    @Transactional // Throws exception without
     public String doLogin() {
 //        logger.log(Level.INFO, "doLogin called with " + credentials.getEmail() + " " + credentials.getPassword());
-
-        accountService.init();
 
         boolean correctInput = true;
 

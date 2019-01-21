@@ -4,6 +4,7 @@ import de.othr.cryptopal.entity.Account;
 import de.othr.cryptopal.entity.Currency;
 import de.othr.cryptopal.entity.Exchange;
 import de.othr.cryptopal.entity.Wallet;
+import de.othr.cryptopal.service.qualifier.ExchangeServiceQualifier;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
@@ -12,6 +13,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @SessionScoped
+@ExchangeServiceQualifier
 public class ExchangeService extends TransactionService<Exchange> {
 
     private Account administration;
