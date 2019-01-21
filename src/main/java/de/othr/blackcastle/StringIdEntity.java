@@ -28,10 +28,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "stringIdEntity")
 @XmlSeeAlso({
-    Game.class,
-    GameDeveloper.class,
-    User.class,
-    Email.class
+    Game.class
 })
 public class StringIdEntity
     extends SingleIdEntity

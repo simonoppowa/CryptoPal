@@ -17,15 +17,16 @@ import javax.xml.bind.annotation.XmlType;
  * <pre>
  * &lt;complexType name="gameDeveloper">
  *   &lt;complexContent>
- *     &lt;extension base="{http://service.oth.swr.de/}stringIdEntity">
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="developerName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="email" type="{http://service.oth.swr.de/}email" minOccurs="0"/>
+ *         &lt;element name="email" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="games" type="{http://service.oth.swr.de/}game" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}long"/>
  *         &lt;element name="password" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="salt" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
- *     &lt;/extension>
+ *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
@@ -37,17 +38,17 @@ import javax.xml.bind.annotation.XmlType;
     "developerName",
     "email",
     "games",
+    "id",
     "password",
     "salt"
 })
-public class GameDeveloper
-    extends StringIdEntity
-{
+public class GameDeveloper {
 
     protected String developerName;
-    protected Email email;
+    protected String email;
     @XmlElement(nillable = true)
     protected List<Game> games;
+    protected long id;
     protected String password;
     protected String salt;
 
@@ -80,10 +81,10 @@ public class GameDeveloper
      * 
      * @return
      *     possible object is
-     *     {@link Email }
+     *     {@link String }
      *     
      */
-    public Email getEmail() {
+    public String getEmail() {
         return email;
     }
 
@@ -92,10 +93,10 @@ public class GameDeveloper
      * 
      * @param value
      *     allowed object is
-     *     {@link Email }
+     *     {@link String }
      *     
      */
-    public void setEmail(Email value) {
+    public void setEmail(String value) {
         this.email = value;
     }
 
@@ -126,6 +127,22 @@ public class GameDeveloper
             games = new ArrayList<Game>();
         }
         return this.games;
+    }
+
+    /**
+     * Gets the value of the id property.
+     * 
+     */
+    public long getId() {
+        return id;
+    }
+
+    /**
+     * Sets the value of the id property.
+     * 
+     */
+    public void setId(long value) {
+        this.id = value;
     }
 
     /**

@@ -6,6 +6,7 @@ import de.othr.cryptopal.entity.Wallet;
 import de.othr.cryptopal.service.AccountService;
 import de.othr.cryptopal.service.CurrencyInformationService;
 import de.othr.cryptopal.service.TransferService;
+import de.othr.cryptopal.service.qualifier.TransferServiceQualifier;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
@@ -27,7 +28,7 @@ public class TransferModel extends AbstractModel {
     @Inject
     private AccountService accountService;
 
-    @Inject
+    @Inject @TransferServiceQualifier
     private TransferService transferService;
 
     @Inject

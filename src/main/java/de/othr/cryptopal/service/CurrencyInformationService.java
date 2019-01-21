@@ -13,6 +13,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import javax.ejb.TransactionAttribute;
+import javax.enterprise.inject.Produces;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import java.io.BufferedReader;
@@ -181,6 +182,11 @@ public class CurrencyInformationService extends AbstractService<Currency> {
         }
 
         return null;
+    }
+
+    @TransactionAttribute
+    public Currency mergeCurrenciesWithDB(Currency currency) {
+        return em.merge(currency);
     }
 
     private List<String> getListOfCurrencyIds(List<Currency> currencies) {

@@ -37,10 +37,13 @@ public abstract class TransactionService<T> extends AbstractService<Transaction>
 
     @Transactional(value = Transactional.TxType.REQUIRES_NEW)
     synchronized void executeTransaction(Transaction transaction, Account receiver) {
-        Currency transactionCurrency = transaction.getPaymentCurrency();
+        // Reattach currency
+        Currency transactionCurrency = currencyInformationService
+                .mergeCurrenciesWithDB(transaction.getPaymentCurrency());
         Account sender = transaction.getSenderWallet().getAccount();
 
-        // Attach senderWallet
+
+        // Attach wallets
         Wallet senderWallet = accountService.getAccountWallet(transaction.getSenderWallet()
                 .getAccount().getEmail(), transactionCurrency);
         Wallet receiverWallet = accountService.getAccountWallet(receiver.getEmail(), transactionCurrency);

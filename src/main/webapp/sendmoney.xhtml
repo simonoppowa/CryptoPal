@@ -16,10 +16,16 @@
 
 
 
+            <p:panel id="sendpanel" header="Send Money">
+
             <h:form id="sendform">
                 <p:message for="sendform">
                     <p:autoUpdate />
                 </p:message>
+
+
+
+
 
                 <h:panelGrid id="grid" columns="3" cellpadding="5">
                     <p:outputLabel for="email" value="Reiceiver Email:"/>
@@ -45,6 +51,8 @@
                 <p:commandButton id="submitButton" value="Send Money" update="grid"
                                  action="#{transferModel.transferMoney}"/>
             </h:form>
+
+        </p:panel>
 
         </ui:define>
     </ui:composition>

@@ -3,7 +3,6 @@ package de.othr.blackcastle;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -17,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;extension base="{http://service.oth.swr.de/}stringIdEntity">
  *       &lt;sequence>
- *         &lt;element name="availableStatus" type="{http://service.oth.swr.de/}status" minOccurs="0"/>
+ *         &lt;element name="available" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
  *         &lt;element name="descr" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="developerId" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="gameDeveloper" type="{http://service.oth.swr.de/}gameDeveloper" minOccurs="0"/>
@@ -35,7 +34,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "game", propOrder = {
-    "availableStatus",
+    "available",
     "descr",
     "developerId",
     "gameDeveloper",
@@ -48,8 +47,7 @@ public class Game
     extends StringIdEntity
 {
 
-    @XmlSchemaType(name = "string")
-    protected Status availableStatus;
+    protected boolean available;
     protected String descr;
     protected String developerId;
     protected GameDeveloper gameDeveloper;
@@ -59,27 +57,19 @@ public class Game
     protected Updates version;
 
     /**
-     * Gets the value of the availableStatus property.
+     * Gets the value of the available property.
      * 
-     * @return
-     *     possible object is
-     *     {@link Status }
-     *     
      */
-    public Status getAvailableStatus() {
-        return availableStatus;
+    public boolean isAvailable() {
+        return available;
     }
 
     /**
-     * Sets the value of the availableStatus property.
+     * Sets the value of the available property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link Status }
-     *     
      */
-    public void setAvailableStatus(Status value) {
-        this.availableStatus = value;
+    public void setAvailable(boolean value) {
+        this.available = value;
     }
 
     /**

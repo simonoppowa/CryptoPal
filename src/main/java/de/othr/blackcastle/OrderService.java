@@ -57,7 +57,7 @@ public interface OrderService {
 
     /**
      * 
-     * @param arg0
+     * @param bestellId
      * @return
      *     returns java.lang.String
      */
@@ -66,7 +66,7 @@ public interface OrderService {
     @RequestWrapper(localName = "getGameTitel", targetNamespace = "http://service.oth.swr.de/", className = "de.swr.oth.service.GetGameTitel")
     @ResponseWrapper(localName = "getGameTitelResponse", targetNamespace = "http://service.oth.swr.de/", className = "de.swr.oth.service.GetGameTitelResponse")
     public String getGameTitel(
-        @WebParam(name = "arg0", targetNamespace = "")
-        Long arg0);
+        @WebParam(name = "BestellId", targetNamespace = "")
+        Long bestellId);
 
 }

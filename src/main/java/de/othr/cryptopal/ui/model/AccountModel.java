@@ -3,7 +3,9 @@ package de.othr.cryptopal.ui.model;
 import de.othr.cryptopal.entity.Account;
 import de.othr.cryptopal.entity.AccountType;
 import de.othr.cryptopal.service.AccountService;
+import de.othr.cryptopal.service.ITransactionService;
 import de.othr.cryptopal.service.TransferService;
+import de.othr.cryptopal.service.qualifier.TransferServiceQualifier;
 
 import javax.enterprise.context.SessionScoped;
 import javax.enterprise.inject.Produces;
@@ -25,8 +27,11 @@ public class AccountModel extends AbstractModel {
     @Inject
     private CurrencyDropdownModel currencyDropdownModel;
 
-    @Inject
-    private TransferService transferService;
+    @Inject @TransferServiceQualifier
+    private ITransactionService transferService;
+//
+//    @Inject
+//    private TransferService transferService;
 
     @Produces
     private Account loggedInAccount;
@@ -153,7 +158,8 @@ public class AccountModel extends AbstractModel {
                 logger.log(Level.INFO, "New account created: " + loggedInAccount.toString());
 
                 // Set start money
-                transferService.setStartMoney(loggedInAccount);
+                TransferService castedTransferService = (TransferService) transferService;
+                castedTransferService.setStartMoney(loggedInAccount);
 
                 return "registersucess.faces";
             } else {

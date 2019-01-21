@@ -1,18 +1,16 @@
 package de.othr.cryptopal.service;
 
 import de.othr.cryptopal.entity.*;
+import de.othr.cryptopal.service.qualifier.TransferServiceQualifier;
 
 import javax.enterprise.context.SessionScoped;
-import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
 @SessionScoped
-public class TransferService extends TransactionService<Transfer> {
+@TransferServiceQualifier
+public class TransferService extends TransactionService<Transfer> implements ITransactionService {
 
     public TransferService() {
         super(Transfer.class);
@@ -27,11 +25,10 @@ public class TransferService extends TransactionService<Transfer> {
 
     @Transactional
     public void sendMoney(Wallet senderWallet, String receiverEmail, BigDecimal amount, String message) {
-        Currency currency = senderWallet.getCurrency();
+        Currency currency = currencyInformationService.getCurrencyFromMap(senderWallet.getCurrency().getCurrencyId());
         Wallet receiverWallet = accountService.getAccountByEmail(receiverEmail).getWalletByCurrency(currency);
 
-        Transfer transfer = new Transfer(senderWallet,
-                receiverWallet, amount, currency,
+        Transfer transfer = new Transfer(senderWallet, receiverWallet, amount, currency,
                 new Date(System.currentTimeMillis()), message);
 
         executeTransaction(transfer, accountService.getAccountByEmail(receiverEmail));

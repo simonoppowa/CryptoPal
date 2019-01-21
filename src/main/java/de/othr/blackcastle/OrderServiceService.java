@@ -17,7 +17,7 @@ import javax.xml.ws.WebServiceFeature;
  * Generated source version: 2.2
  * 
  */
-@WebServiceClient(name = "OrderServiceService", targetNamespace = "http://service.oth.swr.de/", wsdlLocation = "file:/home/simon_oppowa/Orderservice.xml")
+@WebServiceClient(name = "OrderServiceService", targetNamespace = "http://service.oth.swr.de/", wsdlLocation = "file:/home/simon_oppowa/OrderService.xml")
 public class OrderServiceService
     extends Service
 {
@@ -30,7 +30,7 @@ public class OrderServiceService
         URL url = null;
         WebServiceException e = null;
         try {
-            url = new URL("file:/home/simon_oppowa/Orderservice.xml");
+            url = new URL("file:/home/simon_oppowa/OrderService.xml");
         } catch (MalformedURLException ex) {
             e = new WebServiceException(ex);
         }

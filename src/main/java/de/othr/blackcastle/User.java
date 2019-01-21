@@ -17,17 +17,19 @@ import javax.xml.bind.annotation.XmlType;
  * <pre>
  * &lt;complexType name="user">
  *   &lt;complexContent>
- *     &lt;extension base="{http://service.oth.swr.de/}stringIdEntity">
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="gamesId" type="{http://service.oth.swr.de/}game" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="games" type="{http://service.oth.swr.de/}game" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="lib" type="{http://service.oth.swr.de/}library" minOccurs="0"/>
  *         &lt;element name="mailAdress" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="nachname" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="passwordHash" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="salt" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="status" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
+ *         &lt;element name="userId" type="{http://www.w3.org/2001/XMLSchema}long"/>
  *         &lt;element name="vorname" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
- *     &lt;/extension>
+ *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
@@ -36,40 +38,42 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "user", propOrder = {
-    "gamesId",
+    "games",
+    "lib",
     "mailAdress",
     "nachname",
     "passwordHash",
     "salt",
     "status",
+    "userId",
     "vorname"
 })
-public class User
-    extends StringIdEntity
-{
+public class User {
 
     @XmlElement(nillable = true)
-    protected List<Game> gamesId;
+    protected List<Game> games;
+    protected Library lib;
     protected String mailAdress;
     protected String nachname;
     protected String passwordHash;
     protected String salt;
     protected boolean status;
+    protected long userId;
     protected String vorname;
 
     /**
-     * Gets the value of the gamesId property.
+     * Gets the value of the games property.
      * 
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the gamesId property.
+     * This is why there is not a <CODE>set</CODE> method for the games property.
      * 
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
-     *    getGamesId().add(newItem);
+     *    getGames().add(newItem);
      * </pre>
      * 
      * 
@@ -79,11 +83,35 @@ public class User
      * 
      * 
      */
-    public List<Game> getGamesId() {
-        if (gamesId == null) {
-            gamesId = new ArrayList<Game>();
+    public List<Game> getGames() {
+        if (games == null) {
+            games = new ArrayList<Game>();
         }
-        return this.gamesId;
+        return this.games;
+    }
+
+    /**
+     * Gets the value of the lib property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Library }
+     *     
+     */
+    public Library getLib() {
+        return lib;
+    }
+
+    /**
+     * Sets the value of the lib property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Library }
+     *     
+     */
+    public void setLib(Library value) {
+        this.lib = value;
     }
 
     /**
@@ -196,6 +224,22 @@ public class User
      */
     public void setStatus(boolean value) {
         this.status = value;
+    }
+
+    /**
+     * Gets the value of the userId property.
+     * 
+     */
+    public long getUserId() {
+        return userId;
+    }
+
+    /**
+     * Sets the value of the userId property.
+     * 
+     */
+    public void setUserId(long value) {
+        this.userId = value;
     }
 
     /**

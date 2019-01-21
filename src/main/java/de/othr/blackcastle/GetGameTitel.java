@@ -3,6 +3,7 @@ package de.othr.blackcastle;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -16,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
+ *         &lt;element name="BestellId" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -27,34 +28,35 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "getGameTitel", propOrder = {
-    "arg0"
+    "bestellId"
 })
 public class GetGameTitel {
 
-    protected Long arg0;
+    @XmlElement(name = "BestellId")
+    protected Long bestellId;
 
     /**
-     * Gets the value of the arg0 property.
+     * Gets the value of the bestellId property.
      * 
      * @return
      *     possible object is
      *     {@link Long }
      *     
      */
-    public Long getArg0() {
-        return arg0;
+    public Long getBestellId() {
+        return bestellId;
     }
 
     /**
-     * Sets the value of the arg0 property.
+     * Sets the value of the bestellId property.
      * 
      * @param value
      *     allowed object is
      *     {@link Long }
      *     
      */
-    public void setArg0(Long value) {
-        this.arg0 = value;
+    public void setBestellId(Long value) {
+        this.bestellId = value;
     }
 
 }

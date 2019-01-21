@@ -111,6 +111,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link Library }
+     * 
+     */
+    public Library createLibrary() {
+        return new Library();
+    }
+
+    /**
      * Create an instance of {@link GameDeveloper }
      * 
      */
@@ -124,14 +132,6 @@ public class ObjectFactory {
      */
     public User createUser() {
         return new User();
-    }
-
-    /**
-     * Create an instance of {@link Email }
-     * 
-     */
-    public Email createEmail() {
-        return new Email();
     }
 
     /**

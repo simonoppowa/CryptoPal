@@ -28,8 +28,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "generatedIdEntity")
 @XmlSeeAlso({
-    Updates.class,
-    Order.class
+    Updates.class
 })
 public class GeneratedIdEntity
     extends SingleIdEntity

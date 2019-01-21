@@ -16,13 +16,13 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * <pre>
  * &lt;complexType name="order">
  *   &lt;complexContent>
- *     &lt;extension base="{http://service.oth.swr.de/}generatedIdEntity">
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="datum" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
  *         &lt;element name="game" type="{http://service.oth.swr.de/}game" minOccurs="0"/>
  *         &lt;element name="user" type="{http://service.oth.swr.de/}user" minOccurs="0"/>
  *       &lt;/sequence>
- *     &lt;/extension>
+ *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
@@ -35,9 +35,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "game",
     "user"
 })
-public class Order
-    extends GeneratedIdEntity
-{
+public class Order {
 
     @XmlSchemaType(name = "dateTime")
     protected XMLGregorianCalendar datum;
