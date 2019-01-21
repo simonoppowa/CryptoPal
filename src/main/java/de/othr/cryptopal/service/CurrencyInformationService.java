@@ -46,6 +46,7 @@ public class CurrencyInformationService extends AbstractService<Currency> {
 
     /**
      * Fetches new currency prices every day at 12 AM
+     * (would be every couple seconds in real world)
      */
     @Schedule(
             minute="*",
@@ -66,6 +67,9 @@ public class CurrencyInformationService extends AbstractService<Currency> {
             putCurrenciesInMap(cryptoCurrencies);
             persistCurrencies(fiatCurrencies, cryptoCurrencies);
         } else {
+            // TODO
+            fiatCurrencies = CurrencyPropertiesUtil.getSupportedFiatCurrencies();
+            cryptoCurrencies = CurrencyPropertiesUtil.getSupportedCryptoCurrencies();
             putCurrenciesInMap(currenciesFromDB);
         }
     }

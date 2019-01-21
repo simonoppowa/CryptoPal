@@ -66,7 +66,6 @@ public class ExchangeModel extends AbstractModel {
         outputAmount = toBaseCurrency.multiply(new BigDecimal(outputCurrency.getExchangeRate()));
     }
 
-    // TODO add validation messages
     public void doExchange() {
         Account account = accountModel.getLoggedInAccount();
 
