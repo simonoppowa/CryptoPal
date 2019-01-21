@@ -141,18 +141,21 @@ public class AccountService extends AbstractService<Account> {
         createNewAccount(cryptoPalAccount);
 
         // CREATE DUMMY ACCOUNTS
-        Account dummy1 = new Account("Max", "Mustermann", "max.mustermann@gmx.de", "123",
+        Account dummy1 = new Account("Max", "Mustermann", "max.mustermann@gmx.de",
+                "123",
                 currencyInformationService.getCurrencyFromMap("EUR"), AccountType.PRIVATE);
 
         createNewAccount(dummy1);
 
-        Account dummy2 = new Account("Manfred", "Mueller", "manfred.mueller@gmail.de", "321",
+        Account dummy2 = new Account("Manfred", "Mueller", "manfred.mueller@gmail.de",
+                "321",
                 currencyInformationService.getCurrencyFromMap("USD"), AccountType.PRIVATE);
 
         createNewAccount(dummy2);
 
         // CREATE PARTNER ACCOUNTS
-        Account partner1 = new Account("BlueBox", "Business", "business@blueboxgames.de", "12345",
+        Account partner1 = new Account("BlueBox", "Business", "business@blueboxgames.de",
+                "12345",
                 currencyInformationService.getCurrencyFromMap("USD"), AccountType.PARTNER_BUSINESS);
         partner1.getWallets().add(new Wallet("EUR", partner1, new BigDecimal(500),
                 currencyInformationService.getCurrencyFromMap("EUR")));
@@ -160,7 +163,8 @@ public class AccountService extends AbstractService<Account> {
         createNewAccount(partner1);
 
 
-        Account partner2 = new Account("BlackCaste", "Business", "business@blackcastle.de", "12345",
+        Account partner2 = new Account("BlackCaste", "Business", "business@blackcastle.de",
+                "12345",
                 currencyInformationService.getCurrencyFromMap("USD"), AccountType.PARTNER_BUSINESS);
         partner2.getWallets().add(new Wallet("EUR", partner2, new BigDecimal(500),
                 currencyInformationService.getCurrencyFromMap("EUR")));

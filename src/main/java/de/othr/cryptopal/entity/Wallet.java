@@ -26,7 +26,7 @@ public class Wallet implements Serializable {
     @ManyToOne
     private Account account;
     private BigDecimal credit;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Currency currency;
 
     public Wallet() {

@@ -33,7 +33,7 @@ public class Account implements Serializable {
     @Column(unique = true)
     private String email;
     private String password;
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL , orphanRemoval = true)
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Wallet> wallets;
     @OneToOne
@@ -195,7 +195,7 @@ public class Account implements Serializable {
             paymentWalletString = "No payment wallet defined";
         }
         return accountId + " " + firstname + " " + lastname + "\n   "
-                + email + " " + password + "\n   "
+                + email  + "\n   "
                 + defaultCurrencyString  + "\n   "
                 + "Wallet: " + paymentWalletString;
     }

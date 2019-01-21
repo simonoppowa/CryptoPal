@@ -59,17 +59,15 @@ public class CurrencyInformationService extends AbstractService<Currency> {
 
     public void setAllCurrencies() {
         List<Currency> currenciesFromDB = loadCurrenciesFromDB();
+        fiatCurrencies = CurrencyPropertiesUtil.getSupportedFiatCurrencies();
+        cryptoCurrencies = CurrencyPropertiesUtil.getSupportedCryptoCurrencies();
+
         // Check if currencies already in DB
         if(currenciesFromDB == null || currenciesFromDB.isEmpty()) {
-            fiatCurrencies = CurrencyPropertiesUtil.getSupportedFiatCurrencies();
-            cryptoCurrencies = CurrencyPropertiesUtil.getSupportedCryptoCurrencies();
             putCurrenciesInMap(fiatCurrencies);
             putCurrenciesInMap(cryptoCurrencies);
             persistCurrencies(fiatCurrencies, cryptoCurrencies);
         } else {
-            // TODO
-            fiatCurrencies = CurrencyPropertiesUtil.getSupportedFiatCurrencies();
-            cryptoCurrencies = CurrencyPropertiesUtil.getSupportedCryptoCurrencies();
             putCurrenciesInMap(currenciesFromDB);
         }
     }
@@ -97,11 +95,13 @@ public class CurrencyInformationService extends AbstractService<Currency> {
 
         URL url = UrlUtils.buildFiatCurrencyUrl(logger, currencyIds);
         JSONObject jsonObject = fetchFromURL(url);
-        List<Currency> currencies = JsonUtils.getFiatCurrenciesFromResponse(jsonObject, fiatCurrencies);
+        if(jsonObject != null) {
+            List<Currency> currencies = JsonUtils.getFiatCurrenciesFromResponse(jsonObject, fiatCurrencies);
 
-        fiatCurrencies = currencies;
-        for(Currency currency : currencies) {
-            currencyMap.get(currency.getCurrencyId()).setExchangeRate(currency.getExchangeRate());
+            fiatCurrencies = currencies;
+            for(Currency currency : currencies) {
+                currencyMap.get(currency.getCurrencyId()).setExchangeRate(currency.getExchangeRate());
+            }
         }
     }
 
@@ -111,11 +111,14 @@ public class CurrencyInformationService extends AbstractService<Currency> {
 
         URL url = UrlUtils.buildCryptoCurrencyUrl(logger, currencyIds);
         JSONObject jsonObject = fetchFromURL(url);
-        List<Currency> currencies = JsonUtils.getCryptoCurrenciesFromResponse(jsonObject, cryptoCurrencies);
+        if(jsonObject != null) {
+            List<Currency> currencies = JsonUtils.getCryptoCurrenciesFromResponse(jsonObject, cryptoCurrencies);
 
-        for(Currency currency : currencies) {
-            currencyMap.get(currency.getCurrencyId()).setExchangeRate(currency.getExchangeRate());
+            for(Currency currency : currencies) {
+                currencyMap.get(currency.getCurrencyId()).setExchangeRate(currency.getExchangeRate());
+            }
         }
+
     }
 
     private void putCurrenciesInMap(List<Currency> currencies) {
@@ -174,7 +177,7 @@ public class CurrencyInformationService extends AbstractService<Currency> {
             }
 
         } catch (IOException | JSONException ex) {
-            ex.printStackTrace();
+            logger.log(Level.WARNING, "Error while fetching from url");
         }
 
         return null;

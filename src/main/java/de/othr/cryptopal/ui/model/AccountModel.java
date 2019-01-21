@@ -105,7 +105,7 @@ public class AccountModel extends AbstractModel {
             if(loggedInAccount == null) {
                 addWarningMessage("no_account_found", "loginform:email");
             } else {
-                logger.log(Level.INFO, "Logged in with: " + loggedInAccount.getEmail() + " " + loggedInAccount.getPassword());
+                logger.log(Level.INFO, "Logged in with: " + loggedInAccount.getEmail());
                 return "home.faces";
             }
         }

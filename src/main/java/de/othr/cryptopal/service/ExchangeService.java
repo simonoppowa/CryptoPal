@@ -7,17 +7,12 @@ import de.othr.cryptopal.entity.Wallet;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
-import javax.inject.Inject;
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.Date;
 
 @SessionScoped
 public class ExchangeService extends TransactionService<Exchange> {
-
-    // TODO remove
-    @Inject
-    private AccountService accountService;
 
     private Account administration;
 

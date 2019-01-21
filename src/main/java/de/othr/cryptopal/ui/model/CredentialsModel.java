@@ -1,12 +1,11 @@
 package de.othr.cryptopal.ui.model;
 
-import javax.enterprise.context.SessionScoped;
-import javax.faces.bean.ManagedBean;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 import java.io.Serializable;
 
 
-@SessionScoped
+@RequestScoped
 @Named
 public class CredentialsModel implements Serializable {
 

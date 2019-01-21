@@ -37,5 +37,4 @@ public class TransferService extends TransactionService<Transfer> {
         executeTransaction(transfer, accountService.getAccountByEmail(receiverEmail));
     }
 
-
 }
