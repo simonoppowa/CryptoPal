@@ -21,6 +21,11 @@ Ein Bezahldienst in Form von PayPal mit Unterstützung für Crypto-Währungen wi
 
 
 ### Sources:
+#### APIs:
+* [Currency Prices API](https://exchangeratesapi.io/) made by [Madis Väin](https://github.com/madisvain), prices from [European Central Bank](https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.en.html)
+* [Crypto Currency Prices API](https://min-api.cryptocompare.com/documentation/) from [CryptoCompare](https://www.cryptocompare.com)
+
+
 #### Images:
 * [Bitcoin Icon](https://www.flaticon.com/free-icon/bitcoin-logo_25180) made by [Dave Gandy](https://www.flaticon.com/authors/dave-gandy) from www.flaticon.com
 * [Ethereum Icon](https://www.flaticon.com/free-icon/ethereum_1346606) made by [Freepik](https://www.flaticon.com/authors/freepik) from www.flaticon.com
